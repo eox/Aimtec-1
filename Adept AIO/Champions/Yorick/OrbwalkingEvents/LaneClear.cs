@@ -17,14 +17,15 @@
                 return;
             }
 
-            var minion = GameObjects.EnemyMinions.OrderBy(x => x.Health).ThenBy(x => x.Distance(Global.Player)).LastOrDefault(x => x.IsValidTarget(Global.Player.AttackRange + 200));
+            var minion = GameObjects.EnemyMinions.OrderBy(x => x.Health).ThenBy(x => x.Distance(Global.Player)).FirstOrDefault(x => x.IsValidTarget(Global.Player.AttackRange));
 
             if (minion == null)
             {
                 return;
             }
 
-            if (SpellManager.Q.Ready && MenuConfig.LaneClear["Q"].Enabled && Global.Player.ManaPercent() >= MenuConfig.LaneClear["Q"].Value && minion.Health < Global.Player.GetSpellDamage(minion, SpellSlot.Q))
+            if (SpellManager.Q.Ready && MenuConfig.LaneClear["Q"].Enabled && Global.Player.ManaPercent() >= MenuConfig.LaneClear["Q"].Value &&
+                minion.Health < Global.Player.GetAutoAttackDamage(minion) +  Global.Player.GetSpellDamage(minion, SpellSlot.Q))
             {
                 SpellManager.CastQ(minion);
             }

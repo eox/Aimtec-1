@@ -26,7 +26,8 @@ namespace Adept_AIO.Champions.Yorick.OrbwalkingEvents
                 return;
             }
 
-            if (SpellManager.Q.Ready && MenuConfig.LaneClear["Q"].Enabled && Global.Player.ManaPercent() >= MenuConfig.LaneClear["Q"].Value && minion.Health < Global.Player.GetSpellDamage(minion, SpellSlot.Q))
+            if (SpellManager.Q.Ready && MenuConfig.LaneClear["Q"].Enabled && Global.Player.ManaPercent() >= MenuConfig.LaneClear["Q"].Value &&
+                minion.Health < Global.Player.GetAutoAttackDamage(minion) + Global.Player.GetSpellDamage(minion, SpellSlot.Q))
             {
                 SpellManager.CastQ(minion);
             }
