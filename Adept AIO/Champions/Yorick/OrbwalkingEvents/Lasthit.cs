@@ -19,7 +19,7 @@ namespace Adept_AIO.Champions.Yorick.OrbwalkingEvents
                 return;
             }
 
-            var minion = GameObjects.EnemyMinions.OrderBy(x => x.Health).ThenBy(x => x.Distance(Global.Player)).LastOrDefault(x => x.IsValidTarget(Global.Player.AttackRange + 200));
+            var minion = GameObjects.EnemyMinions.OrderBy(x => x.Health).ThenBy(x => x.Distance(Global.Player)).FirstOrDefault(x => x.IsValidTarget(Global.Player.AttackRange + 100));
 
             if (minion == null)
             {
