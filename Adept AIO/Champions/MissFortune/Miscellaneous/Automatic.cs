@@ -33,14 +33,11 @@
               
                 if (MenuConfig.Automatic["QAuto"].Enabled)
                 {
-                   
                     if (MenuConfig.Automatic["Path"].Enabled)
                     {
-                        
                         var wM = SpellManager.WalkBehindMinion(target);
                         if (!wM.IsZero)
                         {
-                            DebugConsole.WriteLine($"TEST 3", MessageState.Debug);
                             Global.Orbwalker.Move(wM);
                         }
                     }
