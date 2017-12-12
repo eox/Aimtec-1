@@ -11,7 +11,7 @@
     {
         public static void OnUpdate()
         {
-            var target = Global.TargetSelector.GetTarget(SpellConfig.Q.Range + 400);
+            var target = Global.TargetSelector.GetTarget(SpellConfig.Q.Range);
             if (target == null)
             {
                 return;
