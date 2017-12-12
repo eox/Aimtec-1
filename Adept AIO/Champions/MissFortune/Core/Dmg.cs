@@ -26,7 +26,7 @@
 
         public static double Ult(Obj_AI_Base target)
         {
-            return SpellManager.R.Ready ? Global.Player.GetSpellDamage(target, SpellSlot.R) : 0d;
+            return SpellManager.R.Ready ? Global.Player.GetSpellDamage(target, SpellSlot.R, DamageStage.AreaOfEffect) : 0d;
         }
     }
 }

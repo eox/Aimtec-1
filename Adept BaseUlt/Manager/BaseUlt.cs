@@ -97,7 +97,7 @@
             {
                 return;
             }
-         
+
             switch (args.Status)
             {
                 case TeleportStatus.Abort:
@@ -109,10 +109,10 @@
                     }
                     break;
                 case TeleportStatus.Start:
-                  
+
                     if (_target == null)
                     {
-                        Set(args.Duration, Environment.TickCount, (Obj_AI_Hero) sender);
+                        Set(args.Duration, Environment.TickCount, (Obj_AI_Hero)sender);
                     }
 
                     break;
@@ -140,13 +140,6 @@
                 return;
             }
 
-            _timeUntilCastingUlt = GetCastTime(GetFountainPos(_target));
-            
-            if (_timeUntilCastingUlt <= Game.Ping)
-            {
-                CastUlt(GetFountainPos(_target));
-            }
-
             if (_menu["RandomUlt"].Enabled)
             {
                 var enemy = _lastEnemyChecked.FirstOrDefault(x => x.NetworkId == _target.NetworkId);
@@ -168,6 +161,13 @@
 
                 CastUlt(_predictedPosition);
             }
+
+            _timeUntilCastingUlt = GetCastTime(GetFountainPos(_target));
+
+            if (_timeUntilCastingUlt <= Game.Ping)
+            {
+                CastUlt(GetFountainPos(_target));
+            }
         }
 
         private void CastUlt(Vector3 pos)
@@ -179,7 +179,7 @@
             }
 
             var rectangle = new Geometry.Rectangle(Global.Player.ServerPosition.To2D(), pos.To2D(), _width);
-           
+
             if (_menu["Collision"].Enabled &&
                 GameObjects.EnemyHeroes.Count(x => x.NetworkId != _target.NetworkId && rectangle.IsInside(x.ServerPosition.To2D())) > _maxCollisionObjects ||
                 pos.Distance(Global.Player) > _range ||
@@ -189,22 +189,14 @@
             }
 
             DebugConsole.WriteLine($"Successfully Fired At: {_target.ChampionName} With The Distance: {Global.Player.Distance(pos)}", MessageState.Debug);
-           
+
             _ultimate.Cast(pos);
             Reset();
-
-            DelayAction.Queue(1500,
-                              () =>
-                              {
-                                  _lastSeenPosition = Vector3.Zero;
-                                  _predictedPosition = Vector3.Zero;
-                              },
-                              new CancellationToken(false));
         }
 
         private int GetCastTime(Vector3 pos)
         {
-            return (int) (-(Environment.TickCount - (_recallStartTick + _recallTime)) - TravelTime(pos));
+            return (int)(-(Environment.TickCount - (_recallStartTick + _recallTime)) - TravelTime(pos));
         }
 
         private void OnRender()
@@ -253,12 +245,12 @@
                 case "Draven":
                     if (_menu["Draven"].Enabled)
                     {
-                        return (float) (Global.Player.GetSpellDamage(_target, SpellSlot.R, DamageStage.SecondForm) + Global.Player.GetSpellDamage(_target, SpellSlot.R));
+                        return (float)(Global.Player.GetSpellDamage(_target, SpellSlot.R, DamageStage.SecondForm) + Global.Player.GetSpellDamage(_target, SpellSlot.R));
                     }
-                    return (float) Global.Player.GetSpellDamage(_target, SpellSlot.R, DamageStage.SecondForm);
-                case "Jinx": return (float) Global.Player.GetSpellDamage(_target, SpellSlot.R, DamageStage.Empowered);
+                    return (float)Global.Player.GetSpellDamage(_target, SpellSlot.R, DamageStage.SecondForm);
+                case "Jinx": return (float)Global.Player.GetSpellDamage(_target, SpellSlot.R, DamageStage.Empowered);
             }
-            return (float) Global.Player.GetSpellDamage(_target, SpellSlot.R);
+            return (float)Global.Player.GetSpellDamage(_target, SpellSlot.R);
         }
 
         private float TargetHealth()
@@ -276,10 +268,10 @@
                 return 0f;
             }
 
-            var final = _target.Health + (hpReg * (invisible?.LifetimeTicks / 10000f ?? 0f) + TravelTime(GetFountainPos(_target)) / 1000);
+            var final = _target.Health + (hpReg * (invisible.LifetimeTicks / 10000f) + TravelTime(GetFountainPos(_target)) / 1000);
 
-            DebugConsole.WriteLine($"Target Health: {final} | Damage: {PlayerDamage()}", MessageState.Debug);
-          
+            DebugConsole.WriteLine($"Target Health: {(int)final} | Damage: {PlayerDamage()}", MessageState.Debug);
+
             return final;
         }
 
@@ -309,7 +301,10 @@
         private void Reset()
         {
             DebugConsole.WriteLine($"Reset Baseult", MessageState.Debug);
-            
+
+            _lastSeenPosition = Vector3.Zero;
+            _predictedPosition = Vector3.Zero;
+
             _recallTime = 0;
             _recallStartTick = 0;
             _target = null;
