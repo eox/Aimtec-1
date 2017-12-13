@@ -10,7 +10,7 @@
 
         public static void WriteLine(string message, MessageState messageState, bool onlyOnce = true)
         {
-            if (onlyOnce && message == _lastMessage && Environment.TickCount - _lastTick <= 2000)
+            if (onlyOnce && message == _lastMessage && Environment.TickCount - _lastTick <= 5000)
             {
                 return;
             }

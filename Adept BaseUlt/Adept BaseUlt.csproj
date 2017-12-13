@@ -57,11 +57,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Baseult Reworked\Baseult.cs" />
+    <Compile Include="Baseult Reworked\Helper.cs" />
+    <Compile Include="Baseult Reworked\MenuConfig.cs" />
+    <Compile Include="Baseult Reworked\Recall Information.cs" />
     <Compile Include="Local SDK\DebugConsole.cs" />
     <Compile Include="Local SDK\Geometry.cs" />
     <Compile Include="Local SDK\Teleport.cs" />
-    <Compile Include="Manager\BaseUlt.cs" />
-    <Compile Include="Local SDK\MenuConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Local SDK\Global.cs" />

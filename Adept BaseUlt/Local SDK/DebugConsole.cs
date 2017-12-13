@@ -2,6 +2,8 @@
 
 namespace Adept_BaseUlt.Local_SDK
 {
+    using Aimtec;
+
     class DebugConsole
     {
         private static MessageState _messageState;
@@ -10,19 +12,19 @@ namespace Adept_BaseUlt.Local_SDK
 
         public static void WriteLine(string message, MessageState messageState, bool onlyOnce = true)
         {
-            if (onlyOnce && _lastMessage == message && Environment.TickCount - _lastTick <= 2000)
+            if (onlyOnce && message == _lastMessage && Game.TickCount - _lastTick <= 5000)
             {
                 return;
             }
-
-            _lastTick = Environment.TickCount;
-            _lastMessage = message;
 
             _messageState = messageState;
 
             Console.ForegroundColor = GetForeGroundColor();
             Console.WriteLine($"[{DateTime.Now}] [BASEULT] [{messageState}] {message}");
             Console.ResetColor();
+
+            _lastTick = Game.TickCount;
+            _lastMessage = message;
         }
 
         private static ConsoleColor GetForeGroundColor()

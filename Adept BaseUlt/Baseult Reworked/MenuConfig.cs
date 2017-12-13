@@ -1,19 +1,27 @@
-﻿namespace Adept_BaseUlt.Local_SDK
+﻿namespace Adept_BaseUlt.Baseult_Reworked
 {
     using Aimtec.SDK.Menu;
     using Aimtec.SDK.Menu.Components;
     using Aimtec.SDK.Util.Cache;
+    using Local_SDK;
 
     class MenuConfig
     {
-        public Menu Menu;
+        public static Menu Menu;
 
-        public void AttatchMenu()
+        public MenuConfig()
         {
-            Menu = new Menu("hello", "Adept - BaseUlt", true);
+            Menu = new Menu("hello", $"BaseUlt | {Global.Player.ChampionName}", true);
             Menu.Attach();
 
             Menu.Add(new MenuBool("RandomUlt", "Use RandomUlt").SetToolTip("Will GUESS the enemy position and ult there"));
+
+            if (Global.Player.ChampionName == "Draven")
+            {
+                Menu.Add(new MenuBool("Draven", "Include R Back (Draven)"));
+            }
+
+            Menu.Add(new MenuBool("Collision", "Check Collision"));
 
             Menu.Add(new MenuSeperator("yes", "Whitelist"));
 
@@ -23,7 +31,7 @@
             }
 
             Menu.Add(new MenuSeperator("no"));
-            Menu.Add(new MenuSlider("Distance", "Max Distance | RandomUlt", 2000, 500, 4000));
+            Menu.Add(new MenuSlider("Distance", "Max Distance | RandomUlt", 5000, 1000, 10000));
         }
     }
 }
