@@ -120,7 +120,7 @@
             var lastSeenPosition = positionsWithId.FirstOrDefault(x => x.Key == recallInformation.NetworkID).Value;
             if (lastSeenPosition.IsZero)
             {
-                DebugConsole.WriteLine($"LAST SEEN POS IS ZERO, REPORT TO DEVELOPER.", MessageState.Error);
+                DebugConsole.WriteLine($"LAST SEEN POS IS ZERO, WAIT FOR NEW UPDATE.", MessageState.Error);
                 return;
             }
 
