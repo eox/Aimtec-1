@@ -60,7 +60,7 @@
             }
             var targetPosIn250ms = target.Position + (target.Position - Q.GetPrediction(target).CastPosition).Normalized() * (0.25f * target.MoveSpeed);
 
-            if(rect.IsInside(targetPosIn250ms.To2D()) && rect.End.Distance(targetPosIn250ms) > 90)
+            if(rect.IsInside(targetPosIn250ms.To2D()) && rect.End.Distance(targetPosIn250ms) > target.BoundingRadius)
             Q.ShootChargedSpell(Q.GetPrediction(target).CastPosition);
         }
 
