@@ -64,6 +64,7 @@
                     break;
                 case TeleportStatus.Start:
 
+                    if(recallInformation != null)
                     recallInformation = new Recall_Information(sender.NetworkId, args.Duration, sender, args.Start);
 
                     break;
