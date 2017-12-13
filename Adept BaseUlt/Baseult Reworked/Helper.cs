@@ -1,7 +1,5 @@
 ﻿namespace Adept_BaseUlt.Baseult_Reworked
 {
-    using System;
-    using System.Linq;
     using Aimtec;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Damage.JSON;

@@ -4,11 +4,9 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
-    using System.Threading;
     using Aimtec;
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Prediction.Skillshots;
-    using Aimtec.SDK.Util;
     using Aimtec.SDK.Util.Cache;
     using Local_SDK;
     using Geometry = Local_SDK.Geometry;
@@ -22,13 +20,12 @@
 
         private Dictionary<int, Vector3> positionsWithId;
         private Dictionary<int, int> lastSeenTickWithId;
-        public static List<Obj_AI_Base> Enemies;
-
+      
         private int lastCheckTick;
 
         private static float TimeUntilCasting => Helper.GetCastTime(Helper.GetFountainPos(), recallInformation);
 
-        private Vector3 RecallPosition;
+        private Vector3 recallPosition;
 
         public Baseult(float speed, float width, float delay, int maxCollisionObjects = int.MaxValue, float range = int.MaxValue)
         {
@@ -39,8 +36,7 @@
 
             positionsWithId = new Dictionary<int, Vector3>();
             lastSeenTickWithId = new Dictionary<int, int>();
-            Enemies = new List<Obj_AI_Base>();
-           
+            
             Game.OnUpdate += OnRandomUlt;
             Game.OnUpdate += OnBaseUlt;
             Render.OnRender += OnRender;
@@ -80,8 +76,7 @@
             {
                 foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsVisible))
                 {
-                    Enemies = new List<Obj_AI_Base> { hero };
-
+                  
                     lastSeenTickWithId = new Dictionary<int, int> { { hero.NetworkId, Game.TickCount } };
 
                     var pos = hero.ServerPosition.Extend(hero.Path.FirstOrDefault(), 50);
@@ -128,7 +123,7 @@
             var dist = (recallInformation.Start - lastSeenTick) / 1000f * recallInformation.Sender.MoveSpeed;
 
             var recallPosition = lastSeenPosition.Extend(recallInformation.Sender.ServerPosition, dist);
-            RecallPosition = recallPosition;
+            this.recallPosition = recallPosition;
 
             if (dist > MenuConfig.Menu["Distance"].Value)
             {
@@ -170,14 +165,14 @@
                 return;
             }
 
-            if ( !RecallPosition.IsZero)
+            if ( !recallPosition.IsZero)
             {
-                Render.Circle(RecallPosition, spell.Width, 100, Color.Red);
+                Render.Circle(recallPosition, spell.Width, 100, Color.Red);
 
-                Render.WorldToScreen(RecallPosition, out var castVector2);
+                Render.WorldToScreen(recallPosition, out var castVector2);
                 Render.Text("Random Ult", castVector2, RenderTextFlags.Center, Color.White);
 
-                Render.WorldToScreen(RecallPosition, out var ppV2);
+                Render.WorldToScreen(recallPosition, out var ppV2);
             }
 
             var barY = Render.Height * 0.8f;
