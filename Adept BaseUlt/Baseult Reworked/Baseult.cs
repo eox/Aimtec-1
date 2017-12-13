@@ -91,7 +91,7 @@
                 lastCheckTick = Environment.TickCount;
             }
 
-            if (recallInformation == null || !Helper.IsValid(recallInformation))
+            if (recallInformation == null || !Helper.IsValid(recallInformation) || !spell.Ready)
             {
                 return;
             }
@@ -107,7 +107,7 @@
 
         private void OnRandomUlt()
         {
-            if (!MenuConfig.Menu["RandomUlt"].Enabled)
+            if (!MenuConfig.Menu["RandomUlt"].Enabled || !spell.Ready)
             {
                 return;
             }
