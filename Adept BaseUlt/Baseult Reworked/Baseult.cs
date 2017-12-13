@@ -76,17 +76,16 @@
 
         private void OnBaseUlt()
         {
-            if (Environment.TickCount - lastCheckTick > Game.Ping)
+            if (Environment.TickCount - lastCheckTick > Game.Ping / 2)
             {
                 foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsVisible))
                 {
                     Enemies = new List<Obj_AI_Base> { hero };
 
-                    var pos = hero.ServerPosition.Extend(hero.Path.FirstOrDefault(), 50);
-
-                    positionsWithId = new Dictionary<int, Vector3> { { hero.NetworkId, pos } };
-
                     lastSeenTickWithId = new Dictionary<int, int> { { hero.NetworkId, Game.TickCount } };
+
+                    var pos = hero.ServerPosition.Extend(hero.Path.FirstOrDefault(), 50);
+                    positionsWithId = new Dictionary<int, Vector3> { { hero.NetworkId, pos } };
                 }
                 lastCheckTick = Environment.TickCount;
             }
