@@ -16,7 +16,7 @@
             {
                 if (this.Unit != null)
                 {
-                    return this.Unit.IsAlly ? new Vector2(34, 9) : new Vector2(10, 20);
+                    return this.Unit.IsAlly ? new Vector2(34, 9) : new Vector2(30, 7);
                 }
                 return new Vector2();
             }
