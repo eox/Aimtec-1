@@ -9,16 +9,16 @@
 
     class AntiGapcloser
     {
-        private readonly SpellConfig _spellConfig;
+        private readonly SpellConfig spellConfig;
 
         public AntiGapcloser(SpellConfig spellConfig)
         {
-            _spellConfig = spellConfig;
+            this.spellConfig = spellConfig;
         }
 
         public void OnGapcloser(Obj_AI_Hero sender, GapcloserArgs args)
         {
-            if (sender.IsMe || sender.IsAlly || args.EndPosition.Distance(Global.Player) > _spellConfig.FullRange)
+            if (sender.IsMe || sender.IsAlly || args.EndPosition.Distance(Global.Player) > spellConfig.FullRange)
             {
                 return;
             }
@@ -29,13 +29,13 @@
                 return;
             }
 
-            if (_spellConfig.W.Ready)
+            if (spellConfig.W.Ready)
             {
-                _spellConfig.W.Cast(Global.Player.GetFountainPos());
+                spellConfig.W.Cast(Global.Player.GetFountainPos());
             }
-            else if (_spellConfig.R.Ready)
+            else if (spellConfig.R.Ready)
             {
-                _spellConfig.R.CastOnUnit(sender);
+                spellConfig.R.CastOnUnit(sender);
             }
         }
     }

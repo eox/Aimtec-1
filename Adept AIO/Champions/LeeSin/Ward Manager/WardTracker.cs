@@ -11,9 +11,9 @@
 
     public class WardTracker : IWardTracker
     {
-        private readonly ISpellConfig _spellConfig;
+        private readonly ISpellConfig spellConfig;
 
-        private readonly IEnumerable<string> _wardNames = new List<string>
+        private readonly IEnumerable<string> wardNames = new List<string>
         {
             "TrinketTotemLvl1",
             "ItemGhostWard",
@@ -22,19 +22,19 @@
 
         public WardTracker(ISpellConfig spellConfig)
         {
-            _spellConfig = spellConfig;
+            this.spellConfig = spellConfig;
         }
 
         public bool DidJustWard => Game.TickCount - this.LastWardCreated <= 800 + Game.Ping / 2f;
 
         public bool IsWardReady()
         {
-            return _wardNames.Any(Items.CanUseItem);
+            return wardNames.Any(Items.CanUseItem);
         }
 
         public string Ward()
         {
-            return _wardNames.FirstOrDefault(Items.CanUseItem);
+            return wardNames.FirstOrDefault(Items.CanUseItem);
         }
 
         public bool IsAtWall { get; set; }
@@ -47,7 +47,7 @@
 
         public void OnCreate(GameObject sender)
         {
-            if (this.DidJustWard || !_spellConfig.IsFirst(_spellConfig.W) || !this.IsAtWall)
+            if (this.DidJustWard || !spellConfig.IsFirst(spellConfig.W) || !this.IsAtWall)
             {
                 return;
             }

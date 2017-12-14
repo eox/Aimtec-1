@@ -17,7 +17,7 @@
     {
         private readonly int maxCollisionObjects;
         private readonly Spell spell;
-        private static Recall_Information recallInformation;
+        private static RecallInformation recallInformation;
 
         private Dictionary<int, Vector3> positionsWithId;
         private Dictionary<int, int> lastSeenTickWithId;
@@ -60,7 +60,7 @@
                 case TeleportStatus.Finish:
                 case TeleportStatus.Unknown:
 
-                    if (recallInformation != null && recallInformation.NetworkID == sender.NetworkId)
+                    if (recallInformation != null && recallInformation.NetworkId == sender.NetworkId)
                     {
                         recallInformation = null;
                     }
@@ -69,7 +69,7 @@
                 case TeleportStatus.Start:
 
                     if(recallInformation == null)
-                    recallInformation = new Recall_Information(sender.NetworkId, args.Duration, sender, args.Start);
+                    recallInformation = new RecallInformation(sender.NetworkId, args.Duration, sender, args.Start);
 
                     break;
             }
@@ -98,17 +98,24 @@
                 return;
             }
 
-            if (Environment.TickCount - lastCheckTick <= 100 && recallInformation == null)
+            if (Environment.TickCount - lastCheckTick > 100)
             {
                 lastCheckTick = Environment.TickCount;
-
-                lastSeenTickWithId = new Dictionary<int, int>();
-                positionsWithId = new Dictionary<int, Vector3>();
                
                 foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsVisible))
                 {
+                    
+                    if (lastSeenTickWithId.ContainsKey(hero.NetworkId))
+                    {
+                     
+                        lastSeenTickWithId.Remove(hero.NetworkId);
+                    }
                     lastSeenTickWithId.Add(hero.NetworkId, Game.TickCount);
 
+                    if (positionsWithId.ContainsKey(hero.NetworkId))
+                    {
+                        positionsWithId.Remove(hero.NetworkId);
+                    }
                     var pos = hero.ServerPosition.Extend(hero.Path.FirstOrDefault(), 50);
                     positionsWithId.Add(hero.NetworkId, pos);
                 }
@@ -126,7 +133,7 @@
                 return;
             }
 
-            var lastSeenTick = lastSeenTickWithId.FirstOrDefault(x => x.Key == recallInformation.NetworkID).Value;
+            var lastSeenTick = lastSeenTickWithId.FirstOrDefault(x => x.Key == recallInformation.NetworkId).Value;
 
             var dist = (recallInformation.Start - lastSeenTick) / 1000f * recallInformation.Sender.MoveSpeed;
 
@@ -151,9 +158,9 @@
 
             if (MenuConfig.Menu["Collision"].Enabled)
             {
-                var rectangle = new Geometry.Rectangle(Global.Player.ServerPosition.To2D(), position.To2D(), spell.Width);
+                var rectangle = new Geometry.Rectangle(Vector3Extensions.To2D(Global.Player.ServerPosition), Vector3Extensions.To2D(position), spell.Width);
 
-                if (GameObjects.EnemyHeroes.Count(x => x.NetworkId != recallInformation.NetworkID && rectangle.IsInside(x.ServerPosition.To2D())) >
+                if (GameObjects.EnemyHeroes.Count(x => x.NetworkId != recallInformation.NetworkId && rectangle.IsInside(Vector3Extensions.To2D(x.ServerPosition))) >
                     maxCollisionObjects ||
                     position.Distance(Global.Player) > spell.Range ||
                     position.Distance(Global.Player) < 1200)

@@ -11,19 +11,19 @@
 
     class Manager
     {
-        private readonly ICombo _combo;
-        private readonly IHarass _harass;
-        private readonly IJungleClear _jungleClear;
-        private readonly ILaneClear _laneClear;
-        private readonly ILasthit _lasthit;
+        private readonly ICombo combo;
+        private readonly IHarass harass;
+        private readonly IJungleClear jungleClear;
+        private readonly ILaneClear laneClear;
+        private readonly ILasthit lasthit;
 
         public Manager(ICombo combo, IHarass harass, IJungleClear jungleClear, ILaneClear laneClear, ILasthit lasthit)
         {
-            _combo = combo;
-            _harass = harass;
-            _jungleClear = jungleClear;
-            _laneClear = laneClear;
-            _lasthit = lasthit;
+            this.combo = combo;
+            this.harass = harass;
+            this.jungleClear = jungleClear;
+            this.laneClear = laneClear;
+            this.lasthit = lasthit;
         }
 
         public void PostAttack(object sender, PostAttackEventArgs args)
@@ -31,14 +31,14 @@
             switch (Global.Orbwalker.Mode)
             {
                 case OrbwalkingMode.Combo:
-                    _combo.OnPostAttack(args.Target);
+                    combo.OnPostAttack(args.Target);
                     break;
                 case OrbwalkingMode.Mixed:
-                    _harass.OnPostAttack(args.Target);
+                    harass.OnPostAttack(args.Target);
                     break;
                 case OrbwalkingMode.Laneclear:
-                    _laneClear.OnPostAttack();
-                    _jungleClear.OnPostAttack(args.Target);
+                    laneClear.OnPostAttack();
+                    jungleClear.OnPostAttack(args.Target);
                     break;
             }
         }
@@ -55,21 +55,21 @@
                 switch (Global.Orbwalker.Mode)
                 {
                     case OrbwalkingMode.Combo:
-                        _combo.OnUpdate();
+                        combo.OnUpdate();
                         break;
                     case OrbwalkingMode.Mixed:
-                        _harass.OnUpdate();
+                        harass.OnUpdate();
                         break;
                     case OrbwalkingMode.Laneclear:
-                        _laneClear.OnUpdate();
-                        _jungleClear.OnUpdate();
+                        laneClear.OnUpdate();
+                        jungleClear.OnUpdate();
                         break;
                     case OrbwalkingMode.Lasthit:
-                        _lasthit.OnUpdate();
+                        lasthit.OnUpdate();
                         break;
                 }
 
-                _jungleClear.SmiteMob();
+                jungleClear.SmiteMob();
             }
             catch (Exception e)
             {

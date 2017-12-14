@@ -97,7 +97,7 @@
         /// <summary>
         ///     Special auto attack names that do not trigger OnProcessAutoAttack
         /// </summary>
-        private readonly string[] _specialAttacks =
+        private readonly string[] specialAttacks =
         {
             "caitlynheadshotmissile",
             "goldcardpreattack",
@@ -134,7 +134,7 @@
         /// <summary>
         ///     Champions whos attack is not wasted on invulnerable targets or when blinded
         /// </summary>
-        private readonly string[] _noWasteAttackChamps =
+        private readonly string[] noWasteAttackChamps =
         {
             "Kalista",
             "Twitch"
@@ -283,7 +283,7 @@
             }
 
             if (Player.HasBuffOfType(BuffType.Blind) &&
-                !_noWasteAttackChamps.Contains(Player.ChampionName))
+                !noWasteAttackChamps.Contains(Player.ChampionName))
             {
                 return false;
             }
@@ -842,7 +842,7 @@
             }
 
             var name = e.SpellData.Name.ToLower();
-            if (_specialAttacks.Any(x => name.StartsWith(x)))
+            if (specialAttacks.Any(x => name.StartsWith(x)))
             {
                 ObjAiHeroOnProcessAutoAttack(sender, e);
             }

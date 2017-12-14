@@ -13,16 +13,16 @@
 
     class DrawManager : IDrawManager
     {
-        private readonly IDmg _damage;
-        private readonly IInsecManager _insecManager;
+        private readonly IDmg damage;
+        private readonly IInsecManager insecManager;
 
-        private readonly ISpellConfig _spellConfig;
+        private readonly ISpellConfig spellConfig;
 
         public DrawManager(ISpellConfig spellConfig, IInsecManager insecManager, IDmg damage)
         {
-            _spellConfig = spellConfig;
-            _insecManager = insecManager;
-            _damage = damage;
+            this.spellConfig = spellConfig;
+            this.insecManager = insecManager;
+            this.damage = damage;
         }
 
         public bool QEnabled { get; set; }
@@ -36,9 +36,9 @@
                 return;
             }
 
-            if (this.QEnabled && _spellConfig.Q.Ready)
+            if (this.QEnabled && spellConfig.Q.Ready)
             {
-                Render.Circle(Global.Player.Position, _spellConfig.Q.Range, (uint) this.SegmentsValue, Color.IndianRed);
+                Render.Circle(Global.Player.Position, spellConfig.Q.Range, (uint) this.SegmentsValue, Color.IndianRed);
             }
 
             Render.WorldToScreen(Global.Player.ServerPosition, out var bkToggleV2);
@@ -51,9 +51,9 @@
                 return;
             }
 
-            if (Temp.IsBubbaKush && _insecManager.BkPosition(target) != Vector3.Zero)
+            if (Temp.IsBubbaKush && insecManager.BkPosition(target) != Vector3.Zero)
             {
-                var bkPos = _insecManager.BkPosition(target);
+                var bkPos = insecManager.BkPosition(target);
                 Render.WorldToScreen(bkPos, out var bkScreen);
                 Render.Text("BK", bkScreen, RenderTextFlags.Center, Color.Orange);
 
@@ -70,9 +70,9 @@
 
                 Render.Circle(bkPos, 65, (uint) this.SegmentsValue, Color.Orange);
             }
-            else if (!_insecManager.InsecPosition(target).IsZero)
+            else if (!insecManager.InsecPosition(target).IsZero)
             {
-                var insecPos = _insecManager.InsecPosition(target);
+                var insecPos = insecManager.InsecPosition(target);
                 var targetEndPos = target.ServerPosition + (target.ServerPosition - insecPos).Normalized() * 900;
 
                 Render.WorldToScreen(targetEndPos, out var endPosV2);
@@ -99,7 +99,7 @@
 
             foreach (var target in GameObjects.EnemyHeroes.Where(x => x.IsVisible && x.IsFloatingHealthBarActive))
             {
-                var damage = _damage.Damage(target);
+                var damage = this.damage.Damage(target);
 
                 Global.DamageIndicator.Unit = target;
                 Global.DamageIndicator.DrawDmg((float) damage, Color.FromArgb(153, 12, 177, 28));

@@ -8,14 +8,14 @@
 
     class MenuConfig
     {
-        public static Menu mainMenu, Combo, Harass, LaneClear, JungleClear, Killsteal, Drawings;
+        public static Menu MainMenu, Combo, Harass, LaneClear, JungleClear, Killsteal, Drawings;
 
         public MenuConfig()
         {
-            mainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
-            mainMenu.Attach();
-            mainMenu.Add(new MenuBool("Stealth", "Stealth Recall"));
-            Global.Orbwalker.Attach(mainMenu);
+            MainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
+            MainMenu.Attach();
+            MainMenu.Add(new MenuBool("Stealth", "Stealth Recall"));
+            Global.Orbwalker.Attach(MainMenu);
 
             Combo = new Menu("TwitchCombo", "Combo")
             {
@@ -70,7 +70,7 @@
                 MenuShortcut.Credits
             })
             {
-                mainMenu.Add(menu);
+                MainMenu.Add(menu);
             }
         }
     }

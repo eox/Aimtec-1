@@ -9,26 +9,26 @@
 
     class KickFlash : IKickFlash
     {
-        private readonly IInsecManager _insecManager;
-        private readonly ISpellConfig _spellConfig;
+        private readonly IInsecManager insecManager;
+        private readonly ISpellConfig spellConfig;
 
         public KickFlash(ISpellConfig spellConfig, IInsecManager insecManager)
         {
-            _spellConfig = spellConfig;
-            _insecManager = insecManager;
+            this.spellConfig = spellConfig;
+            this.insecManager = insecManager;
         }
 
         private Obj_AI_Hero Target => Global.TargetSelector.GetSelectedTarget();
 
         public void OnKeyPressed()
         {
-            if (!this.Enabled || this.Target == null || !_spellConfig.R.Ready || !this.Target.IsValidTarget(_spellConfig.R.Range) || SummonerSpells.Flash == null ||
+            if (!this.Enabled || this.Target == null || !spellConfig.R.Ready || !this.Target.IsValidTarget(spellConfig.R.Range) || SummonerSpells.Flash == null ||
                 !SummonerSpells.Flash.Ready)
             {
                 return;
             }
 
-            _spellConfig.R.CastOnUnit(this.Target);
+            spellConfig.R.CastOnUnit(this.Target);
         }
 
         public void OnProcessSpellCast(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs args)
@@ -38,7 +38,7 @@
                 return;
             }
 
-            SummonerSpells.Flash.Cast(_insecManager.InsecPosition(this.Target));
+            SummonerSpells.Flash.Cast(insecManager.InsecPosition(this.Target));
         }
 
         public bool Enabled { get; set; }

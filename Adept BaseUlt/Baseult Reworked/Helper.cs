@@ -10,7 +10,7 @@
     {
         public static float Speed, Delay;
 
-        public static bool IsValid(Recall_Information information)
+        public static bool IsValid(RecallInformation information)
         {
             return MenuConfig.Menu[((Obj_AI_Hero)information.Sender).ChampionName].Enabled && PlayerDamage(information.Sender) > TargetHealth(information.Sender);
         }
@@ -20,7 +20,7 @@
             return Global.Player.Distance(position) / Speed * 1000 + Delay + Game.Ping / 2f;
         }
 
-        public static int GetCastTime(Vector3 position, Recall_Information information)
+        public static int GetCastTime(Vector3 position, RecallInformation information)
         {
             return (int)(-(Game.TickCount - (information.Start + information.Duration)) - TravelTime(position));
         }

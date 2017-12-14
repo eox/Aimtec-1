@@ -14,7 +14,7 @@
 
     class JungleClear : IJungleClear
     {
-        private readonly Vector3[] _positions =
+        private readonly Vector3[] positions =
         {
             new Vector3(5740, 56, 10629),
             new Vector3(5808, 54, 10319),
@@ -24,7 +24,7 @@
             new Vector3(9687, 56, 3490)
         };
 
-        private readonly string[] _smiteAlways =
+        private readonly string[] smiteAlways =
         {
             "SRU_Dragon_Air",
             "SRU_Dragon_Fire",
@@ -35,7 +35,7 @@
             "SRU_RiftHerald"
         };
 
-        private readonly string[] _smiteOptional =
+        private readonly string[] smiteOptional =
         {
             "Sru_Crab",
             "SRU_Razorbeak",
@@ -46,15 +46,15 @@
             "SRU_Red"
         };
 
-        private readonly ISpellConfig _spellConfig;
+        private readonly ISpellConfig spellConfig;
 
-        private readonly IWardManager _wardManager;
-        private float _q2Time;
+        private readonly IWardManager wardManager;
+        private float q2Time;
 
         public JungleClear(IWardManager wardManager, ISpellConfig spellConfig)
         {
-            _wardManager = wardManager;
-            _spellConfig = spellConfig;
+            this.wardManager = wardManager;
+            this.spellConfig = spellConfig;
         }
 
         public bool StealEnabled { get; set; }
@@ -73,7 +73,7 @@
                 return;
             }
 
-            var count = GameObjects.Jungle.Count(x => x.Distance(Global.Player) <= _spellConfig.Q.Range / 2f);
+            var count = GameObjects.Jungle.Count(x => x.Distance(Global.Player) <= spellConfig.Q.Range / 2f);
 
             if (count <= 1 && mob.Health < Global.Player.GetAutoAttackDamage(mob))
             {
@@ -82,104 +82,104 @@
 
             if (Global.Player.Level <= 4)
             {
-                if (_spellConfig.PassiveStack() >= 1)
+                if (spellConfig.PassiveStack() >= 1)
                 {
                     return;
                 }
 
-                if (_spellConfig.Q.Ready)
+                if (spellConfig.Q.Ready)
                 {
-                    _spellConfig.Q.Cast(mob);
+                    spellConfig.Q.Cast(mob);
                 }
 
-                if (_spellConfig.W.Ready && this.WEnabled && !_spellConfig.IsQ2())
+                if (spellConfig.W.Ready && this.WEnabled && !spellConfig.IsQ2())
                 {
-                    _spellConfig.W.CastOnUnit(Global.Player);
+                    spellConfig.W.CastOnUnit(Global.Player);
                 }
-                else if (_spellConfig.E.Ready && this.EEnabled && !_spellConfig.IsQ2())
+                else if (spellConfig.E.Ready && this.EEnabled && !spellConfig.IsQ2())
                 {
-                    if (_spellConfig.IsFirst(_spellConfig.E))
+                    if (spellConfig.IsFirst(spellConfig.E))
                     {
                         if (Items.CanUseTiamat())
                         {
                             Items.CastTiamat(false);
-                            DelayAction.Queue(50, () => _spellConfig.E.Cast(mob));
+                            DelayAction.Queue(50, () => spellConfig.E.Cast(mob));
                         }
                         else
                         {
-                            _spellConfig.E.Cast(mob);
+                            spellConfig.E.Cast(mob);
                         }
                     }
                     else
                     {
-                        _spellConfig.E.Cast();
+                        spellConfig.E.Cast();
                     }
                 }
             }
             else if (Global.Player.Level <= 8)
             {
-                if (_spellConfig.PassiveStack() >= 1)
+                if (spellConfig.PassiveStack() >= 1)
                 {
                     return;
                 }
 
-                if (_spellConfig.Q.Ready)
+                if (spellConfig.Q.Ready)
                 {
-                    _spellConfig.Q.Cast(mob);
+                    spellConfig.Q.Cast(mob);
                 }
 
-                if (_spellConfig.W.Ready && this.WEnabled)
+                if (spellConfig.W.Ready && this.WEnabled)
                 {
-                    _spellConfig.W.CastOnUnit(Global.Player);
+                    spellConfig.W.CastOnUnit(Global.Player);
                 }
-                else if (_spellConfig.E.Ready && this.EEnabled)
+                else if (spellConfig.E.Ready && this.EEnabled)
                 {
-                    if (_spellConfig.IsFirst(_spellConfig.E))
+                    if (spellConfig.IsFirst(spellConfig.E))
                     {
                         if (Items.CanUseTiamat())
                         {
                             Items.CastTiamat(false);
-                            DelayAction.Queue(50, () => _spellConfig.E.Cast(mob));
+                            DelayAction.Queue(50, () => spellConfig.E.Cast(mob));
                         }
                         else
                         {
-                            _spellConfig.E.Cast(mob);
+                            spellConfig.E.Cast(mob);
                         }
                     }
                     else
                     {
-                        _spellConfig.E.Cast();
+                        spellConfig.E.Cast();
                     }
                 }
             }
             else
             {
-                if (_spellConfig.Q.Ready)
+                if (spellConfig.Q.Ready)
                 {
-                    _spellConfig.Q.Cast(mob);
+                    spellConfig.Q.Cast(mob);
                 }
                 else
                 {
-                    if (_spellConfig.E.Ready && this.EEnabled)
+                    if (spellConfig.E.Ready && this.EEnabled)
                     {
                         if (Items.CanUseTiamat())
                         {
                             Items.CastTiamat(false);
-                            DelayAction.Queue(50, () => _spellConfig.E.Cast(mob));
+                            DelayAction.Queue(50, () => spellConfig.E.Cast(mob));
                         }
                         else
                         {
-                            _spellConfig.E.Cast(mob);
+                            spellConfig.E.Cast(mob);
                         }
                     }
 
-                    if (_spellConfig.W.Ready && this.WEnabled)
+                    if (spellConfig.W.Ready && this.WEnabled)
                     {
-                        if (_spellConfig.E.Ready && this.EEnabled && !_spellConfig.IsFirst(_spellConfig.E))
+                        if (spellConfig.E.Ready && this.EEnabled && !spellConfig.IsFirst(spellConfig.E))
                         {
                             return;
                         }
-                        _spellConfig.W.CastOnUnit(Global.Player);
+                        spellConfig.W.CastOnUnit(Global.Player);
                     }
                 }
             }
@@ -187,36 +187,36 @@
 
         public void OnUpdate()
         {
-            if (!_spellConfig.Q.Ready || !this.Q1Enabled)
+            if (!spellConfig.Q.Ready || !this.Q1Enabled)
             {
                 return;
             }
 
             var mob = ObjectManager.Get<Obj_AI_Minion>().
-                FirstOrDefault(x => x.Distance(Global.Player) < _spellConfig.Q.Range / 2 && x.GetJungleType() != GameObjects.JungleType.Unknown && x.MaxHealth > 7);
+                FirstOrDefault(x => x.Distance(Global.Player) < spellConfig.Q.Range / 2 && x.GetJungleType() != GameObjects.JungleType.Unknown && x.MaxHealth > 7);
 
             if (mob == null)
             {
                 return;
             }
 
-            if (_spellConfig.Q.Ready && _spellConfig.IsQ2() &&
-                (_spellConfig.QAboutToEnd || Global.Player.GetSpellDamage(mob, SpellSlot.Q, DamageStage.SecondCast) + Global.Player.GetAutoAttackDamage(mob) > mob.Health))
+            if (spellConfig.Q.Ready && spellConfig.IsQ2() &&
+                (spellConfig.QAboutToEnd || Global.Player.GetSpellDamage(mob, SpellSlot.Q, DamageStage.SecondCast) + Global.Player.GetAutoAttackDamage(mob) > mob.Health))
             {
-                _spellConfig.Q.CastOnUnit(mob);
+                spellConfig.Q.CastOnUnit(mob);
             }
 
-            if (!_smiteOptional.Contains(mob.UnitSkinName) && !_smiteAlways.Contains(mob.UnitSkinName))
+            if (!smiteOptional.Contains(mob.UnitSkinName) && !smiteAlways.Contains(mob.UnitSkinName))
             {
                 return;
             }
 
-            if (_spellConfig.Q.Ready && _spellConfig.IsQ2() && mob.Health < Global.Player.GetSpellDamage(mob, SpellSlot.Q, DamageStage.SecondCast))
+            if (spellConfig.Q.Ready && spellConfig.IsQ2() && mob.Health < Global.Player.GetSpellDamage(mob, SpellSlot.Q, DamageStage.SecondCast))
             {
                 Global.Player.SpellBook.CastSpell(SpellSlot.Q);
             }
 
-            if (!_spellConfig.IsQ2() && Game.TickCount - _spellConfig.LastQ1CastAttempt > 500)
+            if (!spellConfig.IsQ2() && Game.TickCount - spellConfig.LastQ1CastAttempt > 500)
             {
                 Global.Player.SpellBook.CastSpell(SpellSlot.Q, mob.Position);
             }
@@ -226,11 +226,11 @@
         {
             var smiteAbleMob = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.Distance(Global.Player) < 1300);
 
-            if (smiteAbleMob != null && (_smiteAlways.Contains(smiteAbleMob.UnitSkinName) || _smiteOptional.Contains(smiteAbleMob.UnitSkinName)))
+            if (smiteAbleMob != null && (smiteAlways.Contains(smiteAbleMob.UnitSkinName) || smiteOptional.Contains(smiteAbleMob.UnitSkinName)))
             {
                 if (smiteAbleMob.Health < StealDamage(smiteAbleMob))
                 {
-                    if (_smiteOptional.Contains(smiteAbleMob.UnitSkinName) && Global.Player.HealthPercent() >= (SummonerSpells.Ammo("Smite") <= 1 ? 40 : 50) ||
+                    if (smiteOptional.Contains(smiteAbleMob.UnitSkinName) && Global.Player.HealthPercent() >= (SummonerSpells.Ammo("Smite") <= 1 ? 40 : 50) ||
                         smiteAbleMob.UnitSkinName.ToLower().Contains("blue") && !this.BlueEnabled)
                     {
                         return;
@@ -241,9 +241,9 @@
                         SummonerSpells.Smite.CastOnUnit(smiteAbleMob);
                     }
 
-                    if (_spellConfig.IsQ2() && _spellConfig.Q.Ready)
+                    if (spellConfig.IsQ2() && spellConfig.Q.Ready)
                     {
-                        _spellConfig.Q.Cast();
+                        spellConfig.Q.Cast();
                     }
                 }
             }
@@ -255,25 +255,25 @@
                 return;
             }
 
-            if (_q2Time > 0 && Game.TickCount - _q2Time <= 1500 && SummonerSpells.IsValid(SummonerSpells.Smite) && StealDamage(mob) > mob.Health)
+            if (q2Time > 0 && Game.TickCount - q2Time <= 1500 && SummonerSpells.IsValid(SummonerSpells.Smite) && StealDamage(mob) > mob.Health)
             {
-                if (_spellConfig.W.Ready && _spellConfig.IsFirst(_spellConfig.W) && Global.Player.Distance(mob) <= 500)
+                if (spellConfig.W.Ready && spellConfig.IsFirst(spellConfig.W) && Global.Player.Distance(mob) <= 500)
                 {
                     SummonerSpells.Smite.CastOnUnit(mob);
-                    _wardManager.WardJump(_positions.FirstOrDefault(), (int) mob.Distance(Global.Player));
+                    wardManager.WardJump(positions.FirstOrDefault(), (int) mob.Distance(Global.Player));
                 }
             }
 
-            if (mob.Position.CountAllyHeroesInRange(700) <= 1 && _spellConfig.Q.Ready && _spellConfig.IsQ2() && StealDamage(mob) > mob.Health)
+            if (mob.Position.CountAllyHeroesInRange(700) <= 1 && spellConfig.Q.Ready && spellConfig.IsQ2() && StealDamage(mob) > mob.Health)
             {
-                _spellConfig.Q.Cast();
-                _q2Time = Game.TickCount;
+                spellConfig.Q.Cast();
+                q2Time = Game.TickCount;
             }
         }
 
         private double StealDamage(Obj_AI_Base mob)
         {
-            return SummonerSpells.SmiteMonsters() + (_spellConfig.IsQ2() ? Global.Player.GetSpellDamage(mob, SpellSlot.Q, DamageStage.SecondCast) : 0);
+            return SummonerSpells.SmiteMonsters() + (spellConfig.IsQ2() ? Global.Player.GetSpellDamage(mob, SpellSlot.Q, DamageStage.SecondCast) : 0);
         }
     }
 }

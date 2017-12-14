@@ -4,16 +4,16 @@
 
     class GetRandom
     {
-        private static Random _random;
+        private static Random random;
 
         public GetRandom()
         {
-            _random = new Random();
+            random = new Random();
         }
 
         public static int Next(int min, int max)
         {
-            return _random.Next(min, max);
+            return random.Next(min, max);
         }
     }
 }

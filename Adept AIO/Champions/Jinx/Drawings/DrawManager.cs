@@ -9,20 +9,20 @@
 
     class DrawManager
     {
-        private readonly Dmg _dmg;
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly Dmg dmg;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public DrawManager(MenuConfig menuConfig, Dmg dmg, SpellConfig spellConfig)
         {
-            _menuConfig = menuConfig;
-            _dmg = dmg;
-            _spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
+            this.dmg = dmg;
+            this.spellConfig = spellConfig;
         }
 
         public void OnPresent()
         {
-            if (Global.Player.IsDead || !_menuConfig.Drawings["Dmg"].Enabled)
+            if (Global.Player.IsDead || !menuConfig.Drawings["Dmg"].Enabled)
             {
                 return;
             }
@@ -43,14 +43,14 @@
                 return;
             }
 
-            if (_menuConfig.Drawings["R"].Enabled)
+            if (menuConfig.Drawings["R"].Enabled)
             {
-                Render.Circle(Global.Player.Position, _menuConfig.Killsteal["Range"].Value, (uint) _menuConfig.Drawings["Segments"].Value, Color.CadetBlue);
+                Render.Circle(Global.Player.Position, menuConfig.Killsteal["Range"].Value, (uint) menuConfig.Drawings["Segments"].Value, Color.CadetBlue);
             }
 
-            if (_menuConfig.Drawings["W"].Enabled)
+            if (menuConfig.Drawings["W"].Enabled)
             {
-                Render.Circle(Global.Player.Position, _spellConfig.W.Range, (uint) _menuConfig.Drawings["Segments"].Value, Color.Gray);
+                Render.Circle(Global.Player.Position, spellConfig.W.Range, (uint) menuConfig.Drawings["Segments"].Value, Color.Gray);
             }
         }
     }

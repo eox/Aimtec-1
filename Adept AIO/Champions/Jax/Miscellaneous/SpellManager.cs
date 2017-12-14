@@ -8,8 +8,8 @@
 
     class SpellManager
     {
-        private static bool _canUseE;
-        private static Obj_AI_Base _unit;
+        private static bool canUseE;
+        private static Obj_AI_Base unit;
 
         public static void OnProcessSpellCast(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs args)
         {
@@ -21,28 +21,28 @@
             switch (args.SpellData.Name)
             {
                 case "JaxCounterStrike":
-                    _canUseE = false;
+                    canUseE = false;
                     break;
             }
         }
 
         public static void OnUpdate()
         {
-            if (_unit == null || !_canUseE || !_unit.IsValid || SpellConfig.SecondE)
+            if (unit == null || !canUseE || !unit.IsValid || SpellConfig.SecondE)
             {
                 return;
             }
 
-            if (Game.TickCount - SpellConfig.E.LastCastAttemptT > 1700 || _unit.Distance(Global.Player) <= SpellConfig.E.Range + _unit.BoundingRadius)
+            if (Game.TickCount - SpellConfig.E.LastCastAttemptT > 1700 || unit.Distance(Global.Player) <= SpellConfig.E.Range + unit.BoundingRadius)
             {
-                SpellConfig.E.Cast(_unit);
+                SpellConfig.E.Cast(unit);
             }
         }
 
         public static void CastE(Obj_AI_Base target)
         {
-            _canUseE = true;
-            _unit = target;
+            canUseE = true;
+            unit = target;
         }
     }
 }

@@ -7,18 +7,18 @@
 
     class JungleClear
     {
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public JungleClear(MenuConfig menuConfig, SpellConfig spellConfig)
         {
-            _menuConfig = menuConfig;
-            _spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
+            this.spellConfig = spellConfig;
         }
 
         public void OnUpdate()
         {
-            var minion = GameObjects.JungleLarge.FirstOrDefault(x => x.IsValidTarget(_spellConfig.W.Range));
+            var minion = GameObjects.JungleLarge.FirstOrDefault(x => x.IsValidTarget(spellConfig.W.Range));
             if (minion == null)
             {
                 return;
@@ -26,17 +26,17 @@
 
             var dist = Global.Player.Distance(minion);
 
-            if (_spellConfig.W.Ready && _menuConfig.JungleClear["W"].Enabled && _menuConfig.JungleClear["W"].Value < Global.Player.ManaPercent() && dist <= 650 &&
+            if (spellConfig.W.Ready && menuConfig.JungleClear["W"].Enabled && menuConfig.JungleClear["W"].Value < Global.Player.ManaPercent() && dist <= 650 &&
                 Global.Player.CountEnemyHeroesInRange(2000) == 0)
             {
-                _spellConfig.W.Cast(minion);
+                spellConfig.W.Cast(minion);
             }
 
-            if (_spellConfig.Q.Ready && _menuConfig.JungleClear["Q"].Enabled)
+            if (spellConfig.Q.Ready && menuConfig.JungleClear["Q"].Enabled)
             {
-                if (!_spellConfig.IsQ2 && dist > _spellConfig.DefaultAuotAttackRange || _spellConfig.IsQ2 && dist <= _spellConfig.DefaultAuotAttackRange)
+                if (!spellConfig.IsQ2 && dist > spellConfig.DefaultAuotAttackRange || spellConfig.IsQ2 && dist <= spellConfig.DefaultAuotAttackRange)
                 {
-                    _spellConfig.Q.Cast();
+                    spellConfig.Q.Cast();
                 }
             }
         }

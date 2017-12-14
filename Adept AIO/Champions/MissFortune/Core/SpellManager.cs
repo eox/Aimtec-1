@@ -14,7 +14,7 @@
     class SpellManager
     {
         public static Spell Q, W, E, R;
-        private static float _lastR;
+        private static float lastR;
 
         public SpellManager()
         {
@@ -41,7 +41,7 @@
                 return;
             }
 
-            _lastR = Environment.TickCount;
+            lastR = Environment.TickCount;
         }
 
         private static void OnPreAttack(object sender, PreAttackEventArgs args)
@@ -62,7 +62,7 @@
 
         public static bool IsUlting()
         {
-            return Global.Player.HasBuff("missfortunebulletsound") || Environment.TickCount - _lastR <= 700;
+            return Global.Player.HasBuff("missfortunebulletsound") || Environment.TickCount - lastR <= 700;
         }
 
         public static Geometry.Sector Cone(Obj_AI_Base target)

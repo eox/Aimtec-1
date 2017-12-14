@@ -9,50 +9,50 @@
 
     class Misc
     {
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public Misc(SpellConfig spellConfig, MenuConfig menuConfig)
         {
-            _spellConfig = spellConfig;
-            _menuConfig = menuConfig;
+            this.spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
         }
 
         public void OnUpdate()
         {
-            if (_spellConfig.E.Ready)
+            if (spellConfig.E.Ready)
             {
-                if (_menuConfig.Combo["Teleport"].Enabled)
+                if (menuConfig.Combo["Teleport"].Enabled)
                 {
                     var enemyTeleport = ObjectManager.Get<Obj_AI_Minion>().
-                        FirstOrDefault(x => x.IsEnemy && x.Distance(Global.Player) <= _spellConfig.E.Range && x.Buffs.Any(y => y.IsActive && y.Name.ToLower().Contains("teleport")));
+                        FirstOrDefault(x => x.IsEnemy && x.Distance(Global.Player) <= spellConfig.E.Range && x.Buffs.Any(y => y.IsActive && y.Name.ToLower().Contains("teleport")));
                     if (enemyTeleport != null)
                     {
-                        _spellConfig.E.Cast(enemyTeleport.ServerPosition);
+                        spellConfig.E.Cast(enemyTeleport.ServerPosition);
                     }
                 }
             }
 
-            var target = Global.TargetSelector.GetTarget(_menuConfig.Killsteal["Range"].Value);
+            var target = Global.TargetSelector.GetTarget(menuConfig.Killsteal["Range"].Value);
 
             if (target == null)
             {
                 return;
             }
 
-            if (_spellConfig.R.Ready && _menuConfig.Killsteal["Range"].Enabled && _menuConfig.Whitelist[target.ChampionName].Enabled &&
-                (target.Health < Global.Player.GetSpellDamage(target, SpellSlot.R) && target.Distance(Global.Player) > Global.Player.AttackRange || _menuConfig.Combo["Semi"].Enabled))
+            if (spellConfig.R.Ready && menuConfig.Killsteal["Range"].Enabled && menuConfig.Whitelist[target.ChampionName].Enabled &&
+                (target.Health < Global.Player.GetSpellDamage(target, SpellSlot.R) && target.Distance(Global.Player) > Global.Player.AttackRange || menuConfig.Combo["Semi"].Enabled))
             {
-                _spellConfig.R.Cast(target);
+                spellConfig.R.Cast(target);
             }
 
-            if (_spellConfig.E.Ready)
+            if (spellConfig.E.Ready)
             {
-                var count = GameObjects.EnemyHeroes.Count(x => x.Distance(target) < _spellConfig.E.Range * 3);
+                var count = GameObjects.EnemyHeroes.Count(x => x.Distance(target) < spellConfig.E.Range * 3);
 
-                if (_menuConfig.Combo["Count"].Enabled && count >= 2 || _menuConfig.Combo["Immovable"].Enabled && target.IsHardCc())
+                if (menuConfig.Combo["Count"].Enabled && count >= 2 || menuConfig.Combo["Immovable"].Enabled && target.IsHardCc())
                 {
-                    _spellConfig.E.Cast(target);
+                    spellConfig.E.Cast(target);
                 }
             }
         }

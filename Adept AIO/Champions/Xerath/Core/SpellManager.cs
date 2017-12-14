@@ -14,7 +14,7 @@
     {
         public static bool CastingUltimate => Global.Player.HasBuff("XerathLocusOfPower2");
 
-        private static float _lastRCast;
+        private static float lastRCast;
 
         private static readonly int[] UltiShots = { 0, 3, 4, 5 };
 
@@ -58,9 +58,9 @@
             {
                 return;
             }
-            var targetPosIn250ms = target.Position + (target.Position - Q.GetPrediction(target).CastPosition).Normalized() * (0.25f * target.MoveSpeed);
+            var targetPosIn250Ms = target.Position + (target.Position - Q.GetPrediction(target).CastPosition).Normalized() * (0.25f * target.MoveSpeed);
 
-            if(rect.IsInside(targetPosIn250ms.To2D()) && rect.End.Distance(targetPosIn250ms) > target.BoundingRadius)
+            if(rect.IsInside(targetPosIn250Ms.To2D()) && rect.End.Distance(targetPosIn250Ms) > target.BoundingRadius)
             Q.ShootChargedSpell(Q.GetPrediction(target).CastPosition);
         }
 
@@ -105,7 +105,7 @@
                     R.Cast();
                 }
             }
-            else if (Game.TickCount - _lastRCast > 700)
+            else if (Game.TickCount - lastRCast > 700)
             {
                 R.Cast(target);
             }
@@ -139,7 +139,7 @@
                 return;
             }
 
-            _lastRCast = Game.TickCount;
+            lastRCast = Game.TickCount;
         }
     }
 }

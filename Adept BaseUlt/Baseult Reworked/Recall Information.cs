@@ -2,16 +2,16 @@
 {
     using Aimtec;
 
-    class Recall_Information
+    class RecallInformation
     {
-        public int NetworkID;
+        public int NetworkId;
         public int Duration;
         public int Start;
         public Obj_AI_Base Sender;
      
-        public Recall_Information(int netid, int duration, Obj_AI_Base sender, int start = 0)
+        public RecallInformation(int netid, int duration, Obj_AI_Base sender, int start = 0)
         {
-            NetworkID = netid;
+            NetworkId = netid;
             Duration = duration;
             Sender = sender;
             Start = start;

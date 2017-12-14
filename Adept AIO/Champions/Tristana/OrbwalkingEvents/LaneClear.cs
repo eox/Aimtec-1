@@ -9,18 +9,18 @@
 
     class LaneClear
     {
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public LaneClear(SpellConfig spellConfig, MenuConfig menuConfig)
         {
-            _spellConfig = spellConfig;
-            _menuConfig = menuConfig;
+            this.spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
         }
 
         public void OnPostAttack()
         {
-            if (!_spellConfig.Q.Ready || !_menuConfig.LaneClear["Q"].Enabled || _menuConfig.LaneClear["Check"].Enabled && Global.Player.CountEnemyHeroesInRange(2500) > 0)
+            if (!spellConfig.Q.Ready || !menuConfig.LaneClear["Q"].Enabled || menuConfig.LaneClear["Check"].Enabled && Global.Player.CountEnemyHeroesInRange(2500) > 0)
             {
                 return;
             }
@@ -32,23 +32,23 @@
                 return;
             }
 
-            _spellConfig.Q.Cast();
+            spellConfig.Q.Cast();
         }
 
         public void OnUpdate()
         {
-            if (_menuConfig.LaneClear["Check"].Enabled && Global.Player.CountEnemyHeroesInRange(2500) > 0)
+            if (menuConfig.LaneClear["Check"].Enabled && Global.Player.CountEnemyHeroesInRange(2500) > 0)
             {
                 return;
             }
 
-            if (_spellConfig.E.Ready)
+            if (spellConfig.E.Ready)
             {
-                var turret = GameObjects.EnemyTurrets.FirstOrDefault(x => x.IsValid && x.Distance(Global.Player) <= _spellConfig.FullRange);
+                var turret = GameObjects.EnemyTurrets.FirstOrDefault(x => x.IsValid && x.Distance(Global.Player) <= spellConfig.FullRange);
 
-                if (_menuConfig.LaneClear["Turret"].Enabled && turret != null && turret.HealthPercent() >= 35)
+                if (menuConfig.LaneClear["Turret"].Enabled && turret != null && turret.HealthPercent() >= 35)
                 {
-                    _spellConfig.E.CastOnUnit(turret);
+                    spellConfig.E.CastOnUnit(turret);
                 }
                 else
                 {
@@ -57,15 +57,15 @@
                         x.Health < Global.Player.GetSpellDamage(x, SpellSlot.E) + Global.Player.GetAutoAttackDamage(x) * 5 && x.IsValid);
                     var cannon = GameObjects.EnemyMinions.FirstOrDefault(x => x.UnitSkinName.ToLower().Contains("cannon") && x.IsValid);
 
-                    if (minions >= _menuConfig.LaneClear["E"].Value)
+                    if (minions >= menuConfig.LaneClear["E"].Value)
                     {
                         if (cannon != null)
                         {
-                            _spellConfig.E.CastOnUnit(cannon);
+                            spellConfig.E.CastOnUnit(cannon);
                         }
                         else if (minion != null)
                         {
-                            _spellConfig.E.CastOnUnit(minion);
+                            spellConfig.E.CastOnUnit(minion);
                         }
                     }
                 }

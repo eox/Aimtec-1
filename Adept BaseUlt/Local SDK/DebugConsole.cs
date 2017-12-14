@@ -6,30 +6,30 @@ namespace Adept_BaseUlt.Local_SDK
 
     class DebugConsole
     {
-        private static MessageState _messageState;
-        private static float _lastTick;
-        private static string _lastMessage;
+        private static MessageState messageState;
+        private static float lastTick;
+        private static string lastMessage;
 
         public static void WriteLine(string message, MessageState messageState, bool onlyOnce = true)
         {
-            if (onlyOnce && message == _lastMessage && Game.TickCount - _lastTick <= 5000)
+            if (onlyOnce && message == lastMessage && Game.TickCount - lastTick <= 5000)
             {
                 return;
             }
 
-            _messageState = messageState;
+            DebugConsole.messageState = messageState;
 
             Console.ForegroundColor = GetForeGroundColor();
             Console.WriteLine($"[{DateTime.Now}] [BASEULT] [{messageState}] {message}");
             Console.ResetColor();
 
-            _lastTick = Game.TickCount;
-            _lastMessage = message;
+            lastTick = Game.TickCount;
+            lastMessage = message;
         }
 
         private static ConsoleColor GetForeGroundColor()
         {
-            switch (_messageState)
+            switch (messageState)
             {
                 case MessageState.Debug: return ConsoleColor.Cyan;
                 case MessageState.Error: return ConsoleColor.Red;

@@ -276,7 +276,7 @@
                 Direction = (direction - center).Normalized();
                 Angle = angle;
                 Radius = radius;
-                _quality = quality;
+                this.quality = quality;
                 UpdatePolygon();
             }
 
@@ -307,7 +307,7 @@
             /// <summary>
             ///     The quality
             /// </summary>
-            private readonly int _quality;
+            private readonly int quality;
 
             #endregion
 
@@ -340,12 +340,12 @@
             public void UpdatePolygon(int offset = 0)
             {
                 Points.Clear();
-                var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / _quality);
+                var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / quality);
                 Points.Add(Center);
                 var side1 = Direction.Rotated(-Angle * 0.5f);
-                for (var i = 0; i <= _quality; i++)
+                for (var i = 0; i <= quality; i++)
                 {
-                    var cDirection = side1.Rotated(i * Angle / _quality).Normalized();
+                    var cDirection = side1.Rotated(i * Angle / quality).Normalized();
                     Points.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                 }
             }
@@ -450,7 +450,7 @@
         /// </summary>
         /// <param name="v">The v.</param>
         /// <returns></returns>
-        public static Vector2 TO2D(this Vector3 v)
+        public static Vector2 To2D(this Vector3 v)
         {
             return new Vector2(v.X, v.Y);
         }

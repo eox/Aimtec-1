@@ -9,23 +9,23 @@
 
     class WardManager : IWardManager
     {
-        private readonly IWardTracker _wardTracker;
+        private readonly IWardTracker wardTracker;
 
         public WardManager(IWardTracker wardTracker)
         {
-            _wardTracker = wardTracker;
+            this.wardTracker = wardTracker;
         }
 
         public float LastTimeCasted { get; private set; }
 
         public void WardJump(Vector3 position, int range)
         {
-            if (Game.TickCount - _wardTracker.LastWardCreated < 500)
+            if (Game.TickCount - wardTracker.LastWardCreated < 500)
             {
                 return;
             }
 
-            var ward = _wardTracker.Ward();
+            var ward = wardTracker.Ward();
 
             if (ward == null)
             {
@@ -36,18 +36,18 @@
             position = Global.Player.ServerPosition.Extend(position, range);
 
             this.LastTimeCasted = Game.TickCount;
-            _wardTracker.LastWardCreated = Game.TickCount;
-            _wardTracker.WardPosition = position;
+            wardTracker.LastWardCreated = Game.TickCount;
+            wardTracker.WardPosition = position;
         
             Items.CastItem(ward, position);
 
             if (NavMesh.WorldToCell(position).Flags.HasFlag(NavCellFlags.Wall))
             {
-                _wardTracker.IsAtWall = true;
+                wardTracker.IsAtWall = true;
             }
             else
             {
-                _wardTracker.IsAtWall = false;
+                wardTracker.IsAtWall = false;
                 Global.Player.SpellBook.CastSpell(SpellSlot.W, position);
             }
         }

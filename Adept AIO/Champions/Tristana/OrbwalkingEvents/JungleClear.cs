@@ -8,37 +8,37 @@
 
     class JungleClear
     {
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public JungleClear(MenuConfig menuConfig, SpellConfig spellConfig)
         {
-            _menuConfig = menuConfig;
-            _spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
+            this.spellConfig = spellConfig;
         }
 
         public void OnPostAttack(AttackableUnit target)
         {
-            if (!_spellConfig.Q.Ready || !_menuConfig.JungleClear["Q"].Enabled || target == null || _menuConfig.JungleClear["Avoid"].Enabled && Global.Player.Level == 1)
+            if (!spellConfig.Q.Ready || !menuConfig.JungleClear["Q"].Enabled || target == null || menuConfig.JungleClear["Avoid"].Enabled && Global.Player.Level == 1)
             {
                 return;
             }
 
-            _spellConfig.Q.Cast();
+            spellConfig.Q.Cast();
         }
 
         public void OnUpdate()
         {
-            var mob = GameObjects.Jungle.Where(x => x.IsValidTarget(_spellConfig.FullRange)).OrderByDescending(x => x.GetJungleType()).FirstOrDefault();
+            var mob = GameObjects.Jungle.Where(x => x.IsValidTarget(spellConfig.FullRange)).OrderByDescending(x => x.GetJungleType()).FirstOrDefault();
 
-            if (mob == null || _menuConfig.JungleClear["Avoid"].Enabled && Global.Player.Level == 1)
+            if (mob == null || menuConfig.JungleClear["Avoid"].Enabled && Global.Player.Level == 1)
             {
                 return;
             }
 
-            if (_spellConfig.E.Ready && _menuConfig.JungleClear["E"].Enabled)
+            if (spellConfig.E.Ready && menuConfig.JungleClear["E"].Enabled)
             {
-                _spellConfig.E.CastOnUnit(mob);
+                spellConfig.E.CastOnUnit(mob);
             }
         }
     }

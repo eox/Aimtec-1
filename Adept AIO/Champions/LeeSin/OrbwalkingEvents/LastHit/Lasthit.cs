@@ -9,11 +9,11 @@
 
     class Lasthit : ILasthit
     {
-        private readonly ISpellConfig _spellConfig;
+        private readonly ISpellConfig spellConfig;
 
         public Lasthit(ISpellConfig spellConfig)
         {
-            _spellConfig = spellConfig;
+            this.spellConfig = spellConfig;
         }
 
         public bool Enabled { get; set; }
@@ -25,13 +25,13 @@
                 return;
             }
 
-            var minions = GameObjects.EnemyMinions.LastOrDefault(x => x.IsValidTarget(_spellConfig.Q.Range) && x.Distance(Global.Player) > 300 &&
+            var minions = GameObjects.EnemyMinions.LastOrDefault(x => x.IsValidTarget(spellConfig.Q.Range) && x.Distance(Global.Player) > 300 &&
                                                                       x.Health * 0.9 < Global.Player.GetSpellDamage(x, SpellSlot.Q) && x.MaxHealth > 6);
-            if (minions == null || !_spellConfig.Q.Ready || _spellConfig.IsQ2())
+            if (minions == null || !spellConfig.Q.Ready || spellConfig.IsQ2())
             {
                 return;
             }
-            _spellConfig.Q.Cast(minions);
+            spellConfig.Q.Cast(minions);
         }
     }
 }

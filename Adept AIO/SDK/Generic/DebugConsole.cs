@@ -4,30 +4,30 @@
 
     class DebugConsole
     {
-        private static MessageState _messageState;
-        private static float _lastTick;
-        private static string _lastMessage;
+        private static MessageState messageState;
+        private static float lastTick;
+        private static string lastMessage;
 
         public static void WriteLine(string message, MessageState messageState, bool onlyOnce = true)
         {
-            if (onlyOnce && message == _lastMessage && Environment.TickCount - _lastTick <= 5000)
+            if (onlyOnce && message == lastMessage && Environment.TickCount - lastTick <= 5000)
             {
                 return;
             }
 
-            _messageState = messageState;
+            DebugConsole.messageState = messageState;
 
             Console.ForegroundColor = GetForeGroundColor();
             Console.WriteLine($"[{DateTime.Now}] [ADEPT AIO] [{messageState}] {message}");
             Console.ResetColor();
 
-            _lastTick = Environment.TickCount;
-            _lastMessage = message;
+            lastTick = Environment.TickCount;
+            lastMessage = message;
         }
 
         public static void Write(string message, MessageState messageState)
         {
-            _messageState = messageState;
+            DebugConsole.messageState = messageState;
 
             Console.ForegroundColor = GetForeGroundColor();
             Console.Write($"[{DateTime.Now}] [ADEPT AIO] [{messageState}] {message}");
@@ -36,7 +36,7 @@
 
         private static ConsoleColor GetForeGroundColor()
         {
-            switch (_messageState)
+            switch (messageState)
             {
                 case MessageState.Debug: return ConsoleColor.Cyan;
                 case MessageState.Error: return ConsoleColor.Red;

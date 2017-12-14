@@ -8,11 +8,11 @@
 
     class Dmg : IDmg
     {
-        private readonly ISpellConfig _spellConfig;
+        private readonly ISpellConfig spellConfig;
 
         public Dmg(ISpellConfig spellConfig)
         {
-            _spellConfig = spellConfig;
+            this.spellConfig = spellConfig;
         }
 
         public double Damage(Obj_AI_Base target)
@@ -24,14 +24,14 @@
 
             var dmg = Global.Player.GetAutoAttackDamage(target);
 
-            if (_spellConfig.E.Ready)
+            if (spellConfig.E.Ready)
             {
                 dmg += Global.Player.GetSpellDamage(target, SpellSlot.E) + dmg;
             }
 
-            if (_spellConfig.Q.Ready)
+            if (spellConfig.Q.Ready)
             {
-                if (_spellConfig.IsQ2())
+                if (spellConfig.IsQ2())
                 {
                     dmg += Global.Player.GetSpellDamage(target, SpellSlot.Q, DamageStage.SecondCast) + dmg;
                 }
@@ -41,7 +41,7 @@
                 }
             }
 
-            if (_spellConfig.R.Ready)
+            if (spellConfig.R.Ready)
             {
                 dmg += Global.Player.GetSpellDamage(target, SpellSlot.R);
             }

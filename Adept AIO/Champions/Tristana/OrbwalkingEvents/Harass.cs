@@ -5,36 +5,36 @@
 
     class Harass
     {
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public Harass(SpellConfig spellConfig, MenuConfig menuConfig)
         {
-            _spellConfig = spellConfig;
-            _menuConfig = menuConfig;
+            this.spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
         }
 
         public void OnUpdate()
         {
-            var target = Global.TargetSelector.GetTarget(_spellConfig.FullRange);
+            var target = Global.TargetSelector.GetTarget(spellConfig.FullRange);
 
             if (target == null)
             {
                 return;
             }
 
-            if (_spellConfig.Q.Ready && _menuConfig.Harass["Q"].Enabled)
+            if (spellConfig.Q.Ready && menuConfig.Harass["Q"].Enabled)
             {
-                _spellConfig.Q.Cast();
+                spellConfig.Q.Cast();
             }
 
-            if (_spellConfig.E.Ready && _menuConfig.Harass["E"].Enabled)
+            if (spellConfig.E.Ready && menuConfig.Harass["E"].Enabled)
             {
-                if (!_menuConfig.Harass[target.ChampionName].Enabled)
+                if (!menuConfig.Harass[target.ChampionName].Enabled)
                 {
                     return;
                 }
-                _spellConfig.E.CastOnUnit(target);
+                spellConfig.E.CastOnUnit(target);
             }
         }
     }

@@ -8,11 +8,11 @@
 
     class Dmg
     {
-        private readonly SpellConfig _spellConfig;
+        private readonly SpellConfig spellConfig;
 
         public Dmg(SpellConfig spellConfig)
         {
-            _spellConfig = spellConfig;
+            this.spellConfig = spellConfig;
         }
 
         public double Damage(Obj_AI_Base target)
@@ -29,12 +29,12 @@
                 dmg += Global.Player.GetAutoAttackDamage(target);
             }
 
-            if (_spellConfig.E.Ready || target.HasBuff("TristanaECharge"))
+            if (spellConfig.E.Ready || target.HasBuff("TristanaECharge"))
             {
                 dmg += Global.Player.GetSpellDamage(target, SpellSlot.E) + Global.Player.GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
             }
 
-            if (_spellConfig.R.Ready)
+            if (spellConfig.R.Ready)
             {
                 dmg += Global.Player.GetSpellDamage(target, SpellSlot.R);
             }

@@ -14,19 +14,19 @@
     {
         public static OrbwalkerMode FleeOrbwalkerMode;
 
-        private static Menu _mainMenu;
+        private static Menu mainMenu;
 
         public static Menu Combo, Harass, LaneClear, JungleClear, Lasthit, Killsteal, Misc, Drawings;
 
         public static void Attach()
         {
-            _mainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
-            _mainMenu.Attach();
+            mainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
+            mainMenu.Attach();
 
             FleeOrbwalkerMode = new OrbwalkerMode("Flee", KeyCode.A, null, Flee.OnKeyPressed);
             Global.Orbwalker.AddMode(FleeOrbwalkerMode);
 
-            Global.Orbwalker.Attach(_mainMenu);
+            Global.Orbwalker.Attach(mainMenu);
 
             Combo = new Menu("Combo", "Combo")
             {
@@ -102,7 +102,7 @@
                 new MenuBool("Pred", "Draw Q Prediction")
             };
 
-            Gapcloser.Attach(_mainMenu, "Anti Gapcloser");
+            Gapcloser.Attach(mainMenu, "Anti Gapcloser");
 
             foreach (var menu in new List<Menu>
             {
@@ -117,7 +117,7 @@
                 MenuShortcut.Credits
             })
             {
-                _mainMenu.Add(menu);
+                mainMenu.Add(menu);
             }
         }
     }

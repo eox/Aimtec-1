@@ -6,18 +6,18 @@
 
     class Combo
     {
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public Combo(SpellConfig spellConfig, MenuConfig menuConfig)
         {
-            _spellConfig = spellConfig;
-            _menuConfig = menuConfig;
+            this.spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
         }
 
         public void OnUpdate()
         {
-            var target = Global.TargetSelector.GetTarget(_spellConfig.W.Range);
+            var target = Global.TargetSelector.GetTarget(spellConfig.W.Range);
 
             if (target == null)
             {
@@ -26,22 +26,22 @@
 
             var dist = target.Distance(Global.Player);
 
-            if (_spellConfig.E.Ready && _menuConfig.Combo["Close"].Enabled && target.Distance(Global.Player) <= Global.Player.AttackRange - 250)
+            if (spellConfig.E.Ready && menuConfig.Combo["Close"].Enabled && target.Distance(Global.Player) <= Global.Player.AttackRange - 250)
             {
-                _spellConfig.E.Cast(target);
+                spellConfig.E.Cast(target);
             }
 
-            if (_spellConfig.Q.Ready && _menuConfig.Combo["Q"].Enabled)
+            if (spellConfig.Q.Ready && menuConfig.Combo["Q"].Enabled)
             {
-                if (!_spellConfig.IsQ2 && dist > _spellConfig.DefaultAuotAttackRange && dist <= _spellConfig.Q2Range || _spellConfig.IsQ2 && dist <= _spellConfig.DefaultAuotAttackRange)
+                if (!spellConfig.IsQ2 && dist > spellConfig.DefaultAuotAttackRange && dist <= spellConfig.Q2Range || spellConfig.IsQ2 && dist <= spellConfig.DefaultAuotAttackRange)
                 {
-                    _spellConfig.Q.Cast();
+                    spellConfig.Q.Cast();
                 }
             }
 
-            if (_spellConfig.W.Ready && _menuConfig.Combo["W"].Enabled && dist <= _menuConfig.Combo["W"].Value && target.Distance(Global.Player) > Global.Player.AttackRange + 200)
+            if (spellConfig.W.Ready && menuConfig.Combo["W"].Enabled && dist <= menuConfig.Combo["W"].Value && target.Distance(Global.Player) > Global.Player.AttackRange + 200)
             {
-                _spellConfig.W.Cast(target);
+                spellConfig.W.Cast(target);
             }
         }
     }

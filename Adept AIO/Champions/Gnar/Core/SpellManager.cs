@@ -19,7 +19,7 @@
     {
         public static Spell Q, W, E, R;
 
-        private static int _lastCheckTick;
+        private static int lastCheckTick;
 
         public static GnarState GnarState;
 
@@ -42,7 +42,7 @@
                 GnarState = GnarState.Small;
             }
 
-            if (Game.TickCount - _lastCheckTick <= 1000)
+            if (Game.TickCount - lastCheckTick <= 1000)
             {
                 return;
             }
@@ -54,7 +54,7 @@
 
                 E = new Spell(SpellSlot.E, 475);
                 E.SetSkillshot(0.5f, 150, float.MaxValue, false, SkillshotType.Circle);
-                _lastCheckTick = Game.TickCount;
+                lastCheckTick = Game.TickCount;
             }
             else
             {
@@ -66,7 +66,7 @@
 
                 E = new Spell(SpellSlot.E, 475);
                 E.SetSkillshot(0.6f, 60, 1500, false, SkillshotType.Circle);
-                _lastCheckTick = Game.TickCount;
+                lastCheckTick = Game.TickCount;
             }
         }
 

@@ -25,7 +25,7 @@
 
         private static void OnCastSpell(Obj_AI_Base sender, SpellBookCastSpellEventArgs args)
         {
-            if (sender.IsMe && SpellManager.Q.Ready && args.Slot == SpellSlot.Recall && MenuConfig.mainMenu["Stealth"].Enabled)
+            if (sender.IsMe && SpellManager.Q.Ready && args.Slot == SpellSlot.Recall && MenuConfig.MainMenu["Stealth"].Enabled)
             {
                 SpellManager.Q.Cast();
             }

@@ -10,8 +10,8 @@
 
     class LaneClear
     {
-        private static Obj_AI_Minion _turretTarget;
-        private static Obj_AI_Base _turret;
+        private static Obj_AI_Minion turretTarget;
+        private static Obj_AI_Base turret;
 
         public static void OnUpdate()
         {
@@ -20,36 +20,36 @@
                 return;
             }
 
-            if (_turretTarget != null && _turret != null && MenuConfig.LaneClear["TurretFarm"].Enabled)
+            if (turretTarget != null && turret != null && MenuConfig.LaneClear["TurretFarm"].Enabled)
             {
-                if (_turretTarget.IsDead)
+                if (turretTarget.IsDead)
                 {
-                    _turret = null;
-                    _turretTarget = null;
+                    turret = null;
+                    turretTarget = null;
                 }
                 else
                 {
-                    var turretDamage = _turret.GetAutoAttackDamage(_turretTarget);
-                    var playerDamage = Global.Player.GetAutoAttackDamage(_turretTarget);
-                    var inAaRange = _turretTarget.Distance(Global.Player) <= Global.Player.AttackRange + 65;
+                    var turretDamage = turret.GetAutoAttackDamage(turretTarget);
+                    var playerDamage = Global.Player.GetAutoAttackDamage(turretTarget);
+                    var inAaRange = turretTarget.Distance(Global.Player) <= Global.Player.AttackRange + 65;
 
                     if (!inAaRange)
                     {
                         return;
                     }
 
-                    if (_turretTarget.Health < playerDamage * 2 + turretDamage && _turretTarget.Health > turretDamage + playerDamage && Global.Orbwalker.CanAttack())
+                    if (turretTarget.Health < playerDamage * 2 + turretDamage && turretTarget.Health > turretDamage + playerDamage && Global.Orbwalker.CanAttack())
                     {
-                        Global.Orbwalker.Attack(_turretTarget);
+                        Global.Orbwalker.Attack(turretTarget);
                     }
 
-                    else if (SpellManager.E.Ready && _turretTarget.Health < Global.Player.GetSpellDamage(_turretTarget, SpellSlot.E) + playerDamage)
+                    else if (SpellManager.E.Ready && turretTarget.Health < Global.Player.GetSpellDamage(turretTarget, SpellSlot.E) + playerDamage)
                     {
-                        SpellManager.CastE(_turretTarget);
+                        SpellManager.CastE(turretTarget);
                     }
-                    else if (SpellManager.Q.Ready && _turretTarget.Health < Global.Player.GetSpellDamage(_turretTarget, SpellSlot.Q) + playerDamage)
+                    else if (SpellManager.Q.Ready && turretTarget.Health < Global.Player.GetSpellDamage(turretTarget, SpellSlot.Q) + playerDamage)
                     {
-                        SpellManager.CastQ(_turretTarget);
+                        SpellManager.CastQ(turretTarget);
                     }
                 }
             }
@@ -98,13 +98,13 @@
 
             if (Global.Player.Distance(args.Target) <= SpellManager.Q.Range)
             {
-                _turret = sender;
-                _turretTarget = args.Target as Obj_AI_Minion;
+                turret = sender;
+                turretTarget = args.Target as Obj_AI_Minion;
             }
             else
             {
-                _turret = null;
-                _turretTarget = null;
+                turret = null;
+                turretTarget = null;
             }
         }
     }

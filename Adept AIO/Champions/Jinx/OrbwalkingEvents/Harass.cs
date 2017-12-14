@@ -6,18 +6,18 @@
 
     class Harass
     {
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public Harass(SpellConfig spellConfig, MenuConfig menuConfig)
         {
-            _spellConfig = spellConfig;
-            _menuConfig = menuConfig;
+            this.spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
         }
 
         public void OnUpdate()
         {
-            var target = Global.TargetSelector.GetTarget(_spellConfig.W.Range);
+            var target = Global.TargetSelector.GetTarget(spellConfig.W.Range);
 
             if (target == null)
             {
@@ -26,17 +26,17 @@
 
             var dist = target.Distance(Global.Player);
 
-            if (_spellConfig.Q.Ready && _menuConfig.Harass["Q"].Enabled)
+            if (spellConfig.Q.Ready && menuConfig.Harass["Q"].Enabled)
             {
-                if (!_spellConfig.IsQ2 && dist > _spellConfig.DefaultAuotAttackRange && dist <= _spellConfig.Q2Range || _spellConfig.IsQ2 && dist <= _spellConfig.DefaultAuotAttackRange)
+                if (!spellConfig.IsQ2 && dist > spellConfig.DefaultAuotAttackRange && dist <= spellConfig.Q2Range || spellConfig.IsQ2 && dist <= spellConfig.DefaultAuotAttackRange)
                 {
-                    _spellConfig.Q.Cast();
+                    spellConfig.Q.Cast();
                 }
             }
 
-            if (_spellConfig.W.Ready && _menuConfig.Harass["W"].Enabled && dist <= _menuConfig.Harass["W"].Value)
+            if (spellConfig.W.Ready && menuConfig.Harass["W"].Enabled && dist <= menuConfig.Harass["W"].Value)
             {
-                _spellConfig.W.Cast(target);
+                spellConfig.W.Cast(target);
             }
         }
     }

@@ -16,7 +16,7 @@
     {
         public static Spell Q, W, E, R;
         public static Vector3 PaddleStarPosition;
-        private static float _lastCastTime;
+        private static float lastCastTime;
 
         public SpellManager()
         {
@@ -41,7 +41,7 @@
             }
 
             PaddleStarPosition = args.End;
-            _lastCastTime = Game.TickCount;
+            lastCastTime = Game.TickCount;
             DelayAction.Queue(1200, () => PaddleStarPosition = Vector3.Zero, new CancellationToken(false));
         }
 
@@ -180,7 +180,7 @@
 
         public static void CastQ(Obj_AI_Base target)
         {
-            if (Game.TickCount - _lastCastTime < 800 - Game.Ping / 2)
+            if (Game.TickCount - lastCastTime < 800 - Game.Ping / 2)
             {
                 return;
             }

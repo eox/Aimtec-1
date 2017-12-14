@@ -9,26 +9,26 @@
 
     class AntiGapcloser
     {
-        private readonly ISpellConfig _spellConfig;
-        private readonly IWardManager _wardManager;
-        private readonly IWardTracker _wardTracker;
+        private readonly ISpellConfig spellConfig;
+        private readonly IWardManager wardManager;
+        private readonly IWardTracker wardTracker;
 
         public AntiGapcloser(ISpellConfig spellConfig, IWardManager wardManager, IWardTracker wardTracker)
         {
-            _spellConfig = spellConfig;
-            _wardManager = wardManager;
-            _wardTracker = wardTracker;
+            this.spellConfig = spellConfig;
+            this.wardManager = wardManager;
+            this.wardTracker = wardTracker;
         }
 
         public void OnGapcloser(Obj_AI_Hero sender, GapcloserArgs args)
         {
-            if (sender.IsMe || !sender.IsEnemy || !_spellConfig.W.Ready || !_spellConfig.IsFirst(_spellConfig.W) || !_wardTracker.IsWardReady() ||
+            if (sender.IsMe || !sender.IsEnemy || !spellConfig.W.Ready || !spellConfig.IsFirst(spellConfig.W) || !wardTracker.IsWardReady() ||
                 args.EndPosition.Distance(Global.Player) > 425)
             {
                 return;
             }
 
-            _wardManager.WardJump(Game.CursorPos, _spellConfig.WardRange);
+            wardManager.WardJump(Game.CursorPos, spellConfig.WardRange);
         }
     }
 }

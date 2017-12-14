@@ -8,27 +8,27 @@
 
     class DrawManager
     {
-        private readonly Dmg _dmg;
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly Dmg dmg;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public DrawManager(MenuConfig menuConfig, Dmg dmg, SpellConfig spellConfig)
         {
-            _menuConfig = menuConfig;
-            _dmg = dmg;
-            _spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
+            this.dmg = dmg;
+            this.spellConfig = spellConfig;
         }
 
         public void OnPresent()
         {
-            if (Global.Player.IsDead || !_menuConfig.Drawings["Dmg"].Enabled)
+            if (Global.Player.IsDead || !menuConfig.Drawings["Dmg"].Enabled)
             {
                 return;
             }
 
             foreach (var target in GameObjects.EnemyHeroes.Where(x => !x.IsDead && x.IsFloatingHealthBarActive && x.IsVisible))
             {
-                var damage = _dmg.Damage(target);
+                var damage = dmg.Damage(target);
 
                 Global.DamageIndicator.Unit = target;
                 Global.DamageIndicator.DrawDmg((float) damage, Color.FromArgb(153, 12, 177, 28));
@@ -42,9 +42,9 @@
                 return;
             }
 
-            if (_menuConfig.Drawings["W"].Enabled)
+            if (menuConfig.Drawings["W"].Enabled)
             {
-                Render.Circle(Global.Player.Position, _spellConfig.W.Range, (uint) _menuConfig.Drawings["Segments"].Value, Color.Gray);
+                Render.Circle(Global.Player.Position, spellConfig.W.Range, (uint) menuConfig.Drawings["Segments"].Value, Color.Gray);
             }
         }
     }

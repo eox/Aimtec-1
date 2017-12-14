@@ -9,11 +9,11 @@
 
     class InsecManager : IInsecManager
     {
-        private readonly ISpellConfig _spellConfig;
+        private readonly ISpellConfig spellConfig;
 
         public InsecManager(ISpellConfig spellConfig)
         {
-            _spellConfig = spellConfig;
+            this.spellConfig = spellConfig;
         }
 
         public int InsecKickValue { get; set; }
@@ -21,7 +21,7 @@
 
         public float DistanceBehindTarget(Obj_AI_Base target = null)
         {
-            return Math.Min((Global.Player.BoundingRadius + (target == null ? 65 : target.BoundingRadius) + 50) * 1.25f, _spellConfig.R.Range);
+            return Math.Min((Global.Player.BoundingRadius + (target == null ? 65 : target.BoundingRadius) + 50) * 1.25f, spellConfig.R.Range);
         }
 
         public Vector3 InsecPosition(Obj_AI_Base target)
@@ -38,7 +38,7 @@
                 return Vector3.Zero;
             }
 
-            var secondEnemy = GameObjects.EnemyHeroes.FirstOrDefault(x => x.NetworkId != target.NetworkId && x.Distance(target) <= _spellConfig.R2.Range + 100);
+            var secondEnemy = GameObjects.EnemyHeroes.FirstOrDefault(x => x.NetworkId != target.NetworkId && x.Distance(target) <= spellConfig.R2.Range + 100);
 
             if (secondEnemy == null)
             {

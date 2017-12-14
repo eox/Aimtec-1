@@ -6,40 +6,40 @@
 
     class Combo
     {
-        private readonly Dmg _dmg;
-        private readonly MenuConfig _menuConfig;
-        private readonly SpellConfig _spellConfig;
+        private readonly Dmg dmg;
+        private readonly MenuConfig menuConfig;
+        private readonly SpellConfig spellConfig;
 
         public Combo(SpellConfig spellConfig, MenuConfig menuConfig, Dmg dmg)
         {
-            _spellConfig = spellConfig;
-            _menuConfig = menuConfig;
-            _dmg = dmg;
+            this.spellConfig = spellConfig;
+            this.menuConfig = menuConfig;
+            this.dmg = dmg;
         }
 
         public void OnUpdate()
         {
-            var target = Global.TargetSelector.GetTarget(_spellConfig.FullRange);
+            var target = Global.TargetSelector.GetTarget(spellConfig.FullRange);
 
             if (target == null)
             {
                 return;
             }
 
-            if (_spellConfig.E.Ready && _menuConfig.Combo["E"].Enabled && _menuConfig.Combo[target.ChampionName].Enabled)
+            if (spellConfig.E.Ready && menuConfig.Combo["E"].Enabled && menuConfig.Combo[target.ChampionName].Enabled)
             {
-                _spellConfig.E.CastOnUnit(target);
+                spellConfig.E.CastOnUnit(target);
             }
 
-            if (_spellConfig.Q.Ready && _menuConfig.Combo["Q"].Enabled)
+            if (spellConfig.Q.Ready && menuConfig.Combo["Q"].Enabled)
             {
-                _spellConfig.Q.Cast();
+                spellConfig.Q.Cast();
             }
 
-            if (_spellConfig.W.Ready && _menuConfig.Combo["W"].Enabled && target.Health < _dmg.Damage(target) && target.Distance(Global.Player) > Global.Player.AttackRange + 100 &&
+            if (spellConfig.W.Ready && menuConfig.Combo["W"].Enabled && target.Health < dmg.Damage(target) && target.Distance(Global.Player) > Global.Player.AttackRange + 100 &&
                 Global.Player.CountEnemyHeroesInRange(2000) <= 2 && target.ServerPosition.CountAllyHeroesInRange(900) == 0)
             {
-                _spellConfig.W.Cast(target);
+                spellConfig.W.Cast(target);
             }
         }
     }

@@ -9,16 +9,16 @@
 
     class MenuConfig
     {
-        private static Menu _mainMenu;
+        private static Menu mainMenu;
 
         public static Menu Combo, Harass, LaneClear, JungleClear, Killsteal, Drawings;
 
         public MenuConfig()
         {
-            _mainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
-            _mainMenu.Attach();
+            mainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
+            mainMenu.Attach();
 
-            Global.Orbwalker.Attach(_mainMenu);
+            Global.Orbwalker.Attach(mainMenu);
 
             Combo = new Menu("ZoeCombo", "Combo")
             {
@@ -64,7 +64,7 @@
                 new MenuBool("Pred", "Draw Q Prediction")
             };
 
-            Gapcloser.Attach(_mainMenu, "Anti Gapcloser");
+            Gapcloser.Attach(mainMenu, "Anti Gapcloser");
 
             foreach (var menu in new List<Menu>
             {
@@ -77,7 +77,7 @@
                 MenuShortcut.Credits
             })
             {
-                _mainMenu.Add(menu);
+                mainMenu.Add(menu);
             }
         }
     }

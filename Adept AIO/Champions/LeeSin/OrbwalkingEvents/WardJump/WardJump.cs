@@ -8,17 +8,17 @@
 
     class WardJump : IWardJump
     {
-        private readonly ISpellConfig _spellConfig;
+        private readonly ISpellConfig spellConfig;
 
-        private readonly IWardManager _wardManager;
+        private readonly IWardManager wardManager;
 
-        private readonly IWardTracker _wardTracker;
+        private readonly IWardTracker wardTracker;
 
         public WardJump(IWardTracker wardTracker, IWardManager wardManager, ISpellConfig spellConfig)
         {
-            _wardTracker = wardTracker;
-            _wardManager = wardManager;
-            _spellConfig = spellConfig;
+            this.wardTracker = wardTracker;
+            this.wardManager = wardManager;
+            this.spellConfig = spellConfig;
         }
 
         public bool Enabled { get; set; }
@@ -30,11 +30,11 @@
                 return;
             }
 
-            if (_spellConfig.W.Ready && _spellConfig.IsFirst(_spellConfig.W) && _wardTracker.IsWardReady())
+            if (spellConfig.W.Ready && spellConfig.IsFirst(spellConfig.W) && wardTracker.IsWardReady())
             {
                 var cursorDist = (int) Global.Player.Distance(Game.CursorPos);
-                var dist = cursorDist <= _spellConfig.WardRange ? cursorDist : _spellConfig.WardRange;
-                _wardManager.WardJump(Game.CursorPos, dist);
+                var dist = cursorDist <= spellConfig.WardRange ? cursorDist : spellConfig.WardRange;
+                wardManager.WardJump(Game.CursorPos, dist);
             }
         }
     }

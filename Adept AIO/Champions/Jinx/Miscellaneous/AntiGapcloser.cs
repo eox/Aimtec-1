@@ -8,21 +8,21 @@
 
     class AntiGapcloser
     {
-        private readonly SpellConfig _spellConfig;
+        private readonly SpellConfig spellConfig;
 
         public AntiGapcloser(SpellConfig spellConfig)
         {
-            _spellConfig = spellConfig;
+            this.spellConfig = spellConfig;
         }
 
         public void OnGapcloser(Obj_AI_Hero sender, GapcloserArgs args)
         {
-            if (!sender.IsEnemy || !_spellConfig.E.Ready || args.EndPosition.Distance(Global.Player) > _spellConfig.E.Range)
+            if (!sender.IsEnemy || !spellConfig.E.Ready || args.EndPosition.Distance(Global.Player) > spellConfig.E.Range)
             {
                 return;
             }
 
-            _spellConfig.E.Cast(args.EndPosition);
+            spellConfig.E.Cast(args.EndPosition);
         }
     }
 }

@@ -13,12 +13,12 @@
 
     class SpellManager
     {
-        private static bool _canWq;
-        private static bool _canUseQ;
-        private static bool _canUseW;
+        private static bool canWq;
+        private static bool canUseQ;
+        private static bool canUseW;
 
-        private static Obj_AI_Base _unit;
-        private static bool _serverPosition;
+        private static Obj_AI_Base unit;
+        private static bool serverPosition;
 
         public static float LastR;
 
@@ -41,9 +41,9 @@
             {
                 case "RivenTriCleave":
                     Extensions.LastQCastAttempt = Game.TickCount;
-                    _canUseQ = false;
-                    _canWq = false;
-                    _serverPosition = false;
+                    canUseQ = false;
+                    canWq = false;
+                    serverPosition = false;
 
                     Extensions.CurrentQCount++;
                     if (Extensions.CurrentQCount > 3)
@@ -54,7 +54,7 @@
                     Animation.Reset();
                     break;
                 case "RivenMartyr":
-                    _canUseW = false;
+                    canUseW = false;
                     break;
                 case "RivenFengShuiEngine":
                     LastR = Game.TickCount;
@@ -69,68 +69,68 @@
 
         public static void OnUpdate()
         {
-            switch (_unit)
+            switch (unit)
             {
                 case null: return;
-                case Obj_AI_Hero _ when _unit.HasBuff("FioraW") || _unit.HasBuff("PoppyW"): return;
+                case Obj_AI_Hero _ when unit.HasBuff("FioraW") || unit.HasBuff("PoppyW"): return;
             }
 
-            if (_canWq)
+            if (canWq)
             {
                 SpellConfig.W.Cast();
-                Global.Player.SpellBook.CastSpell(SpellSlot.Q, _unit);
+                Global.Player.SpellBook.CastSpell(SpellSlot.Q, unit);
                 DelayAction.Queue(600,
                     () =>
                     {
                         Global.Orbwalker.ResetAutoAttackTimer();
-                        Global.Orbwalker.Attack(_unit);
+                        Global.Orbwalker.Attack(unit);
                     }, new CancellationToken(false));
             }
 
-            if (_canUseW && _unit.IsValidTarget(SpellConfig.W.Range))
+            if (canUseW && unit.IsValidTarget(SpellConfig.W.Range))
             {
-                _canUseW = false;
+                canUseW = false;
 
                 if (Items.CanUseTiamat())
                 {
                     Items.CastTiamat();
-                    DelayAction.Queue(300, () => SpellConfig.W.Cast(_unit), new CancellationToken(false));
+                    DelayAction.Queue(300, () => SpellConfig.W.Cast(unit), new CancellationToken(false));
                 }
 
-                SpellConfig.W.Cast(_unit);
+                SpellConfig.W.Cast(unit);
             }
 
-            if (_canUseQ)
+            if (canUseQ)
             {
                 if (Extensions.DidJustAuto)
                 {
                     Extensions.DidJustAuto = false;
-                    Global.Player.SpellBook.CastSpell(SpellSlot.Q, _unit);
+                    Global.Player.SpellBook.CastSpell(SpellSlot.Q, unit);
                 }
-                else if (_serverPosition)
+                else if (serverPosition)
                 {
-                    SpellConfig.Q.CastOnUnit(_unit);
+                    SpellConfig.Q.CastOnUnit(unit);
                 }
             }
         }
 
         public static void CastWq(Obj_AI_Base target)
         {
-            _unit = target;
-            _canWq = true;
+            unit = target;
+            canWq = true;
         }
 
         public static void CastQ(Obj_AI_Base target, bool serverPosition = false)
         {
-            _unit = target;
-            _canUseQ = true;
-            _serverPosition = serverPosition;
+            unit = target;
+            canUseQ = true;
+            SpellManager.serverPosition = serverPosition;
         }
 
         public static void CastW(Obj_AI_Base target)
         {
-            _canUseW = true;
-            _unit = target;
+            canUseW = true;
+            unit = target;
         }
 
         public static void CastR2(Obj_AI_Base target)
@@ -151,7 +151,7 @@
                 {
                     DelayAction.Queue(500, () => SpellConfig.R2.Cast(target));
                 }
-                _canUseQ = true;
+                canUseQ = true;
             }
             else
             {

@@ -9,14 +9,14 @@
 
     class Harass : IHarass
     {
-        private readonly ISpellConfig _spellConfig;
+        private readonly ISpellConfig spellConfig;
 
-        private readonly IWardManager _wardManager;
+        private readonly IWardManager wardManager;
 
         public Harass(IWardManager wardManager, ISpellConfig spellConfig)
         {
-            _wardManager = wardManager;
-            _spellConfig = spellConfig;
+            this.wardManager = wardManager;
+            this.spellConfig = spellConfig;
         }
 
         public bool Q1Enabled { get; set; }
@@ -31,46 +31,46 @@
             {
                 return;
             }
-            if (_spellConfig.E.Ready && this.E2Enabled && !_spellConfig.IsFirst(_spellConfig.E))
+            if (spellConfig.E.Ready && this.E2Enabled && !spellConfig.IsFirst(spellConfig.E))
             {
-                _spellConfig.E.Cast();
+                spellConfig.E.Cast();
             }
-            else if (_spellConfig.W.Ready && this.Mode == 1)
+            else if (spellConfig.W.Ready && this.Mode == 1)
             {
-                _spellConfig.W.CastOnUnit(Global.Player);
+                spellConfig.W.CastOnUnit(Global.Player);
             }
         }
 
         public void OnUpdate()
         {
-            var target = Global.TargetSelector.GetTarget(_spellConfig.Q.Range);
+            var target = Global.TargetSelector.GetTarget(spellConfig.Q.Range);
             if (target == null)
             {
                 return;
             }
 
-            if (_spellConfig.Q.Ready && this.Q1Enabled)
+            if (spellConfig.Q.Ready && this.Q1Enabled)
             {
-                if (_spellConfig.IsQ2() && this.Q2Enabled || !_spellConfig.IsQ2())
+                if (spellConfig.IsQ2() && this.Q2Enabled || !spellConfig.IsQ2())
                 {
-                    _spellConfig.Q.Cast(target);
+                    spellConfig.Q.Cast(target);
                 }
             }
 
-            if (_spellConfig.E.Ready)
+            if (spellConfig.E.Ready)
             {
-                if (_spellConfig.IsFirst(_spellConfig.E) && this.EEnabled && target.IsValidTarget(_spellConfig.E.Range))
+                if (spellConfig.IsFirst(spellConfig.E) && this.EEnabled && target.IsValidTarget(spellConfig.E.Range))
                 {
-                    _spellConfig.E.Cast(target);
+                    spellConfig.E.Cast(target);
                 }
             }
 
-            if (_spellConfig.W.Ready && _spellConfig.IsFirst(_spellConfig.W) && !_spellConfig.E.Ready && !_spellConfig.Q.Ready && this.Mode == 0)
+            if (spellConfig.W.Ready && spellConfig.IsFirst(spellConfig.W) && !spellConfig.E.Ready && !spellConfig.Q.Ready && this.Mode == 0)
             {
                 var turret = GameObjects.AllyTurrets.OrderBy(x => x.Distance(Global.Player)).FirstOrDefault();
                 if (turret != null)
                 {
-                    _wardManager.WardJump(turret.ServerPosition, _spellConfig.WardRange);
+                    wardManager.WardJump(turret.ServerPosition, spellConfig.WardRange);
                 }
             }
         }
