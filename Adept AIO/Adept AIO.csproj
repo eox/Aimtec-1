@@ -357,7 +357,6 @@
     <Compile Include="SDK\Generic\Maths.cs" />
     <Compile Include="SDK\Draw Extension\DamageIndicator.cs" />
     <Compile Include="SDK\Geometry Related\DashManager.cs" />
-    <Compile Include="SDK\Geometry Related\LocalPrediction.cs" />
     <Compile Include="SDK\Geometry Related\Geometries.cs" />
     <Compile Include="SDK\Generic\GetRandom.cs" />
     <Compile Include="Champions\LeeSin\Core\Damage\IDmg.cs" />

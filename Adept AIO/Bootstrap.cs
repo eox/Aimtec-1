@@ -71,8 +71,6 @@
 
         private static void GameEvents_GameStart()
         {
-            Prediction.Instance.AddPredictionImplementation("Adept Prediction", new LocalPrediction());
-
             if (Valid.All(x => Global.Player.ChampionName != x))
             {
                 return;

@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adept AIO", "Adept AIO.csproj", "{26E904A9-26D9-4A4F-A53C-13E0BCA11D29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adept BaseUlt", "..\Adept BaseUlt\Adept BaseUlt.csproj", "{E00C6A6C-9D7A-49B3-87A5-056AC2F6B474}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adept Prediction", "..\Adept Prediction\Adept Prediction.csproj", "{28CC293E-6479-4E8C-8C75-A9B67A42D2D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E00C6A6C-9D7A-49B3-87A5-056AC2F6B474}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E00C6A6C-9D7A-49B3-87A5-056AC2F6B474}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E00C6A6C-9D7A-49B3-87A5-056AC2F6B474}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28CC293E-6479-4E8C-8C75-A9B67A42D2D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28CC293E-6479-4E8C-8C75-A9B67A42D2D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28CC293E-6479-4E8C-8C75-A9B67A42D2D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28CC293E-6479-4E8C-8C75-A9B67A42D2D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

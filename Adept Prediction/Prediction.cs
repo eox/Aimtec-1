@@ -22,6 +22,8 @@
 
     class LocalPrediction : ISkillshotPrediction, IPrediction
     {
+        private static float LastTickChecked;
+
         private static readonly Dictionary<int, float> Timers = new Dictionary<int, float>();
 
         public LocalPrediction()
@@ -40,7 +42,7 @@
                     {
                         return;
                     }
-                  
+
                     Timers[id] = Game.ClockTime;
                 }
             };
@@ -55,7 +57,7 @@
         {
             if (!input.Unit.IsValidTarget() || !input.Unit.IsValid)
             {
-                return new PredictionOutput {Input = input};
+                return new PredictionOutput { Input = input };
             }
 
             if (input.Unit.IsDashing())
@@ -80,7 +82,7 @@
                 HitChance = HitChance.Dashing
             };
 
-            if (input.Unit.Distance(input.From) > input.Range)
+            if (input.Unit.Distance(input.RangeCheckFrom) > input.Range)
             {
                 result.HitChance = HitChance.OutOfRange;
             }
@@ -112,7 +114,7 @@
                 HitChance = HitChance.High
             };
 
-            if (input.Unit.Distance(input.From) > input.Range)
+            if (input.Unit.Distance(input.RangeCheckFrom) > input.Range)
             {
                 result.HitChance = HitChance.OutOfRange;
             }
@@ -133,6 +135,17 @@
 
         public PredictionOutput GetMovementPrediction(PredictionInput input, bool checkCollision)
         {
+            if (Environment.TickCount - LastTickChecked <= 50)
+            {
+                return new PredictionOutput()
+                {
+                    HitChance = HitChance.Impossible,
+                    Input = input
+                };
+            }
+
+            LastTickChecked = Environment.TickCount;
+
             var result = new PredictionOutput { Input = input, HitChance = HitChance.VeryHigh };
 
             var unit = input.Unit;
@@ -221,12 +234,12 @@
                 predpos = unit.Position;
             }
 
-            if (predpos.IsZero || (int) path.LastOrDefault().X != (int) unit.Path.LastOrDefault().X)
+            if (predpos.IsZero || (int)path.LastOrDefault().X != (int)unit.Path.LastOrDefault().X)
             {
                 result.HitChance = HitChance.Impossible;
             }
 
-            if (input.From.Distance(predpos) > input.Range)
+            if (input.RangeCheckFrom.Distance(predpos) > input.Range)
             {
                 result.HitChance = HitChance.OutOfRange;
             }
