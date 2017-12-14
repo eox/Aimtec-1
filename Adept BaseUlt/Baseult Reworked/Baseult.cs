@@ -9,6 +9,7 @@
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util.Cache;
     using Local_SDK;
+    using Font = Aimtec.Font;
     using Geometry = Local_SDK.Geometry;
     using Spell = Aimtec.SDK.Spell;
 
@@ -27,8 +28,11 @@
 
         private Vector3 recallPosition;
 
+        private Font text;
+
         public Baseult(float speed, float width, float delay, int maxCollisionObjects = int.MaxValue, float range = int.MaxValue)
         {
+            text = new Font("Calibri", 13, 6);
             this.maxCollisionObjects = maxCollisionObjects;
 
             spell = new Spell(SpellSlot.R, range);
@@ -73,21 +77,6 @@
 
         private void OnBaseUlt()
         {
-            if (Environment.TickCount - lastCheckTick > Game.Ping / 2)
-            {
-                lastSeenTickWithId = new Dictionary<int, int>();
-                positionsWithId = new Dictionary<int, Vector3>();
-
-                foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsVisible))
-                {
-                    lastSeenTickWithId.Add(hero.NetworkId, Game.TickCount);
-
-                    var pos = hero.ServerPosition.Extend(hero.Path.FirstOrDefault(), 50);
-                    positionsWithId.Add(hero.NetworkId, pos);
-                }
-                lastCheckTick = Environment.TickCount;
-            }
-
             if (recallInformation == null || !Helper.IsValid(recallInformation) || !spell.Ready)
             {
                 return;
@@ -109,6 +98,22 @@
                 return;
             }
 
+            if (Environment.TickCount - lastCheckTick <= 100 && recallInformation == null)
+            {
+                lastCheckTick = Environment.TickCount;
+
+                lastSeenTickWithId = new Dictionary<int, int>();
+                positionsWithId = new Dictionary<int, Vector3>();
+
+                foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsVisible))
+                {
+                    lastSeenTickWithId.Add(hero.NetworkId, Game.TickCount);
+
+                    var pos = hero.ServerPosition.Extend(hero.Path.FirstOrDefault(), 50);
+                    positionsWithId.Add(hero.NetworkId, pos);
+                }
+            }
+          
             if (recallInformation == null|| !Helper.IsValid(recallInformation))
             {
                 return;
@@ -193,9 +198,18 @@
                 return;
             }
 
+            var ready = spell.Ready;
+
             Render.Rectangle(barX + scale * timeUntilCastingUlt, barY + i + barHeight - 3, 1, 10, Color.Orange);
-            Render.Rectangle(barX, barY, (int)(scale * recallInformation.Duration), barHeight, Color.Crimson);
-            Render.Rectangle(barX + scale * recallInformation.Duration - 1, barY + i + barHeight - 3, 1, barHeight, Color.IndianRed);
+
+            Render.Rectangle(barX, barY, (int)(scale * recallInformation.Duration), barHeight, ready ? Color.Crimson : Color.Gray);
+
+            Render.Rectangle(barX + scale * recallInformation.Duration - 1, barY + i + barHeight - 3, 1, barHeight, ready ? Color.IndianRed : Color.LightGray);
+
+            var champName = ((Obj_AI_Hero) recallInformation.Sender).ChampionName;
+            Render.Text($"{champName}", new Vector2(barX + (scale * recallInformation.Duration - champName.Length * text.Width / 2f), 
+                                                    barY + i + text.Height / 2f), RenderTextFlags.Bottom, Color.White);
+
         }
     }
 }
