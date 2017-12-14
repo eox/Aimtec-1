@@ -157,7 +157,7 @@
             var recallPos = lastSeenPosition.Extend(recallInformation.Sender.ServerPosition, dist);
             this.recallPosition = recallPos;
 
-            if (dist > MenuConfig.Menu["Distance"].Value)
+            if (Global.Player.Distance(recallPos) > MenuConfig.Menu["Distance"].Value)
             {
                 return;
             }
