@@ -11,12 +11,12 @@ namespace Adept_AIO.SDK.Geometry_Related
     using Unit_Extensions;
     using Spell = Aimtec.SDK.Spell;
 
-    public class LocalPrediction
+    public class XerathPrediction
     {
         static readonly Dictionary<int, float> Timers = new Dictionary<int, float>();
         private static float lastQ;
 
-        public LocalPrediction()
+        public XerathPrediction()
         {
             foreach (var hero in GameObjects.EnemyHeroes)
             {
@@ -94,32 +94,27 @@ namespace Adept_AIO.SDK.Geometry_Related
                                 predpos = (vj + (vj1 - vj).Normalized() * ss).To3D();
                                 break;
                             }
-
-                            if (j + 1 != lenght - 1)
+                            if (j + 1 == lenght - 1)
                             {
-                                continue;
+                                predpos = (vj + (vj1 - vj).Normalized() * dd).To3D();
+                                break;
                             }
-                            predpos = (vj + (vj1 - vj).Normalized() * dd).To3D();
-                            break;
                         }
                         break;
                     }
-                    if (i + 1 != lenght - 1)
+                    if (i + 1 == lenght - 1)
                     {
-                        continue;
+                        predpos = (vi + (vi1 - vi).Normalized() * vi.Distance(vi1)).To3D();
+                        break;
                     }
-                    predpos = (vi + (vi1 - vi).Normalized() * vi.Distance(vi1)).To3D();
-                    break;
                 }
             }
             else
             {
                 predpos = enemy.Position;
             }
-            var dist = predpos.Distance(Global.Player);
-            if (dist > 1300)
-                range += 150;
-            if (predpos.IsZero || dist > range - 150 || (int)path.LastOrDefault().X != (int)enemy.Path.LastOrDefault().X)
+          
+            if (predpos.IsZero || (int)path.LastOrDefault().X != (int)enemy.Path.LastOrDefault().X)
                 return false;
 
             Global.Player.SpellBook.UpdateChargedSpell(SpellSlot.Q, predpos, true);
