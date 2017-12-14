@@ -33,7 +33,7 @@
 
             Q = new Spell(SpellSlot.Q, 1600);
             Q.SetSkillshot(0.6f, 95f, 3000f, false, SkillshotType.Line, false, HitChance.Medium);
-            Q.SetCharged("XerathArcanopulseChargeUp", "XerathArcanopulseChargeUp", 850, 1400, 1.2f);
+            Q.SetCharged("XerathArcanopulseChargeUp", "XerathArcanopulseChargeUp", 850, 1500, 1.25f);
 
             W = new Spell(SpellSlot.W, 1100);
             W.SetSkillshot(0.7f, 125f, float.MaxValue, false, SkillshotType.Circle);

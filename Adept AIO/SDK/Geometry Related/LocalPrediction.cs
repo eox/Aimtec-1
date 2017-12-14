@@ -60,25 +60,27 @@ namespace Adept_AIO.SDK.Geometry_Related
             var predpos = Vector3.Zero;
             if (lenght > 1)
             {
-                var s_in_time = enemyspeed * (Game.ClockTime - Timers[enemyid] + (Game.Ping * 0.001f));
+                var sInTime = enemyspeed * (Game.ClockTime - Timers[enemyid] + Game.Ping * 0.001f);
                 var d = 0f;
+
                 for (var i = 0; i < lenght - 1; i++)
                 {
                     var vi = path[i].To2D();
                     var vi1 = path[i + 1].To2D();
                     d += vi.Distance(vi1);
-                    if (d >= s_in_time)
+
+                    if (d >= sInTime)
                     {
                         var dd = enemypos.Distance(vi1);
                         var ss = enemyspeed * 0.5f;
                         if (dd >= ss)
                         {
-                            predpos = (enemypos + ((vi1 - enemypos).Normalized() * ss)).To3D();
+                            predpos = (enemypos + (vi1 - enemypos).Normalized() * ss).To3D();
                             break;
                         }
                         if (i + 1 == lenght - 1)
                         {
-                            predpos = (enemypos + ((vi1 - enemypos).Normalized() * enemypos.Distance(vi1))).To3D();
+                            predpos = (enemypos + (vi1 - enemypos).Normalized() * enemypos.Distance(vi1)).To3D();
                             break;
                         }
                         for (var j = i + 1; j < lenght - 1; j++)
@@ -89,22 +91,25 @@ namespace Adept_AIO.SDK.Geometry_Related
                             dd = vj.Distance(vj1);
                             if (dd >= ss)
                             {
-                                predpos = (vj + ((vj1 - vj).Normalized() * ss)).To3D();
+                                predpos = (vj + (vj1 - vj).Normalized() * ss).To3D();
                                 break;
                             }
-                            if (j + 1 == lenght - 1)
+
+                            if (j + 1 != lenght - 1)
                             {
-                                predpos = (vj + ((vj1 - vj).Normalized() * dd)).To3D();
-                                break;
+                                continue;
                             }
+                            predpos = (vj + (vj1 - vj).Normalized() * dd).To3D();
+                            break;
                         }
                         break;
                     }
-                    if (i + 1 == lenght - 1)
+                    if (i + 1 != lenght - 1)
                     {
-                        predpos = (vi + ((vi1 - vi).Normalized() * vi.Distance(vi1))).To3D();
-                        break;
+                        continue;
                     }
+                    predpos = (vi + (vi1 - vi).Normalized() * vi.Distance(vi1)).To3D();
+                    break;
                 }
             }
             else
