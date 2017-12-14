@@ -12,7 +12,7 @@
 
     class SpellManager
     {
-        private static LocalPrediction LocalPrediction;
+       // private static LocalPrediction LocalPrediction;
 
         public static bool CastingUltimate => Global.Player.HasBuff("XerathLocusOfPower2");
 
@@ -29,7 +29,7 @@
 
         public SpellManager()
         {
-            LocalPrediction = new LocalPrediction();
+            //LocalPrediction = new LocalPrediction();
 
             Q = new Spell(SpellSlot.Q, 1600);
             Q.SetSkillshot(0.6f, 95f, 3000f, false, SkillshotType.Line, false, HitChance.Medium);
@@ -67,7 +67,7 @@
             //if(!pred.IsZero)
             //Q.ShootChargedSpell(pred);
 
-            LocalPrediction.CastQ(target);
+            //LocalPrediction.CastQ(target);
         }
 
         public static void CastW(Obj_AI_Base target)
@@ -120,7 +120,7 @@
         public static Geometry.Rectangle QRealRect(Obj_AI_Base target)
         {
             return new Geometry.Rectangle(Global.Player.ServerPosition.To2D(),
-                Global.Player.ServerPosition.Extend(LocalPrediction.GetPrediction(target, Q), Q.Range).To2D(),
+                Global.Player.ServerPosition.Extend(Q.GetPrediction(target).CastPosition, Q.Range).To2D(),
                 Q.Width);
         }
 
