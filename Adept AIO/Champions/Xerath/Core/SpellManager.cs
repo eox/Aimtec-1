@@ -28,7 +28,8 @@
 
         public SpellManager()
         {
-         
+            XerathPrediction.Load();
+
             Q = new Spell(SpellSlot.Q, 1600);
             Q.SetSkillshot(0.6f, 95f, 3000f, false, SkillshotType.Line, false, HitChance.Medium);
             Q.SetCharged("XerathArcanopulseChargeUp", "XerathArcanopulseChargeUp", 850, 1500, 1.25f);
@@ -110,7 +111,7 @@
         public static Geometry.Rectangle QRealRect(Obj_AI_Base target)
         {
             return new Geometry.Rectangle(Global.Player.ServerPosition.To2D(),
-                Global.Player.ServerPosition.Extend(XerathPrediction.GetPrediction(target, Q), Q.Range).To2D(),
+                Global.Player.ServerPosition.Extend(Q.GetPrediction(target).CastPosition, Q.Range).To2D(),
                 Q.Width);
         }
 
