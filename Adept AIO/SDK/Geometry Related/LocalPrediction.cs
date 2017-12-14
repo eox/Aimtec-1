@@ -45,35 +45,32 @@ namespace Adept_AIO.SDK.Geometry_Related
             };
         }
 
-        public static bool CastQ(Obj_AI_Base target)
+        public static bool CastQ(Obj_AI_Base target, Spell xerathQ)
         {
-            int range = 750 + (int)((Game.ClockTime - lastQ) * 433);
-            if (range > 1500)
-            {
-                range = 1500;
-            }
+            var range = xerathQ.Range;
+         
             var enemy = target;
             if (!enemy.IsValidTarget())
                 return false;
-            int enemyid = enemy.NetworkId;
-            Vector2 enemypos = enemy.Position.To2D();
-            float enemyspeed = enemy.MoveSpeed;
-            Vector3[] path = enemy.Path;
-            int lenght = path.Length;
-            Vector3 predpos = Vector3.Zero;
+            var enemyid = enemy.NetworkId;
+            var enemypos = enemy.Position.To2D();
+            var enemyspeed = enemy.MoveSpeed;
+            var path = enemy.Path;
+            var lenght = path.Length;
+            var predpos = Vector3.Zero;
             if (lenght > 1)
             {
-                float s_in_time = enemyspeed * (Game.ClockTime - Timers[enemyid] + (Game.Ping * 0.001f));
-                float d = 0f;
-                for (int i = 0; i < lenght - 1; i++)
+                var s_in_time = enemyspeed * (Game.ClockTime - Timers[enemyid] + (Game.Ping * 0.001f));
+                var d = 0f;
+                for (var i = 0; i < lenght - 1; i++)
                 {
-                    Vector2 vi = path[i].To2D();
-                    Vector2 vi1 = path[i + 1].To2D();
+                    var vi = path[i].To2D();
+                    var vi1 = path[i + 1].To2D();
                     d += vi.Distance(vi1);
                     if (d >= s_in_time)
                     {
-                        float dd = enemypos.Distance(vi1);
-                        float ss = enemyspeed * 0.5f;
+                        var dd = enemypos.Distance(vi1);
+                        var ss = enemyspeed * 0.5f;
                         if (dd >= ss)
                         {
                             predpos = (enemypos + ((vi1 - enemypos).Normalized() * ss)).To3D();
@@ -84,10 +81,10 @@ namespace Adept_AIO.SDK.Geometry_Related
                             predpos = (enemypos + ((vi1 - enemypos).Normalized() * enemypos.Distance(vi1))).To3D();
                             break;
                         }
-                        for (int j = i + 1; j < lenght - 1; j++)
+                        for (var j = i + 1; j < lenght - 1; j++)
                         {
-                            Vector2 vj = path[j].To2D();
-                            Vector2 vj1 = path[j + 1].To2D();
+                            var vj = path[j].To2D();
+                            var vj1 = path[j + 1].To2D();
                             ss -= dd;
                             dd = vj.Distance(vj1);
                             if (dd >= ss)
@@ -114,11 +111,13 @@ namespace Adept_AIO.SDK.Geometry_Related
             {
                 predpos = enemy.Position;
             }
-            float dist = predpos.Distance(Global.Player);
+            var dist = predpos.Distance(Global.Player);
             if (dist > 1300)
                 range += 150;
             if (predpos.IsZero || dist > range - 150 || (int)path.LastOrDefault().X != (int)enemy.Path.LastOrDefault().X)
                 return false;
+
+            Global.Player.SpellBook.UpdateChargedSpell(SpellSlot.Q, predpos, true);
 
             return true;
         }

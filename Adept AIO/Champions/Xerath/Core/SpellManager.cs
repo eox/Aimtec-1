@@ -67,7 +67,8 @@
             //if(!pred.IsZero)
             //Q.ShootChargedSpell(pred);
 
-            LocalPrediction.CastQ(target);
+            if(Q.IsCharging)
+            LocalPrediction.CastQ(target, Q);
         }
 
         public static void CastW(Obj_AI_Base target)
@@ -120,7 +121,7 @@
         public static Geometry.Rectangle QRealRect(Obj_AI_Base target)
         {
             return new Geometry.Rectangle(Global.Player.ServerPosition.To2D(),
-                Global.Player.ServerPosition.Extend(Q.GetPrediction(target).CastPosition, Q.Range).To2D(),
+                Global.Player.ServerPosition.Extend(LocalPrediction.GetPrediction(target, Q), Q.Range).To2D(),
                 Q.Width);
         }
 
