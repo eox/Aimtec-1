@@ -30,7 +30,7 @@
                         new Baseult(int.MaxValue, int.MaxValue, 3000);
                         break;
                     case "Xerath":
-
+                        new Baseult(float.MaxValue, 130f, 700, int.MaxValue, 2500f);
                         break;
                     case "Ziggs":
                         new Baseult(1750, 275, 250, int.MaxValue, 5250);

@@ -63,10 +63,19 @@
             return Vector3.Zero;
         }
 
+        private static readonly int[] UltiShots = { 0, 3, 4, 5 };
+
+        public static int GetUltiShots()
+        {
+            return UltiShots[ObjectManager.GetLocalPlayer().SpellBook.GetSpell(SpellSlot.R).Level];
+        }
         public static float PlayerDamage(Obj_AI_Base target)
         {
             switch (Global.Player.ChampionName)
             {
+                case "Xerath":
+                    return (float) (Global.Player.GetSpellDamage(target, SpellSlot.R) * GetUltiShots());
+                    
                 case "Draven":
                     if (MenuConfig.Menu["Draven"].Enabled)
                     {

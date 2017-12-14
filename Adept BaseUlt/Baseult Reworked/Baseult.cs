@@ -42,9 +42,19 @@
             lastSeenTickWithId = new Dictionary<int, int>();
             
             Game.OnUpdate += OnRandomUlt;
+
             Game.OnUpdate += OnBaseUlt;
+
             Render.OnRender += OnRender;
             Teleport.OnTeleport += OnTeleport;
+
+            if (Global.Player.ChampionName == "Xerath")
+            {
+                Game.OnUpdate += delegate
+                {
+                    spell.Range = new float[] { 3520, 4840, 6160 }[Math.Max(0, Global.Player.SpellBook.GetSpell(SpellSlot.R).Level - 1)];
+                };
+            }
         }
 
         private void OnTeleport(Obj_AI_Base sender, Teleport.TeleportEventArgs args)

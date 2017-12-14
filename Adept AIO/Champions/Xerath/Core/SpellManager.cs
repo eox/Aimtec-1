@@ -119,7 +119,7 @@
         {
             return new Geometry.Rectangle(Global.Player.ServerPosition.To2D(),
                 (Global.Player.ServerPosition + target.ServerPosition).To2D().Normalized() * E.Range,
-                E.Width + 80);
+                E.Width + 30);
         }
 
         public static Geometry.Circle WCircle(Obj_AI_Base target)
