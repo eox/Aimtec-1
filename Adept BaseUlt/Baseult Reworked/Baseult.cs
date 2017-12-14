@@ -98,16 +98,15 @@
                 return;
             }
 
-            if (Environment.TickCount - lastCheckTick > 100)
+            if (Environment.TickCount - lastCheckTick > Game.Ping)
             {
                 lastCheckTick = Environment.TickCount;
                
                 foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsVisible))
                 {
-                    
+                    // Refreshes the dictionary. This way it wont remove values of people who has left the FOW.
                     if (lastSeenTickWithId.ContainsKey(hero.NetworkId))
-                    {
-                     
+                    {    
                         lastSeenTickWithId.Remove(hero.NetworkId);
                     }
                     lastSeenTickWithId.Add(hero.NetworkId, Game.TickCount);
