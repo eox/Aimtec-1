@@ -186,7 +186,6 @@
                 }
             }
 
-            DebugConsole.WriteLine("Successfully Fired", MessageState.Debug);
             spell.Cast(position);
         }
 
