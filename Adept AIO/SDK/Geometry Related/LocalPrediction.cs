@@ -4,13 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using Aimtec;
+    using Aimtec.SDK.Events;
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Prediction.Collision;
     using Aimtec.SDK.Prediction.Skillshots;
 
     interface IPrediction
     {
-        PredictionOutput GetDashPrediction(PredictionInput input);
+        PredictionOutput GetDashPrediction(PredictionInput input, bool checkCollision);
 
         PredictionOutput GetIdlePrediction(PredictionInput input, bool checkCollision);
 
@@ -52,16 +53,48 @@
 
         public PredictionOutput GetPrediction(PredictionInput input, bool ft, bool collision)
         {
-            if (!input.Unit.IsValidTarget() || !input.Unit.IsValid) return new PredictionOutput {Input = input};
+            if (!input.Unit.IsValidTarget() || !input.Unit.IsValid)
+            {
+                return new PredictionOutput {Input = input};
+            }
+
+            if (input.Unit.IsDashing())
+            {
+                return this.GetDashPrediction(input, collision);
+            }
 
             return input.Unit.IsMoving
                 ? this.GetMovementPrediction(input, collision)
                 : this.GetIdlePrediction(input, collision);
         }
 
-        public PredictionOutput GetDashPrediction(PredictionInput input)
+        public PredictionOutput GetDashPrediction(PredictionInput input, bool checkCollision)
         {
-            throw new NotImplementedException();
+            var dashInfo = input.Unit.GetDashInfo();
+
+            var result = new PredictionOutput
+            {
+                Input = input,
+                UnitPosition = input.Unit.ServerPosition,
+                CastPosition = dashInfo.EndPos.To3D(),
+                HitChance = HitChance.Dashing
+            };
+
+            if (!checkCollision || !input.Collision)
+            {
+                return result;
+            }
+
+            var collisionObjects = Collision.GetCollision(new List<Vector3> { input.Unit.ServerPosition }, input);
+
+            result.CollisionObjects = collisionObjects;
+
+            if (collisionObjects.Count > 0)
+            {
+                result.HitChance = HitChance.Collision;
+            }
+
+            return result;
         }
 
         public PredictionOutput GetIdlePrediction(PredictionInput input, bool checkCollision)
