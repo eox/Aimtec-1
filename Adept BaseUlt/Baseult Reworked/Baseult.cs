@@ -32,7 +32,7 @@
             this.maxCollisionObjects = maxCollisionObjects;
 
             spell = new Spell(SpellSlot.R, range);
-            spell.SetSkillshot(delay / 100, width, speed, false, SkillshotType.Line);
+            spell.SetSkillshot(delay / 1000, width, speed, false, SkillshotType.Line);
 
             positionsWithId = new Dictionary<int, Vector3>();
             lastSeenTickWithId = new Dictionary<int, int>();
@@ -93,7 +93,7 @@
                 return;
             }
 
-            Helper.Delay = spell.Delay * 100;
+            Helper.Delay = spell.Delay * 1000;
             Helper.Speed = spell.Speed;
 
             if (TimeUntilCasting <= Game.Ping)
