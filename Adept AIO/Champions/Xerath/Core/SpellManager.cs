@@ -12,6 +12,8 @@
 
     class SpellManager
     {
+        private static LocalPrediction LocalPrediction;
+
         public static bool CastingUltimate => Global.Player.HasBuff("XerathLocusOfPower2");
 
         private static float lastRCast;
@@ -27,9 +29,11 @@
 
         public SpellManager()
         {
+            LocalPrediction = new LocalPrediction();
+
             Q = new Spell(SpellSlot.Q, 1600);
             Q.SetSkillshot(0.6f, 95f, 3000f, false, SkillshotType.Line, false, HitChance.Medium);
-            Q.SetCharged("XerathArcanopulseChargeUp", "XerathArcanopulseChargeUp", 750, 1400, 1.5f);
+            Q.SetCharged("XerathArcanopulseChargeUp", "XerathArcanopulseChargeUp", 850, 1400, 1.2f);
 
             W = new Spell(SpellSlot.W, 1100);
             W.SetSkillshot(0.7f, 125f, float.MaxValue, false, SkillshotType.Circle);
@@ -53,15 +57,17 @@
                 Q.StartCharging(target.ServerPosition);
             }
 
-            var rect = QRealRect(target);
-            if (rect == null || !Q.IsCharging)
-            {
-                return;
-            }
-            var targetPosIn250Ms = target.Position + (target.Position - Q.GetPrediction(target).CastPosition).Normalized() * (0.25f * target.MoveSpeed);
+            //var rect = QRealRect(target);
+            //if (rect == null || !Q.IsCharging)
+            //{
+            //    return;
+            //}
 
-            if(rect.IsInside(targetPosIn250Ms.To2D()) && rect.End.Distance(targetPosIn250Ms) > target.BoundingRadius)
-            Q.ShootChargedSpell(Q.GetPrediction(target).CastPosition);
+            //var pred = LocalPrediction.GetPrediction(target, Q);
+            //if(!pred.IsZero)
+            //Q.ShootChargedSpell(pred);
+
+            LocalPrediction.CastQ(target);
         }
 
         public static void CastW(Obj_AI_Base target)
@@ -114,7 +120,7 @@
         public static Geometry.Rectangle QRealRect(Obj_AI_Base target)
         {
             return new Geometry.Rectangle(Global.Player.ServerPosition.To2D(),
-                Global.Player.ServerPosition.Extend(Q.GetPrediction(target).CastPosition, Q.Range).To2D(),
+                Global.Player.ServerPosition.Extend(LocalPrediction.GetPrediction(target, Q), Q.Range).To2D(),
                 Q.Width);
         }
 
