@@ -40,15 +40,17 @@
 
             positionsWithId = new Dictionary<int, Vector3>();
             lastSeenTickWithId = new Dictionary<int, int>();
-            
-            Game.OnUpdate += OnRandomUlt;
+
+            var name = Global.Player.ChampionName;
+            if(name != "Xerath" && name != "Ziggs")
+            Game.OnUpdate += OnRandomUlt; // Messy, whatever.
 
             Game.OnUpdate += OnBaseUlt;
 
             Render.OnRender += OnRender;
             Teleport.OnTeleport += OnTeleport;
 
-            if (Global.Player.ChampionName == "Xerath")
+            if (name == "Xerath")
             {
                 Game.OnUpdate += delegate
                 {
