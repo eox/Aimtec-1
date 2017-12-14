@@ -113,8 +113,10 @@ namespace Adept_AIO.SDK.Geometry_Related
             {
                 predpos = enemy.Position;
             }
-          
-            if (predpos.IsZero || (int)path.LastOrDefault().X != (int)enemy.Path.LastOrDefault().X)
+            var dist = predpos.Distance(Global.Player);
+            if (dist > 1300)
+                range += 150;
+            if (predpos.IsZero || dist > range - 150 || (int)path.LastOrDefault().X != (int)enemy.Path.LastOrDefault().X)
                 return false;
 
             Global.Player.SpellBook.UpdateChargedSpell(SpellSlot.Q, predpos, true);
