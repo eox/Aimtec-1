@@ -20,50 +20,33 @@ namespace Adept_AIO.SDK.Geometry_Related
                 Timers.Add(hero.NetworkId, 0);
             }
 
-            //Game.OnUpdate += delegate
-            //{
-            //    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy))
-            //    {
-            //        var id = hero.NetworkId;
-            //        if (!Timers.ContainsKey(id))
-            //        {
-            //            return;
-            //        }
-
-            //        Timers[id] = Game.ClockTime;
-            //    }
-            //};
-
-            Obj_AI_Base.OnNewPath += delegate (Obj_AI_Base sender, Obj_AI_BaseNewPathEventArgs args)
+            Game.OnUpdate += delegate
             {
-                if (!sender.IsEnemy)
+                foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy))
                 {
-                    return;
-                }
-                Console.WriteLine("???????????");
-                var id = sender.NetworkId;
-                if (!Timers.ContainsKey(id))
-                {
-                    return;
-                }
+                    var id = hero.NetworkId;
+                    if (!Timers.ContainsKey(id))
+                    {
+                        return;
+                    }
 
-                Timers[id] = Game.ClockTime;
+                    Timers[id] = Game.ClockTime;
+                }
             };
         }
 
         public static bool CastQ(Obj_AI_Base target, Spell xerathQ)
         {
             var range = xerathQ.Range;
-         
-            var enemy = target;
-            if (!enemy.IsValidTarget())
-                return false;
-            var enemyid = enemy.NetworkId;
-            var enemypos = enemy.Position.To2D();
-            var enemyspeed = enemy.MoveSpeed;
-            var path = enemy.Path;
+
+            var enemyid = target.NetworkId;
+            var enemypos = target.Position.To2D();
+            var enemyspeed = target.MoveSpeed;
+
+            var path = target.Path;
             var lenght = path.Length;
             var predpos = Vector3.Zero;
+
             if (lenght > 1)
             {
                 var sInTime = enemyspeed * (Game.ClockTime - Timers[enemyid] + Game.Ping * 0.001f);
@@ -100,30 +83,38 @@ namespace Adept_AIO.SDK.Geometry_Related
                                 predpos = (vj + (vj1 - vj).Normalized() * ss).To3D();
                                 break;
                             }
-                            if (j + 1 == lenght - 1)
+                            if (j + 1 != lenght - 1)
                             {
-                                predpos = (vj + (vj1 - vj).Normalized() * dd).To3D();
-                                break;
+                                continue;
                             }
+                            predpos = (vj + (vj1 - vj).Normalized() * dd).To3D();
+                            break;
                         }
                         break;
                     }
-                    if (i + 1 == lenght - 1)
+                    if (i + 1 != lenght - 1)
                     {
-                        predpos = (vi + (vi1 - vi).Normalized() * vi.Distance(vi1)).To3D();
-                        break;
+                        continue;
                     }
+                    predpos = (vi + (vi1 - vi).Normalized() * vi.Distance(vi1)).To3D();
+                    break;
                 }
             }
             else
             {
-                predpos = enemy.Position;
+                predpos = target.Position;
             }
+
             var dist = predpos.Distance(Global.Player);
             if (dist > 1300)
+            {
                 range += 150;
-            if (predpos.IsZero || dist > range - 150 || (int)path.LastOrDefault().X != (int)enemy.Path.LastOrDefault().X)
+            }
+
+            if (predpos.IsZero || dist > range - 150 || (int) path.LastOrDefault().X != (int) target.Path.LastOrDefault().X)
+            {
                 return false;
+            }
 
             Global.Player.SpellBook.UpdateChargedSpell(SpellSlot.Q, predpos, true);
 
