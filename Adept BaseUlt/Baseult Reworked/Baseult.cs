@@ -104,7 +104,7 @@
 
                 lastSeenTickWithId = new Dictionary<int, int>();
                 positionsWithId = new Dictionary<int, Vector3>();
-
+               
                 foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsVisible))
                 {
                     lastSeenTickWithId.Add(hero.NetworkId, Game.TickCount);
