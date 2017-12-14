@@ -25,7 +25,7 @@
             var misc = new Misc(spellConfig, menuConfig);
             var gapcloser = new AntiGapcloser(spellConfig);
 
-            var manager = new Manager(combo, harass, laneclear, jungleclear);
+            var manager = new Manager(combo, harass, laneclear, jungleclear, spellConfig);
 
             var drawManager = new DrawManager(menuConfig, new Dmg(spellConfig), spellConfig);
 

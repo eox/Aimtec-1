@@ -1,6 +1,7 @@
 ﻿namespace Adept_AIO.Champions.Jinx.Miscellaneous
 {
     using Aimtec.SDK.Orbwalking;
+    using Core;
     using OrbwalkingEvents;
     using SDK.Unit_Extensions;
 
@@ -10,13 +11,15 @@
         private readonly Harass harass;
         private readonly JungleClear jungleClear;
         private readonly LaneClear laneClear;
+        private readonly SpellConfig spellConfig;
 
-        public Manager(Combo combo, Harass harass, LaneClear laneClear, JungleClear jungleClear)
+        public Manager(Combo combo, Harass harass, LaneClear laneClear, JungleClear jungleClear, SpellConfig spellConfig)
         {
             this.combo = combo;
             this.harass = harass;
             this.laneClear = laneClear;
             this.jungleClear = jungleClear;
+            this.spellConfig = spellConfig;
         }
 
         public void OnUpdate()
@@ -37,6 +40,13 @@
                 case OrbwalkingMode.Laneclear:
                     laneClear.OnUpdate();
                     jungleClear.OnUpdate();
+                    break;
+                case OrbwalkingMode.Lasthit:
+                case OrbwalkingMode.None:
+                    if (spellConfig.IsQ2)
+                    {
+                        spellConfig.Q.Cast();
+                    }
                     break;
             }
         }

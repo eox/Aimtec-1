@@ -12,7 +12,7 @@
         public Spell Q, W, E, R;
 
         public bool IsQ2 => Global.Player.HasBuff("JinxQ");
-        public int Q2Range => 630 + 25 * Global.Player.GetSpell(SpellSlot.Q).Level;
+        public int Q2Range => 615 + 25 * Global.Player.GetSpell(SpellSlot.Q).Level;
 
         public void Load()
         {
