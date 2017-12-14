@@ -10,8 +10,6 @@
         {
             GameEvents.GameStart += delegate
             {
-                new MenuConfig();
-
                 switch (Global.Player.ChampionName)
                 {
                     case "Ashe":

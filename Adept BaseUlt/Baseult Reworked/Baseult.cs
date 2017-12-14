@@ -32,6 +32,8 @@
 
         public Baseult(float speed, float width, float delay, int maxCollisionObjects = int.MaxValue, float range = int.MaxValue)
         {
+            new MenuConfig();
+
             text = new Font("Calibri", 13, 6);
             this.maxCollisionObjects = maxCollisionObjects;
 
