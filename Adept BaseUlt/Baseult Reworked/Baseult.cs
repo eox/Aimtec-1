@@ -75,13 +75,15 @@
         {
             if (Environment.TickCount - lastCheckTick > Game.Ping / 2)
             {
+                lastSeenTickWithId = new Dictionary<int, int>();
+                positionsWithId = new Dictionary<int, Vector3>();
+
                 foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsVisible))
                 {
-                  
-                    lastSeenTickWithId = new Dictionary<int, int> { { hero.NetworkId, Game.TickCount } };
+                    lastSeenTickWithId.Add(hero.NetworkId, Game.TickCount);
 
                     var pos = hero.ServerPosition.Extend(hero.Path.FirstOrDefault(), 50);
-                    positionsWithId = new Dictionary<int, Vector3> { { hero.NetworkId, pos } };
+                    positionsWithId.Add(hero.NetworkId, pos);
                 }
                 lastCheckTick = Environment.TickCount;
             }
@@ -91,7 +93,7 @@
                 return;
             }
 
-            Helper.Delay = spell.Delay;
+            Helper.Delay = spell.Delay * 100;
             Helper.Speed = spell.Speed;
 
             if (TimeUntilCasting <= Game.Ping)
@@ -112,7 +114,7 @@
                 return;
             }
 
-            var lastSeenPosition = positionsWithId.FirstOrDefault(x => x.Key == recallInformation.NetworkID).Value;
+            var lastSeenPosition = positionsWithId.FirstOrDefault(x => x.Key == recallInformation.Sender.NetworkId).Value;
             if (lastSeenPosition.IsZero)
             {
                 DebugConsole.WriteLine($"LAST SEEN POS IS ZERO, WAIT FOR NEW UPDATE.", MessageState.Error);
@@ -123,15 +125,15 @@
 
             var dist = (recallInformation.Start - lastSeenTick) / 1000f * recallInformation.Sender.MoveSpeed;
 
-            var recallPosition = lastSeenPosition.Extend(recallInformation.Sender.ServerPosition, dist);
-            this.recallPosition = recallPosition;
+            var recallPos = lastSeenPosition.Extend(recallInformation.Sender.ServerPosition, dist);
+            this.recallPosition = recallPos;
 
             if (dist > MenuConfig.Menu["Distance"].Value)
             {
                 return;
             }
 
-            Cast(recallPosition);
+            Cast(recallPos);
         }
 
         private void Cast(Vector3 position)
