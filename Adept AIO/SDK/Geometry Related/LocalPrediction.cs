@@ -80,6 +80,11 @@
                 HitChance = HitChance.Dashing
             };
 
+            if (input.Unit.Distance(input.From) > input.Range)
+            {
+                result.HitChance = HitChance.OutOfRange;
+            }
+
             if (!checkCollision || !input.Collision)
             {
                 return result;
@@ -107,7 +112,15 @@
                 HitChance = HitChance.High
             };
 
-            if (!checkCollision || !input.Collision) return result;
+            if (input.Unit.Distance(input.From) > input.Range)
+            {
+                result.HitChance = HitChance.OutOfRange;
+            }
+
+            if (!checkCollision || !input.Collision)
+            {
+                return result;
+            }
 
             var collisionObjects = Collision.GetCollision(new List<Vector3> { input.Unit.ServerPosition }, input);
 
