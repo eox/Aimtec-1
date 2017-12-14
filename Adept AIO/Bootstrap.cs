@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using Aimtec.SDK.Events;
+    using Aimtec.SDK.Prediction.Skillshots;
     using Champions.Azir;
     using Champions.Draven;
     using Champions.Ezreal;
@@ -28,6 +29,7 @@
     using Champions.Zed;
     using Champions.Zoe;
     using SDK.Generic;
+    using SDK.Geometry_Related;
     using SDK.Unit_Extensions;
     using SDK.Usables;
 
@@ -69,6 +71,8 @@
 
         private static void GameEvents_GameStart()
         {
+            Prediction.Instance.AddPredictionImplementation("Adept Prediction", new LocalPrediction());
+
             if (Valid.All(x => Global.Player.ChampionName != x))
             {
                 return;

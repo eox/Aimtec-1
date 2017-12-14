@@ -11,7 +11,7 @@ namespace Adept_AIO.SDK.Geometry_Related
     public class XerathPrediction
     {
         static readonly Dictionary<int, float> Timers = new Dictionary<int, float>();
-      
+
         public static void Load()
         {
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy))
