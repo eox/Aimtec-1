@@ -8,25 +8,19 @@
     {
         public static void OnUpdate()
         {
-            var target = Global.TargetSelector.GetTarget(SpellManager.Q.ChargedMaxRange);
-            if (target == null)
-            {
-                return;
-            }
-
             if (SpellManager.E.Ready && MenuConfig.Harass["E"].Enabled && Global.Player.ManaPercent() >= MenuConfig.Harass["E"].Value)
             {
-                SpellManager.CastE(target);
+                SpellManager.CastE();
             }
 
             if ((SpellManager.Q.Ready || SpellManager.Q.IsCharging) && MenuConfig.Harass["Q"].Enabled && Global.Player.ManaPercent() >= MenuConfig.Harass["Q"].Value)
             {
-                SpellManager.CastQ(target);
+                SpellManager.CastQ();
             }
 
             if (SpellManager.W.Ready && MenuConfig.Harass["W"].Enabled && Global.Player.ManaPercent() >= MenuConfig.Harass["W"].Value)
             {
-                SpellManager.CastW(target);
+                SpellManager.CastW();
             }
         }
     }

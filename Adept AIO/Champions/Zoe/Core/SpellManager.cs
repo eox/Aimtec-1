@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Zoe.Core
 {
-    using System;
     using System.Linq;
     using System.Threading;
     using Aimtec;

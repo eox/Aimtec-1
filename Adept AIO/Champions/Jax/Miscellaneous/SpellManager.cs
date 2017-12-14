@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Jax.Miscellaneous
 {
-    using System;
     using Aimtec;
     using Aimtec.SDK.Extensions;
     using Core;

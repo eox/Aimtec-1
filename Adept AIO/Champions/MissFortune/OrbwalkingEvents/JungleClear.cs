@@ -1,7 +1,6 @@
 ﻿namespace Adept_AIO.Champions.MissFortune.OrbwalkingEvents
 {
     using System.Linq;
-    using Aimtec;
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Orbwalking;
     using Core;

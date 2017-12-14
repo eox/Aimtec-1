@@ -42,10 +42,14 @@
             lastSeenTickWithId = new Dictionary<int, int>();
 
             var name = Global.Player.ChampionName;
-            if(name != "Xerath" && name != "Ziggs")
-            Game.OnUpdate += OnRandomUlt; // Messy, whatever.
+           
+            Game.OnUpdate += OnRandomUlt;
 
-            Game.OnUpdate += OnBaseUlt;
+            // Messy, whatever.
+            if (name != "Xerath" && name != "Ziggs")
+            {
+                Game.OnUpdate += OnBaseUlt;
+            }
 
             Render.OnRender += OnRender;
             Teleport.OnTeleport += OnTeleport;

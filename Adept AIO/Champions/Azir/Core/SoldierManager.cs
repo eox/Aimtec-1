@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Azir.Core
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;

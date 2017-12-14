@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Draven.Miscellaneous
 {
-    using System.Linq;
     using Aimtec;
     using Aimtec.SDK.Extensions;
     using Core;

@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Yasuo.Miscellaneous
 {
-    using System;
     using System.Threading;
     using Aimtec;
     using Aimtec.SDK.Events;

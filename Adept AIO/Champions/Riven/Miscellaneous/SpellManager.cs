@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Riven.Miscellaneous
 {
-    using System;
     using System.Linq;
     using System.Threading;
     using Aimtec;

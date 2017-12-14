@@ -3,7 +3,6 @@
     using System.Drawing;
     using System.Linq;
     using Aimtec;
-    using Aimtec.SDK.Prediction.Skillshots;
     using Core;
     using SDK.Geometry_Related;
     using SDK.Unit_Extensions;

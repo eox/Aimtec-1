@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Jax.OrbwalkingEvents
 {
-    using System;
     using System.Linq;
     using Aimtec;
     using Aimtec.SDK.Extensions;

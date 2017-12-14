@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.MissFortune.Drawings
 {
-    using System;
     using System.Drawing;
     using System.Linq;
     using Aimtec;

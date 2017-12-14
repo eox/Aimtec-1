@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.LeeSin.OrbwalkingEvents.Combo
 {
-    using System;
     using Aimtec;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Damage.JSON;

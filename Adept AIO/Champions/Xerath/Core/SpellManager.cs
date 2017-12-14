@@ -1,11 +1,9 @@
 ﻿namespace Adept_AIO.Champions.Xerath.Core
 {
-    using System;
     using System.Linq;
     using Aimtec;
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Prediction.Skillshots;
-    using SDK.Generic;
     using SDK.Geometry_Related;
     using SDK.Unit_Extensions;
     using Spell = Aimtec.SDK.Spell;
@@ -44,8 +42,13 @@
             R.SetSkillshot(0.7f, 130f, float.MaxValue, false, SkillshotType.Circle);
         }
         
-        public static void CastQ(Obj_AI_Base target)
+        public static void CastQ(Obj_AI_Base target = null)
         {
+            if (target == null)
+            {
+                target = Global.TargetSelector.GetTarget(Q.ChargedMaxRange);
+            }
+
             if (!target.IsValidTarget(Q.ChargedMaxRange))
             {
                 return;
@@ -61,8 +64,13 @@
             }
         }
 
-        public static void CastW(Obj_AI_Base target)
+        public static void CastW(Obj_AI_Base target = null)
         {
+            if (target == null)
+            {
+                target = Global.TargetSelector.GetTarget(W.Range);
+            }
+
             if (!target.IsValidTarget(W.Range))
             {
                 return;
@@ -71,8 +79,13 @@
             W.Cast(target);
         }
 
-        public static void CastE(Obj_AI_Base target)
+        public static void CastE(Obj_AI_Base target = null)
         {
+            if (target == null)
+            {
+                target = Global.TargetSelector.GetTarget(E.Range);
+            }
+
             if (!target.IsValidTarget(E.Range))
             {
                 return;
@@ -93,8 +106,13 @@
             E.Cast(target);
         }
 
-        public static void CastR(Obj_AI_Base target)
+        public static void CastR(Obj_AI_Base target = null)
         {
+            if (target == null)
+            {
+                target = Global.TargetSelector.GetTarget(R.Range);
+            }
+
             if (!CastingUltimate)
             {
                 if (Global.Player.CountEnemyHeroesInRange(1000) == 0)

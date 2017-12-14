@@ -1,8 +1,6 @@
 ﻿namespace Adept_AIO.Champions.Draven.OrbwalkingEvents
 {
     using System.Linq;
-    using Aimtec;
-    using Aimtec.SDK.Damage;
     using Aimtec.SDK.Extensions;
     using Core;
     using SDK.Unit_Extensions;

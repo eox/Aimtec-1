@@ -1,7 +1,6 @@
 ﻿namespace Adept_AIO.Champions.Riven.Core
 {
     using System;
-    using Aimtec;
     using SDK.Unit_Extensions;
 
     class Extensions

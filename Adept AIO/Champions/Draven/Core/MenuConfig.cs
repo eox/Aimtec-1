@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using Aimtec.SDK.Menu;
     using Aimtec.SDK.Menu.Components;
-    using Aimtec.SDK.Util;
     using SDK.Delegates;
     using SDK.Menu_Extension;
     using SDK.Unit_Extensions;

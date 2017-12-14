@@ -5,7 +5,6 @@ namespace Adept_AIO.Champions.Yorick.OrbwalkingEvents
     using Aimtec;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using SDK.Unit_Extensions;
 

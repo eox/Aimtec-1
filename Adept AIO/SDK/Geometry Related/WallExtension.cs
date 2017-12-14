@@ -5,7 +5,6 @@
     using Aimtec;
     using Aimtec.SDK.Extensions;
     using Generic;
-    using Unit_Extensions;
 
     class WallExtension
     {

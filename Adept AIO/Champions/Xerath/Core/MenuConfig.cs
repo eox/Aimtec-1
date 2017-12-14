@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Xerath.Core
 {
-    using System;
     using System.Collections.Generic;
     using Aimtec.SDK.Menu;
     using Aimtec.SDK.Menu.Components;

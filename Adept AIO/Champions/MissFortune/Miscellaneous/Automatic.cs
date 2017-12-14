@@ -1,11 +1,9 @@
 ﻿namespace Adept_AIO.Champions.MissFortune.Miscellaneous
 {
-    using System.Linq;
     using Aimtec;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Extensions;
     using Core;
-    using SDK.Generic;
     using SDK.Unit_Extensions;
 
     class Automatic

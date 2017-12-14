@@ -3,7 +3,6 @@
     using Core;
     using Drawings;
     using Miscellaneous;
-    using SDK.Delegates;
 
     class MissFortune
     {

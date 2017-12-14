@@ -3,13 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
     using Aimtec;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Prediction.Skillshots;
-    using Aimtec.SDK.Util;
     using SDK.Generic;
     using SDK.Unit_Extensions;
     using Geometry = SDK.Geometry_Related.Geometry;
