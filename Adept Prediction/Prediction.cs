@@ -148,7 +148,7 @@
 
         public PredictionOutput GetMovementPrediction(PredictionInput input, bool checkCollision)
         {
-            if (Environment.TickCount - lastTickChecked <= 50)
+            if (Environment.TickCount - lastTickChecked <= 10)
             {
                 return new PredictionOutput();
             }
