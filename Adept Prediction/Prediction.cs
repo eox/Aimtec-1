@@ -73,7 +73,7 @@
                 }
             }
 
-            if (input.Unit.IsDashing() && !input.Unit.GetDashInfo().IsBlink)
+            if (input.Unit.IsDashing())
             {
                 return this.GetDashPrediction(input, collision);
             }
