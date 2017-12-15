@@ -1,4 +1,4 @@
-﻿namespace Adept_AIO.SDK.Geometry_Related
+﻿namespace Adept_Prediction
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +22,7 @@
 
     class LocalPrediction : ISkillshotPrediction, IPrediction
     {
-        private static float LastTickChecked;
+        private static float lastTickChecked;
 
         private static readonly Dictionary<int, float> Timers = new Dictionary<int, float>();
 
@@ -135,7 +135,7 @@
 
         public PredictionOutput GetMovementPrediction(PredictionInput input, bool checkCollision)
         {
-            if (Environment.TickCount - LastTickChecked <= 50)
+            if (Environment.TickCount - lastTickChecked <= 50)
             {
                 return new PredictionOutput()
                 {
@@ -144,7 +144,7 @@
                 };
             }
 
-            LastTickChecked = Environment.TickCount;
+            lastTickChecked = Environment.TickCount;
 
             var result = new PredictionOutput { Input = input, HitChance = HitChance.VeryHigh };
 

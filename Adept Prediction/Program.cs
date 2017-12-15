@@ -1,6 +1,5 @@
 ﻿namespace Adept_Prediction
 {
-    using Adept_AIO.SDK.Geometry_Related;
     using Aimtec.SDK.Events;
     using Aimtec.SDK.Prediction.Skillshots;
 
