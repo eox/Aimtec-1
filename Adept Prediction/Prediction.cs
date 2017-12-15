@@ -25,28 +25,28 @@
     {
         private static float lastTickChecked;
 
-        private static readonly Dictionary<int, float> Timers = new Dictionary<int, float>();
+       // private static readonly Dictionary<int, float> Timers = new Dictionary<int, float>();
 
         public LocalPrediction()
         {
-            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy))
-            {
-                Timers.Add(hero.NetworkId, 0);
-            }
+            //foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy))
+            //{
+            //    Timers.Add(hero.NetworkId, 0);
+            //}
 
-            Game.OnUpdate += delegate
-            {
-                foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy))
-                {
-                    var id = hero.NetworkId;
-                    if (!Timers.ContainsKey(id))
-                    {
-                        return;
-                    }
+            //Game.OnUpdate += delegate
+            //{
+            //    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy))
+            //    {
+            //        var id = hero.NetworkId;
+            //        if (!Timers.ContainsKey(id))
+            //        {
+            //            return;
+            //        }
 
-                    Timers[id] = Game.ClockTime;
-                }
-            };
+            //        Timers[id] = Game.ClockTime;
+            //    }
+            //};
         }
 
         public PredictionOutput GetPrediction(PredictionInput input)
@@ -159,11 +159,6 @@
 
             var unit = input.Unit;
 
-            if (!Timers.ContainsKey(input.Unit.NetworkId))
-            {
-                Timers.Add(input.Unit.NetworkId, Game.ClockTime);
-            }
-
             var unitPosition = unit.Position.To2D();
             var unitSpeed = unit.MoveSpeed;
 
@@ -178,7 +173,7 @@
 
             if (lenght > 1)
             {
-                var time = unitSpeed * (Game.ClockTime - Timers[input.Unit.NetworkId] + Game.Ping / 1000f);
+                var time = unitSpeed * (/*Game.ClockTime - Timers[input.Unit.NetworkId] +*/ Game.Ping / 2f / 1000f);
                 var d = 0f;
 
                 for (var i = 0; i < lenght - 1; i++)

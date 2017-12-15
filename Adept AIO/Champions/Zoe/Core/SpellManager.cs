@@ -60,7 +60,7 @@
                 var rotated = (pos.To2D() + spell.Range * dir.Rotated((float) angleRad)).To3D();
 
                 var rectBefore = new Geometry.Rectangle(Global.Player.ServerPosition.To2D(), rotated.To2D(), Q.Width + target.BoundingRadius);
-                var rectAfter = new Geometry.Rectangle(rotated.To2D(), target.ServerPosition.To2D(), Q.Width + target.BoundingRadius + 100);
+                var rectAfter = new Geometry.Rectangle(rotated.To2D(), Q.GetPrediction(target).CastPosition.To2D(), Q.Width + target.BoundingRadius + 100);
 
                 if (GameObjects.Enemy.OrderBy(x => x.Distance(Global.Player)).
                     Where(x => x.NetworkId != target.NetworkId).
