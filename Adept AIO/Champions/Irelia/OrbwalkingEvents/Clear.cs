@@ -7,6 +7,7 @@
     using Aimtec.SDK.Orbwalking;
     using Core;
     using SDK.Unit_Extensions;
+    using PreAttackEventArgs = SDK.Orbwalking.PreAttackEventArgs;
 
     class Clear
     {

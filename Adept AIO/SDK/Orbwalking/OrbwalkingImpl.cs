@@ -1,4 +1,4 @@
-﻿namespace Adept_AIO.Champions.Riven.Orbwalker
+namespace Adept_AIO.SDK.Orbwalking
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +15,7 @@
     using Aimtec.SDK.Util;
     using Aimtec.SDK.Util.Cache;
 
-    class OrbwalkingImpl : AOrbwalker
+    internal class OrbwalkingImpl : AOrbwalker
     {
         #region Fields
 
@@ -30,7 +30,7 @@
 
         internal OrbwalkingImpl()
         {
-            Initialize();
+            this.Initialize();
         }
 
         #endregion
@@ -52,7 +52,7 @@
                     attackDelay = (1.0740296828f * Player.AttackDelay - 0.7162381256175f) * 1000;
                 }
 
-                if (champion.Equals("Kalista") && !Config["Misc"]["KalistaFly"].Enabled)
+                if (champion.Equals("Kalista") && !this.Config["Misc"]["KalistaFly"].Enabled)
                 {
                     return attackDelay;
                 }
@@ -65,7 +65,7 @@
         {
             get
             {
-                var detectionTime = Math.Max(this.ServerAttackDetectionTick, LastAttackCommandSentTime);
+                var detectionTime = Math.Max(this.ServerAttackDetectionTick, this.LastAttackCommandSentTime);
                 return Game.TickCount + Game.Ping / 2 - detectionTime <= this.WindUpTime;
             }
         }
@@ -81,17 +81,17 @@
 
         private bool Attached { get; set; }
 
-        private int AttackDelayReduction => Config["Advanced"]["AttackDelayReduction"].Value;
+        private int AttackDelayReduction => this.Config["Advanced"]["AttackDelayReduction"].Value;
 
-        private int ExtraWindUp => Config["Attacking"]["ExtraWindup"].Value;
+        private int ExtraWindUp => this.Config["Attacking"]["ExtraWindup"].Value;
 
-        private int HoldPositionRadius => Config["Misc"]["HoldPositionRadius"].Value;
+        private int HoldPositionRadius => this.Config["Misc"]["HoldPositionRadius"].Value;
 
-        private bool DrawAttackRange => Config["Drawings"]["DrawAttackRange"].Enabled;
+        private bool DrawAttackRange => this.Config["Drawings"]["DrawAttackRange"].Enabled;
 
-        private bool DrawHoldPosition => Config["Drawings"]["DrawHoldRadius"].Enabled;
+        private bool DrawHoldPosition => this.Config["Drawings"]["DrawHoldRadius"].Enabled;
 
-        private bool DrawKillable => Config["Drawings"]["DrawKillableMinion"].Enabled;
+        private bool DrawKillable => this.Config["Drawings"]["DrawKillableMinion"].Enabled;
 
 
         /// <summary>
@@ -118,7 +118,8 @@
             "mordekaiserqattack",
             "reksaiq",
             "warwickq",
-            "vaynecondemnmissile"
+            "vaynecondemnmissile",
+            "masochismattack"
         };
 
         /// <summary>
@@ -134,11 +135,7 @@
         /// <summary>
         ///     Champions whos attack is not wasted on invulnerable targets or when blinded
         /// </summary>
-        private readonly string[] noWasteAttackChamps =
-        {
-            "Kalista",
-            "Twitch"
-        };
+        private readonly string[] noWasteAttackChamps = { "Kalista", "Twitch" };
 
         private Obj_AI_Hero GangPlank { get; set; }
         private Obj_AI_Hero Jax { get; set; }
@@ -152,12 +149,12 @@
             if (!this.Attached)
             {
                 this.Attached = true;
-                menu.Add(Config);
-                Obj_AI_Base.OnProcessAutoAttack += ObjAiHeroOnProcessAutoAttack;
-                Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
-                Game.OnUpdate += Game_OnUpdate;
-                SpellBook.OnStopCast += SpellBook_OnStopCast;
-                Render.OnRender += RenderManager_OnRender;
+                menu.Add(this.Config);
+                Obj_AI_Base.OnProcessAutoAttack += this.ObjAiHeroOnProcessAutoAttack;
+                Obj_AI_Base.OnProcessSpellCast += this.Obj_AI_Base_OnProcessSpellCast;
+                Game.OnUpdate += this.Game_OnUpdate;
+                SpellBook.OnStopCast += this.SpellBook_OnStopCast;
+                Render.OnRender += this.RenderManager_OnRender;
             }
             else
             {
@@ -167,26 +164,24 @@
 
         public override bool Attack(AttackableUnit target)
         {
-            var preAttackargs = FirePreAttack(target);
-            if (preAttackargs.Cancel)
+            var preAttackargs = this.FirePreAttack(target);
+            if (!preAttackargs.Cancel)
             {
-                return false;
+                var targetToAttack = preAttackargs.Target;
+                if (this.ForcedTarget != null &&
+                    this.ForcedTarget.IsValidAutoRange())
+                {
+                    targetToAttack = this.ForcedTarget;
+                }
+
+                if (Player.IssueOrder(OrderType.AttackUnit, targetToAttack))
+                {
+                    this.LastAttackCommandSentTime = Game.TickCount;
+                    return true;
+                }
             }
 
-            var targetToAttack = preAttackargs.Target;
-            if (this.ForcedTarget != null &&
-                this.ForcedTarget.IsValidAutoRange())
-            {
-                targetToAttack = this.ForcedTarget;
-            }
-
-            if (!Player.IssueOrder(OrderType.AttackUnit, targetToAttack))
-            {
-                return false;
-            }
-
-            LastAttackCommandSentTime = Game.TickCount;
-            return true;
+            return false;
         }
 
         public bool IsValidAttackableObject(AttackableUnit unit)
@@ -214,7 +209,7 @@
             {
                 return false;
             }
-
+        
 
             var minion = unit as Obj_AI_Minion;
 
@@ -225,44 +220,45 @@
 
 
             var name = minion.UnitSkinName.ToLower();
-
-            if (name.Contains("zyraseed"))
+            
+            if (name.Contains("zyraseed")) 
+            {
+                return false;
+            }
+            
+            if (!this.Config["Farming"]["AttackPlants"].Enabled && name.Contains("sru_plant_"))
             {
                 return false;
             }
 
-            if (!Config["Farming"]["AttackPlants"].Enabled && name.Contains("sru_plant_"))
+            if (!this.Config["Farming"]["AttackWards"].Enabled && name.Contains("ward"))
             {
                 return false;
             }
-
-            if (!Config["Farming"]["AttackWards"].Enabled && name.Contains("ward"))
+            
+            if (this.GangPlank != null)
             {
-                return false;
+                if (name.Contains("gangplankbarrel"))
+                {
+                    if (!this.Config["Farming"]["AttackBarrels"].Enabled)
+                    {
+                        return false;
+                    }
+
+                    //dont attack ally barrels
+                    if (this.GangPlank.IsAlly)
+                    {
+                        return false;
+                    }
+                }
             }
 
-            if (this.GangPlank == null)
-            {
-                return true;
-            }
-
-            if (!name.Contains("gangplankbarrel"))
-            {
-                return true;
-            }
-
-            if (!Config["Farming"]["AttackBarrels"].Enabled)
-            {
-                return false;
-            }
-
-            //dont attack ally barrels
-            return !this.GangPlank.IsAlly;
+            return true;
         }
 
         public override bool CanAttack()
         {
-            return CanAttack(GetActiveMode());
+            return this.CanAttack(this.GetActiveMode());
         }
 
         public bool CanAttack(OrbwalkerMode mode)
@@ -283,7 +279,7 @@
             }
 
             if (Player.HasBuffOfType(BuffType.Blind) &&
-                !noWasteAttackChamps.Contains(Player.ChampionName))
+                !this.noWasteAttackChamps.Contains(Player.ChampionName))
             {
                 return false;
             }
@@ -298,22 +294,25 @@
                 return false;
             }
 
-            if (!NoCancelChamps.Contains(Player.ChampionName))
+            if (this.NoCancelChamps.Contains(Player.ChampionName))
             {
-                return !this.IsWindingUp && this.AttackReady;
+                if (Player.ChampionName.Equals("Kalista") && this.Config["Misc"]["KalistaFly"].Enabled)
+                {
+                    return true;
+                }
             }
 
-            if (Player.ChampionName.Equals("Kalista") && Config["Misc"]["KalistaFly"].Enabled)
+            if (this.IsWindingUp)
             {
-                return true;
+                return false;
             }
 
-            return !this.IsWindingUp && this.AttackReady;
+            return this.AttackReady;
         }
 
         public override bool CanMove()
         {
-            return CanMove(GetActiveMode());
+            return this.CanMove(this.GetActiveMode());
         }
 
         public bool CanMove(OrbwalkerMode mode)
@@ -333,22 +332,27 @@
                 return false;
             }
 
-            if (NoCancelChamps.Contains(Player.ChampionName))
+            if (this.NoCancelChamps.Contains(Player.ChampionName))
             {
                 return true;
             }
 
-            return !this.IsWindingUp;
+            if (this.IsWindingUp)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public override void Dispose()
         {
-            Config.Dispose();
-            Obj_AI_Base.OnProcessAutoAttack -= ObjAiHeroOnProcessAutoAttack;
-            Obj_AI_Base.OnProcessSpellCast -= Obj_AI_Base_OnProcessSpellCast;
-            Game.OnUpdate -= Game_OnUpdate;
-            SpellBook.OnStopCast -= SpellBook_OnStopCast;
-            Render.OnRender -= RenderManager_OnRender;
+            this.Config.Dispose();
+            Obj_AI_Base.OnProcessAutoAttack -= this.ObjAiHeroOnProcessAutoAttack;
+            Obj_AI_Base.OnProcessSpellCast -= this.Obj_AI_Base_OnProcessSpellCast;
+            Game.OnUpdate -= this.Game_OnUpdate;
+            SpellBook.OnStopCast -= this.SpellBook_OnStopCast;
+            Render.OnRender -= this.RenderManager_OnRender;
             this.Attached = false;
         }
 
@@ -375,13 +379,21 @@
 
         public override bool Move(Vector3 movePosition)
         {
-            var preMoveArgs = FirePreMove(movePosition);
-            return !preMoveArgs.Cancel && Player.IssueOrder(OrderType.MoveTo, preMoveArgs.MovePosition);
+            var preMoveArgs = this.FirePreMove(movePosition);
+            if (!preMoveArgs.Cancel)
+            {
+                if (Player.IssueOrder(OrderType.MoveTo, preMoveArgs.MovePosition))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public override void Orbwalk()
         {
-            var mode = GetActiveMode();
+            var mode = this.GetActiveMode();
             if (mode == null)
             {
                 return;
@@ -405,25 +417,25 @@
                 return;
             }
 
-            if (CanAttack(mode))
+            if (this.CanAttack(mode))
             {
-                var target = this.LastTarget = FindTarget(mode);
+                var target = this.LastTarget = this.FindTarget(mode);
                 if (target != null)
                 {
-                    Attack(target);
+                    this.Attack(target);
                 }
             }
 
-            if (CanMove(mode))
+            if (this.CanMove(mode))
             {
-                Move(Game.CursorPos);
+                this.Move(Game.CursorPos);
             }
         }
 
         public override void ResetAutoAttackTimer()
         {
             this.ServerAttackDetectionTick = 0;
-            LastAttackCommandSentTime = 0;
+            this.LastAttackCommandSentTime = 0;
         }
 
         #endregion
@@ -437,7 +449,7 @@
                 return;
             }
 
-            Orbwalk();
+            this.Orbwalk();
         }
 
         protected void ObjAiHeroOnProcessAutoAttack(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs args)
@@ -447,34 +459,31 @@
                 return;
             }
 
-            if (!(args.Target is AttackableUnit targ))
+            if (args.Target is AttackableUnit targ)
             {
-                return;
+                this.ServerAttackDetectionTick = Game.TickCount - Game.Ping / 2;
+                this.LastTarget = targ;
+                this.ForcedTarget = null;
+                DelayAction.Queue((int)this.WindUpTime, () => this.FirePostAttack(targ));
             }
-
-            this.ServerAttackDetectionTick = Game.TickCount - Game.Ping / 2;
-            this.LastTarget = targ;
-            this.ForcedTarget = null;
-            DelayAction.Queue((int) this.WindUpTime, () => FirePostAttack(targ));
         }
 
         private bool CanKillMinion(Obj_AI_Base minion, int time = 0)
         {
-            var rtime = time == 0 ? TimeForAutoToReachTarget(minion) : time;
-            var pred = GetPredictedHealth(minion, rtime);
+            var rtime = time == 0 ? this.TimeForAutoToReachTarget(minion) : time;
+            var pred = this.GetPredictedHealth(minion, rtime);
             if (pred > 0)
             {
-                return pred <= GetRealAutoAttackDamage(minion);
+                return pred <= this.GetRealAutoAttackDamage(minion);
             }
 
-            FireNonKillableMinion(minion);
+            this.FireNonKillableMinion(minion);
             return false;
         }
 
         private AttackableUnit GetHeroTarget()
         {
             var targets = TargetSelector.Implementation.GetOrderedTargets(0, true);
-
             return targets.FirstOrDefault(target => this.Jax == null || target.NetworkId != this.Jax.NetworkId || !target.HasBuff("JaxCounterStrike"));
         }
 
@@ -482,23 +491,28 @@
         {
             if (UnderTurretMode())
             {
-                //Temporarily...
-                return GetLastHitTarget();
+                return this.GetUnderTurret();
             }
 
-            var attackable = ObjectManager.Get<AttackableUnit>().Where(IsValidAttackableObject);
+            var attackable = ObjectManager.Get<AttackableUnit>().Where(this.IsValidAttackableObject);
             var attackableUnits = attackable as AttackableUnit[] ?? attackable.ToArray();
             IEnumerable<Obj_AI_Base> minions = attackableUnits.Where(x => x is Obj_AI_Base).Cast<Obj_AI_Base>().OrderByDescending(x => x.MaxHealth);
 
-            //Killable
-            var enumerable = minions.ToArray();
-            AttackableUnit killableMinion = enumerable.FirstOrDefault(x => CanKillMinion(x));
-            if (killableMinion != null)
+            var actualKillable = GetLastHitTarget(minions.ToArray());
+            if (actualKillable != null)
             {
-                return killableMinion;
+                return actualKillable;
             }
 
-            var waitableMinion = enumerable.Any(ShouldWaitMinion);
+            //Killable
+            var enumerable = minions.ToArray();
+            //AttackableUnit killableMinion = enumerable.FirstOrDefault(x => this.CanKillMinion(x));
+            //if (killableMinion != null)
+            //{
+            //    return killableMinion;
+            //}
+
+            var waitableMinion = enumerable.Any(this.ShouldWaitMinion);
             if (waitableMinion)
             {
                 Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
@@ -510,13 +524,13 @@
             {
                 return structure;
             }
-
+            
             if (this.LastTarget != null &&
                 this.LastTarget.IsValidAutoRange())
             {
                 if (this.LastTarget is Obj_AI_Base b)
                 {
-                    var predHealth = GetPredictedHealth(b);
+                    var predHealth = this.GetPredictedHealth(b);
 
                     //taking damage
                     if (Math.Abs(this.LastTarget.Health - predHealth) < 0)
@@ -525,10 +539,10 @@
                     }
                 }
             }
-
+            
             foreach (var minion in enumerable)
             {
-                var predHealth = GetPredictedHealth(minion);
+                var predHealth = this.GetPredictedHealth(minion);
 
                 //taking damage
                 if (minion.Health - predHealth > 0)
@@ -546,8 +560,13 @@
             }
 
             //Heros
-            var hero = GetHeroTarget();
-            return hero;
+            var hero = this.GetHeroTarget();
+            if (hero != null)
+            {
+                return hero;
+            }
+
+            return null;
         }
 
         public static bool UnderTurretMode()
@@ -558,7 +577,7 @@
 
         public AttackableUnit GetUnderTurret()
         {
-            var attackable = ObjectManager.Get<AttackableUnit>().Where(IsValidAttackableObject);
+            var attackable = ObjectManager.Get<AttackableUnit>().Where(this.IsValidAttackableObject);
 
             var nearestTurret = TurretAttackManager.GetNearestTurretData(Player, TurretAttackManager.TurretTeam.Ally);
 
@@ -577,6 +596,7 @@
                 {
                     return null;
                 }
+
                 var tTarget = tData.LastTarget;
                 if (!tTarget.IsValidAutoRange())
                 {
@@ -593,7 +613,7 @@
                     var tDmg = tData.Turret.GetAutoAttackDamage(tTarget);
 
                     //var tWillKill = tDmg > tTarget.Health;
-                    var numTurretAutosToKill = (int) Math.Ceiling(tTarget.Health / tDmg);
+                    var numTurretAutosToKill = (int)Math.Ceiling(tTarget.Health / tDmg);
                     var turretDistance = tData.Turret.Distance(tTarget) - Player.BoundingRadius - tTarget.BoundingRadius;
                     var tCastDelay = tData.Turret.AttackCastDelay * 1000;
                     var tTravTime = turretDistance / tData.Turret.BasicAttack.MissileSpeed * 1000;
@@ -604,17 +624,17 @@
                     //var minDelay = castDelay;
                     var dist = Player.Distance(tTarget) - Player.BoundingRadius - tTarget.BoundingRadius;
                     var travTime = dist / Player.BasicAttack.MissileSpeed * 1000;
-                    var totalTime = (int) (castDelay + travTime + Game.Ping / 2f);
+                    var totalTime = (int)(castDelay + travTime + Game.Ping / 2f);
 
                     //minion hpred
                     var tMinionDmgPredHealth = HealthPrediction.Instance.GetPrediction(tTarget, totalTime);
 
                     //myattack
-                    const int extraBuffer = 50;
+                    const int ExtraBuffer = 50;
                     //if total time > turret attack arrival time by buffer (can be early/late)
-                    var canReachSooner = totalTime - eta > extraBuffer;
+                    var canReachSooner = totalTime - eta > ExtraBuffer;
 
-                    var myAutoDmg = GetRealAutoAttackDamage(tTarget);
+                    var myAutoDmg = this.GetRealAutoAttackDamage(tTarget);
 
                     //if my attk reach sooner than turret & my auto can kill it
                     if (canReachSooner && myAutoDmg >= tMinionDmgPredHealth)
@@ -673,9 +693,9 @@
                             var castDelay1 = Player.AttackCastDelay * 1000;
                             var dist1 = Player.Distance(min) - Player.BoundingRadius - min.BoundingRadius;
                             var travTime1 = dist1 / Player.BasicAttack.MissileSpeed * 1000;
-                            var totalTime1 = (int) (castDelay1 + travTime1 + Game.Ping / 2f);
+                            var totalTime1 = (int)(castDelay1 + travTime1 + Game.Ping / 2f);
 
-                            var dmg1 = GetRealAutoAttackDamage(minBase);
+                            var dmg1 = this.GetRealAutoAttackDamage(minBase);
                             var pred1 = HealthPrediction.Instance.GetPrediction(minBase, totalTime1);
                             if (dmg1 > pred1)
                             {
@@ -691,19 +711,24 @@
 
         private AttackableUnit GetLastHitTarget()
         {
-            return GetLastHitTarget(null);
+            return this.GetLastHitTarget(null);
         }
 
         private AttackableUnit GetLastHitTarget(IEnumerable<AttackableUnit> attackable)
         {
+            
             if (attackable == null)
             {
-                attackable = ObjectManager.Get<AttackableUnit>().Where(IsValidAttackableObject);
+                attackable = ObjectManager.Get<AttackableUnit>().Where(this.IsValidAttackableObject);
             }
 
-            var availableMinionTargets = attackable.OfType<Obj_AI_Base>().Where(x => CanKillMinion(x));
+            var availableMinionTargets = attackable
+                .OfType<Obj_AI_Base>().Where(x => this.CanKillMinion(x));
 
-            var bestMinionTarget = availableMinionTargets.OrderByDescending(x => x.MaxHealth).ThenBy(x => x.Health).FirstOrDefault();
+            var bestMinionTarget = availableMinionTargets
+                .OrderByDescending(x => x.MaxHealth)
+                .ThenBy(x => x.Health)
+                .FirstOrDefault();
 
             return bestMinionTarget;
         }
@@ -711,11 +736,11 @@
         //In mixed mode we prioritize killable units, then structures, then heros. If none are found, then we don't attack anything.
         private AttackableUnit GetMixedModeTarget()
         {
-            var attackable = ObjectManager.Get<AttackableUnit>().Where(IsValidAttackableObject);
+            var attackable = ObjectManager.Get<AttackableUnit>().Where(this.IsValidAttackableObject);
 
             var attackableUnits = attackable as AttackableUnit[] ?? attackable.ToArray();
 
-            var killable = GetLastHitTarget(attackableUnits);
+            var killable = this.GetLastHitTarget(attackableUnits);
 
             //Killable unit 
             if (killable != null)
@@ -731,14 +756,14 @@
             }
 
             //Heros
-            var hero = GetHeroTarget();
+            var hero = this.GetHeroTarget();
             return hero;
         }
 
         private int GetPredictedHealth(Obj_AI_Base minion, int time = 0)
         {
-            var rtime = time == 0 ? TimeForAutoToReachTarget(minion) : time;
-            return (int) Math.Ceiling(HealthPrediction.Instance.GetPrediction(minion, rtime));
+            var rtime = time == 0 ? this.TimeForAutoToReachTarget(minion) : time;
+            return (int)Math.Ceiling(HealthPrediction.Instance.GetPrediction(minion, rtime));
         }
 
         //Gets a structure target based on the following order (Nexus, Turret, Inihibitor)
@@ -760,7 +785,8 @@
             }
 
             //Inhib
-            var inhib = attackableUnits.Where(x => x.Type == GameObjectType.obj_BarracksDampener).MinBy(x => x.Distance(Player));
+            var inhib = attackableUnits.Where(x => x.Type == GameObjectType.obj_BarracksDampener)
+                                       .MinBy(x => x.Distance(Player));
             if (inhib != null && inhib.IsValidAutoRange())
             {
                 return inhib;
@@ -772,48 +798,46 @@
         private void Initialize()
         {
             var advanced = new Menu("Advanced", "Advanced")
-            {
-                new MenuSlider("AttackDelayReduction", "Attack Delay Reduction", 90, 0, 180, true)
-            };
+                               {
+                                   new MenuSlider("AttackDelayReduction", "Attack Delay Reduction", 90, 0, 180, true)
+                               };
 
             var attacking = new Menu("Attacking", "Attacking")
-            {
-                new MenuSlider("ExtraWindup", "Additional Windup", Game.Ping / 2, 0, 200, true)
-            };
+                                { new MenuSlider("ExtraWindup", "Additional Windup", Game.Ping / 2, 0, 200, true) };
 
             var farming = new Menu("Farming", "Farming")
-            {
-                new MenuBool("AttackPlants", "Attack Plants", false, true),
-                new MenuBool("AttackWards", "Attack Wards", true, true),
-                new MenuBool("AttackBarrels", "Attack Barrels", true, true)
-            };
+                              {
+                                  new MenuBool("AttackPlants", "Attack Plants", false, true),
+                                  new MenuBool("AttackWards", "Attack Wards", true, true),
+                                  new MenuBool("AttackBarrels", "Attack Barrels", true, true)
+                              };
 
             var misc = new Menu("Misc", "Misc")
-            {
-                new MenuSlider("HoldPositionRadius", "Hold Radius", 50, 0, 400, true),
-                Player.ChampionName.Equals("Kalista") ? new MenuBool("KalistaFly", "Kalista Fly", true, true) : null
-            };
+                           {
+                               new MenuSlider("HoldPositionRadius", "Hold Radius", 50, 0, 400, true),
+                               Player.ChampionName.Equals("Kalista") ? new MenuBool("KalistaFly", "Kalista Fly", true, true) : null
+                           };
 
             var drawings = new Menu("Drawings", "Drawings")
-            {
-                new MenuBool("DrawAttackRange", "Draw Attack Range"),
-                new MenuBool("DrawHoldRadius", "Draw Hold Radius"),
-                new MenuBool("DrawKillableMinion", "Indicate Killable")
-            };
+                               {
+                                   new MenuBool("DrawAttackRange", "Draw Attack Range"),
+                                   new MenuBool("DrawHoldRadius", "Draw Hold Radius", false),
+                                   new MenuBool("DrawKillableMinion", "Indicate Killable", false)
+                               };
 
-            Config.Add(advanced);
-            Config.Add(attacking);
-            Config.Add(farming);
-            Config.Add(misc);
-            Config.Add(drawings);
+            this.Config.Add(advanced);
+            this.Config.Add(attacking);
+            this.Config.Add(farming);
+            this.Config.Add(misc);
+            this.Config.Add(drawings);
 
 
-            AddMode(this.Combo = new OrbwalkerMode("Combo", GlobalKeys.ComboKey, GetHeroTarget, null));
-            AddMode(this.LaneClear = new OrbwalkerMode("Laneclear", GlobalKeys.WaveClearKey, GetLaneClearTarget, null));
-            AddMode(this.LastHit = new OrbwalkerMode("Lasthit", GlobalKeys.LastHitKey, GetLastHitTarget, null));
-            AddMode(this.Mixed = new OrbwalkerMode("Mixed", GlobalKeys.MixedKey, GetMixedModeTarget, null));
+            this.AddMode(this.Combo = new OrbwalkerMode("Combo", GlobalKeys.ComboKey, this.GetHeroTarget, null));
+            this.AddMode(this.LaneClear = new OrbwalkerMode("Laneclear", GlobalKeys.WaveClearKey, this.GetLaneClearTarget, null));
+            this.AddMode(this.LastHit = new OrbwalkerMode("Lasthit", GlobalKeys.LastHitKey, this.GetLastHitTarget, null));
+            this.AddMode(this.Mixed = new OrbwalkerMode("Mixed", GlobalKeys.MixedKey, this.GetMixedModeTarget, null));
 
-            CheckSpecialHeroes();
+            this.CheckSpecialHeroes();
         }
 
         private void CheckSpecialHeroes()
@@ -842,14 +866,14 @@
             }
 
             var name = e.SpellData.Name.ToLower();
-            if (specialAttacks.Any(x => name.StartsWith(x)))
+            if (this.specialAttacks.Any(x => name.StartsWith(x)))
             {
-                ObjAiHeroOnProcessAutoAttack(sender, e);
+                this.ObjAiHeroOnProcessAutoAttack(sender, e);
             }
 
-            if (IsReset(name))
+            if (this.IsReset(name))
             {
-                ResetAutoAttackTimer();
+                this.ResetAutoAttackTimer();
             }
         }
 
@@ -865,38 +889,35 @@
                 Render.Circle(Player.Position, this.HoldPositionRadius, 30, Color.White);
             }
 
-            if (this.DrawKillable)
+            if (!this.DrawKillable)
             {
-                foreach (var m in ObjectManager.Get<Obj_AI_Minion>().Where(x => IsValidAttackableObject(x) && x.Health <= GetRealAutoAttackDamage(x)))
-                {
-                    Render.Circle(m.Position, 50, 30, Color.LimeGreen);
-                }
+                return;
+            }
+
+            foreach (var m in ObjectManager.Get<Obj_AI_Minion>().Where(x => this.IsValidAttackableObject(x) && x.Health <= this.GetRealAutoAttackDamage(x)))
+            {
+                m.SetGlow(Color.LimeGreen, 4);
             }
         }
 
-
         private double GetRealAutoAttackDamage(Obj_AI_Base minion)
         {
-            if (minion.IsWard())
-            {
-                return 1;
-            }
-
-            return Player.GetAutoAttackDamage(minion);
+            return minion.IsWard() ? 1 : Player.GetAutoAttackDamage(minion);
         }
 
         private bool ShouldWaitMinion(Obj_AI_Base minion)
         {
-            var time = TimeForAutoToReachTarget(minion) + (int) Player.AttackDelay * 1000 + 100;
-            var pred = HealthPrediction.Instance.GetLaneClearHealthPrediction(minion, (int) (time * 2f));
-            return pred < GetRealAutoAttackDamage(minion);
+            var time = this.TimeForAutoToReachTarget(minion) + (int)Player.AttackDelay * 1000 * 1.2f + Game.Ping / 2f + 1000 * 500 / Player.BasicAttack.MissileSpeed;
+            var pred = HealthPrediction.Instance.GetLaneClearHealthPrediction(minion, (int)(time));
+
+            return pred < this.GetRealAutoAttackDamage(minion);
         }
 
         private void SpellBook_OnStopCast(Obj_AI_Base sender, SpellBookStopCastEventArgs e)
         {
             if (sender.IsMe && (e.DestroyMissile || e.ForceStop)) // || e.StopAnimation
             {
-                ResetAutoAttackTimer();
+                this.ResetAutoAttackTimer();
             }
         }
 
@@ -912,7 +933,8 @@
                 case "Azir":
                 case "Velkoz":
                 case "Thresh":
-                case "Rakan": return float.MaxValue;
+                case "Rakan":
+                    return float.MaxValue;
 
                 case "Kayle":
                     if (hero.HasBuff("JudicatorRighteousFury"))
@@ -936,8 +958,8 @@
         private int TimeForAutoToReachTarget(AttackableUnit minion)
         {
             var dist = Player.ServerPosition.Distance(minion.ServerPosition);
-            var attackTravelTime = dist / (int) GetBasicAttackMissileSpeed(ObjectManager.GetLocalPlayer()) * 1000f;
-            var totalTime = (int) (this.AnimationTime + attackTravelTime + Game.Ping / 2f);
+            var attackTravelTime = dist / (int)GetBasicAttackMissileSpeed(ObjectManager.GetLocalPlayer()) * 1000f;
+            var totalTime = (int)(this.AnimationTime + attackTravelTime + Game.Ping / 2f);
             return totalTime;
         }
 

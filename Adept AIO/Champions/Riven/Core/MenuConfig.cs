@@ -3,13 +3,15 @@
     using System.Collections.Generic;
     using Aimtec.SDK.Menu;
     using Aimtec.SDK.Menu.Components;
+    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Util;
-    using Orbwalker;
+  
     using OrbwalkingEvents;
     using SDK.Delegates;
     using SDK.Menu_Extension;
     using SDK.Unit_Extensions;
-// using Aimtec.SDK.Orbwalking;
+    using Orbwalker = SDK.Orbwalking.Orbwalker;
+    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
 
     class MenuConfig
     {

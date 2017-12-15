@@ -9,7 +9,7 @@
     using Core;
     using OrbwalkingEvents;
     using SDK.Unit_Extensions;
-    using OrbwalkingMode = Aimtec.SDK.Orbwalking.OrbwalkingMode;
+    using OrbwalkingMode = SDK.Orbwalking.OrbwalkingMode;
 
     class Manager
     {

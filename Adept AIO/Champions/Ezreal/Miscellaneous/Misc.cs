@@ -9,6 +9,7 @@
     using Core;
     using SDK.Generic;
     using SDK.Unit_Extensions;
+    using OrbwalkingMode = SDK.Orbwalking.OrbwalkingMode;
 
     class Misc
     {

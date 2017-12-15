@@ -1,4 +1,4 @@
-﻿namespace Adept_AIO.Champions.Riven.Orbwalker
+﻿namespace Adept_AIO.SDK.Orbwalking
 {
     using System;
     using Aimtec;
@@ -6,6 +6,8 @@
     using Aimtec.SDK.Menu.Config;
     using Aimtec.SDK.Util;
 
+    /// <summary>
+    /// </summary>
     public interface IOrbwalker : IDisposable
     {
         #region Public Events
@@ -225,7 +227,7 @@
     /// <summary>
     ///     The event arguements for the <see cref="IOrbwalker.PreAttack" /> event.
     /// </summary>
-    /// <seealso cref="Aimtec.SDK.Orbwalking.OrbwalkingEventArgs" />
+    /// <seealso cref="OrbwalkingEventArgs" />
     public class PreAttackEventArgs : OrbwalkingEventArgs
     {
         #region Public Properties
@@ -242,7 +244,7 @@
     /// <summary>
     ///     The event arguements for the <see cref="IOrbwalker.PostAttack" /> event.
     /// </summary>
-    /// <seealso cref="Aimtec.SDK.Orbwalking.OrbwalkingEventArgs" />
+    /// <seealso cref="OrbwalkingEventArgs" />
     public class PostAttackEventArgs : OrbwalkingEventArgs
     {
     }
@@ -250,7 +252,7 @@
     /// <summary>
     ///     The event arguements for the <see cref="AOrbwalker.OnNonKillableMinion" /> event.
     /// </summary>
-    /// <seealso cref="Aimtec.SDK.Orbwalking.OrbwalkingEventArgs" />
+    /// <seealso cref="OrbwalkingEventArgs" />
     public class NonKillableMinionEventArgs : OrbwalkingEventArgs
     {
     }
@@ -258,7 +260,7 @@
     /// <summary>
     ///     The event arguements for the <see cref="IOrbwalker.PreMove" /> event.
     /// </summary>
-    /// <seealso cref="Aimtec.SDK.Orbwalking.OrbwalkingEventArgs" />
+    /// <seealso cref="OrbwalkingEventArgs" />
     public class PreMoveEventArgs : EventArgs
     {
         #region Public Properties

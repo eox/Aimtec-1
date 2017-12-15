@@ -7,6 +7,7 @@
     using Aimtec.SDK.Prediction.Skillshots;
     using SDK.Unit_Extensions;
     using SDK.Usables;
+    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
     using Spell = Aimtec.SDK.Spell;
 
     class SpellConfig : ISpellConfig

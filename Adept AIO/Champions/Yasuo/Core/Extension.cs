@@ -6,6 +6,7 @@
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Orbwalking;
     using SDK.Unit_Extensions;
+    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
 
     public enum Mode
     {

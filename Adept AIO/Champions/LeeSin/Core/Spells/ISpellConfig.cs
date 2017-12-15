@@ -2,6 +2,7 @@
 {
     using Aimtec;
     using Aimtec.SDK.Orbwalking;
+    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
     using Spell = Aimtec.SDK.Spell;
 
     public interface ISpellConfig

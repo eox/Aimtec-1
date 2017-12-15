@@ -72,7 +72,7 @@
                     return AoePrediction.GetAoEPrediction(input);
                 }
             }
-
+            
             if (input.Unit.IsDashing())
             {
                 return this.GetDashPrediction(input, collision);

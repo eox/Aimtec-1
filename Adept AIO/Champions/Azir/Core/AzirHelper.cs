@@ -3,6 +3,7 @@
     using Aimtec;
     using Aimtec.SDK.Orbwalking;
     using SDK.Geometry_Related;
+    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
 
     class AzirHelper
     {

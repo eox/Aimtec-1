@@ -8,6 +8,7 @@
     using Core;
     using SDK.Geometry_Related;
     using SDK.Unit_Extensions;
+    using OrbwalkingMode = SDK.Orbwalking.OrbwalkingMode;
 
     class DrawManager
     {

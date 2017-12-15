@@ -1,4 +1,4 @@
-﻿namespace Adept_AIO.Champions.Riven.Orbwalker
+﻿namespace Adept_AIO.SDK.Orbwalking
 {
     public enum OrbwalkingMode
     {

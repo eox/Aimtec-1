@@ -243,12 +243,6 @@
     <Compile Include="Champions\MissFortune\OrbwalkingEvents\Lasthit.cs" />
     <Compile Include="Champions\Riven\Core\Enums.cs" />
     <Compile Include="Champions\Riven\Miscellaneous\AntiGapcloser.cs" />
-    <Compile Include="Champions\Riven\Orbwalker\AOrbwalker.cs" />
-    <Compile Include="Champions\Riven\Orbwalker\IOrbwalker.cs" />
-    <Compile Include="Champions\Riven\Orbwalker\Orbwalker.cs" />
-    <Compile Include="Champions\Riven\Orbwalker\OrbwalkerImpl.cs" />
-    <Compile Include="Champions\Riven\Orbwalker\OrbwalkerMode.cs" />
-    <Compile Include="Champions\Riven\Orbwalker\OrbwalkingMode.cs" />
     <Compile Include="Champions\1. Template\Core\Dmg.cs" />
     <Compile Include="Champions\1. Template\Core\MenuConfig.cs" />
     <Compile Include="Champions\1. Template\Core\SpellManager.cs" />
@@ -434,6 +428,12 @@
     <Compile Include="Champions\Yasuo\Yasuo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SDK\Geometry Related\XerathPrediction.cs" />
+    <Compile Include="SDK\Orbwalking\AOrbwalker.cs" />
+    <Compile Include="SDK\Orbwalking\IOrbwalker.cs" />
+    <Compile Include="SDK\Orbwalking\Orbwalker.cs" />
+    <Compile Include="SDK\Orbwalking\OrbwalkerMode.cs" />
+    <Compile Include="SDK\Orbwalking\OrbwalkingImpl.cs" />
+    <Compile Include="SDK\Orbwalking\OrbwalkingMode.cs" />
     <Compile Include="SDK\Unit Extensions\GameObjects.cs" />
     <Compile Include="SDK\Unit Extensions\Global.cs" />
     <Compile Include="SDK\Menu Extension\MenuShortcut.cs" />

@@ -11,6 +11,8 @@
     using SDK.Generic;
     using SDK.Unit_Extensions;
     using Geometry = SDK.Geometry_Related.Geometry;
+    using OrbwalkingMode = SDK.Orbwalking.OrbwalkingMode;
+    using PreMoveEventArgs = SDK.Orbwalking.PreMoveEventArgs;
     using Spell = Aimtec.SDK.Spell;
 
     class SpellManager

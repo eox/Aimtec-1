@@ -8,6 +8,7 @@
     using Core;
     using SDK.Unit_Extensions;
     using GameObjects = Aimtec.SDK.Util.Cache.GameObjects;
+    using PreAttackEventArgs = SDK.Orbwalking.PreAttackEventArgs;
 
     class Combo
     {

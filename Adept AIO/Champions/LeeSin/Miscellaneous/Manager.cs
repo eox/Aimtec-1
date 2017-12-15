@@ -8,6 +8,8 @@
     using OrbwalkingEvents.LaneClear;
     using OrbwalkingEvents.LastHit;
     using SDK.Unit_Extensions;
+    using OrbwalkingMode = SDK.Orbwalking.OrbwalkingMode;
+    using PostAttackEventArgs = SDK.Orbwalking.PostAttackEventArgs;
 
     class Manager
     {

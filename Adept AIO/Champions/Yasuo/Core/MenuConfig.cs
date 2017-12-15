@@ -10,6 +10,7 @@
     using SDK.Menu_Extension;
     using SDK.Unit_Extensions;
     using GameObjects = Aimtec.SDK.Util.Cache.GameObjects;
+    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
 
     class MenuConfig
     {

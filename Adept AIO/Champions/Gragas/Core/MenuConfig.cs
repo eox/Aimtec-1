@@ -9,6 +9,7 @@
     using SDK.Delegates;
     using SDK.Menu_Extension;
     using SDK.Unit_Extensions;
+    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
 
     class MenuConfig
     {

@@ -1,4 +1,4 @@
-﻿namespace Adept_AIO.Champions.Riven.Orbwalker
+﻿namespace Adept_AIO.SDK.Orbwalking
 {
     using System;
     using Aimtec;
@@ -6,6 +6,9 @@
     using Aimtec.SDK.Menu.Config;
     using Aimtec.SDK.Util;
 
+    /// <summary>
+    ///     Class OrbwalkerMode
+    /// </summary>
     public class OrbwalkerMode
     {
         #region Fields
@@ -24,6 +27,10 @@
         ///     The Orbwalker Instance this mode belongs to
         /// </summary>
         public AOrbwalker ParentInstance;
+
+        private bool attackEnabled = true;
+
+        private bool moveEnabled = true;
 
         #endregion
 
@@ -44,8 +51,8 @@
             }
 
             this.Name = name;
-            ModeBehaviour = orbwalkBehaviour;
-            GetTargetImplementation = targetDelegate;
+            this.ModeBehaviour = orbwalkBehaviour;
+            this.GetTargetImplementation = targetDelegate;
             this.MenuItem = key.KeyBindItem;
             key.Activate();
             this.UsingGlobalKey = true;
@@ -61,8 +68,8 @@
             OrbwalkModeDelegate orbwalkBehaviour)
         {
             this.Name = name ?? throw new Exception("There was an error creating the Orbwalker Mode");
-            ModeBehaviour = orbwalkBehaviour;
-            GetTargetImplementation = targetDelegate;
+            this.ModeBehaviour = orbwalkBehaviour;
+            this.GetTargetImplementation = targetDelegate;
             this.MenuItem = new MenuKeyBind(name, name, key, KeybindType.Press);
         }
 
@@ -92,7 +99,14 @@
         /// <summary>
         ///     Whether attacking is currently allowed
         /// </summary>
-        public bool AttackingEnabled { get; set; } = true;
+        public bool AttackingEnabled
+        {
+            get
+            {
+                return this.attackEnabled;
+            }
+            set => this.attackEnabled = value;
+        }
 
         /// <summary>
         ///     Whether this mode should execute the base Orbwalking Logic
@@ -107,7 +121,14 @@
         /// <summary>
         ///     Whether moving is currently enabled
         /// </summary>
-        public bool MovingEnabled { get; set; } = true;
+        public bool MovingEnabled
+        {
+            get
+            {
+                return this.moveEnabled;
+            }
+            set => this.moveEnabled = value;
+        }
 
         /// <summary>
         ///     The name of this mode
@@ -128,12 +149,12 @@
         /// </summary>
         public void Execute()
         {
-            ModeBehaviour?.Invoke();
+            this.ModeBehaviour?.Invoke();
         }
 
         public AttackableUnit GetTarget()
         {
-            return GetTargetImplementation?.Invoke();
+            return this.GetTargetImplementation?.Invoke();
         }
 
         #endregion

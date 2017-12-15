@@ -5,6 +5,7 @@
     using Core;
     using Drawings;
     using Miscellaneous;
+    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
 
     class Gragas
     {

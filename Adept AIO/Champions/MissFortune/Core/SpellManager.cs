@@ -8,6 +8,8 @@
     using Aimtec.SDK.Prediction.Skillshots;
     using SDK.Geometry_Related;
     using SDK.Unit_Extensions;
+    using PreAttackEventArgs = SDK.Orbwalking.PreAttackEventArgs;
+    using PreMoveEventArgs = SDK.Orbwalking.PreMoveEventArgs;
     using Spell = Aimtec.SDK.Spell;
 
     class SpellManager

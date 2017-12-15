@@ -1,4 +1,4 @@
-﻿namespace Adept_AIO.Champions.Riven.Orbwalker
+﻿namespace Adept_AIO.SDK.Orbwalking
 {
     using System;
     using System.Collections.Generic;
@@ -9,11 +9,14 @@
     using Aimtec.SDK.Util;
     using NLog;
 
+    /// <summary>
+    ///     AOrbwalker class
+    /// </summary>
     public abstract class AOrbwalker : IOrbwalker
     {
-        public AOrbwalker()
+        protected AOrbwalker()
         {
-            Config = new Menu("Orbwalker", "Orbwalker");
+            this.Config = new Menu("Orbwalker", "Orbwalker");
         }
 
         #region Fields
@@ -21,69 +24,107 @@
         /// <summary>
         ///     Names of champions which cannot cancel their auto attacks
         /// </summary>
-        public string[] NoCancelChamps =
-        {
-            "Kalista"
-        };
+        public string[] NoCancelChamps = { "Kalista" };
 
         /// <summary>
         ///     The Orbwalker Menu
         /// </summary>
         protected Menu Config;
 
+        private string[] attackResets =
+            {
+                "dariusnoxiantacticsonh",
+                "garenq",
+                "gravesmove",
+                "jaxempowertwo",
+                "jaycehypercharge",
+                "leonashieldofdaybreak",
+                "luciane",
+                "monkeykingdoubleattack",
+                "mordekaisermaceofspades",
+                "nasusq",
+                "nautiluspiercinggaze",
+                "netherblade",
+                "gangplankqwrapper",
+                "powerfist",
+                "renektonpreexecute",
+                "rengarq",
+                "shyvanadoubleattack",
+                "sivirw",
+                "takedown",
+                "talonnoxiandiplomacy",
+                "trundletrollsmash",
+                "vaynetumble",
+                "vie",
+                "volibearq",
+                "xenzhaocombotarget",
+                "yorickspectral",
+                "reksaiq",
+                "itemtitanichydracleave",
+                "masochism",
+                "illaoiw",
+                "elisespiderw",
+                "fiorae",
+                "meditate",
+                "sejuaninorthernwinds",
+                "camilleq",
+                "camilleq2",
+                "vorpalspikes"
+            };
+
         /// <summary>
         ///     Spells that are attacks even if they don't have the "attack" word in their name.
         /// </summary>
         public static string[] SpecialAttacks =
-        {
-            "caitlynheadshotmissile",
-            "kennenmegaproc",
-            "masteryidoublestrike",
-            "quinnwenhanced",
-            "renektonexecute",
-            "renektonsuperexecute",
-            "trundleq",
-            "viktorqbuff",
-            "xenzhaothrust",
-            "xenzhaothrust2",
-            "xenzhaothrust3"
-        };
+            {
+                "caitlynheadshotmissile",
+                "kennenmegaproc",
+                "masteryidoublestrike",
+                "quinnwenhanced",
+                "renektonexecute",
+                "renektonsuperexecute",
+                "trundleq",
+                "viktorqbuff",
+                "xenzhaothrust",
+                "xenzhaothrust2",
+                "xenzhaothrust3"
+            };
 
         /// <summary>
         ///     Spells that are not attacks even if they have the "attack" word in their name.
         /// </summary>
         public static string[] NoAttacks =
-        {
-            "asheqattacknoonhit",
-            "volleyattackwithsound",
-            "volleyattack",
-            "annietibbersbasicattack",
-            "annietibbersbasicattack2",
-            "azirsoldierbasicattack",
-            "azirsundiscbasicattack",
-            "elisespiderlingbasicattack",
-            "gravesbasicattackspread",
-            "gravesautoattackrecoil",
-            "heimertyellowbasicattack",
-            "heimertyellowbasicattack2",
-            "heimertbluebasicattack",
-            "jarvanivcataclysmattack",
-            "kindredwolfbasicattack",
-            "malzaharvoidlingbasicattack",
-            "malzaharvoidlingbasicattack2",
-            "malzaharvoidlingbasicattack3",
-            "shyvanadoubleattack",
-            "shyvanadoubleattackdragon",
-            "sivirwattackbounce",
-            "monkeykingdoubleattack",
-            "yorickspectralghoulbasicattack",
-            "yorickdecayedghoulbasicattack",
-            "yorickravenousghoulbasicattack",
-            "zyragraspingplantattack",
-            "zyragraspingplantattack2",
-            "zyragraspingplantattackfire",
-            "zyragraspingplantattack2fire"
-        };
+            {
+                "asheqattacknoonhit",
+                "volleyattackwithsound",
+                "volleyattack",
+                "annietibbersbasicattack",
+                "annietibbersbasicattack2",
+                "azirsoldierbasicattack",
+                "azirsundiscbasicattack",
+                "elisespiderlingbasicattack",
+                "gravesbasicattackspread",
+                "gravesautoattackrecoil",
+                "heimertyellowbasicattack",
+                "heimertyellowbasicattack2",
+                "heimertbluebasicattack",
+                "jarvanivcataclysmattack",
+                "kindredwolfbasicattack",
+                "malzaharvoidlingbasicattack",
+                "malzaharvoidlingbasicattack2",
+                "malzaharvoidlingbasicattack3",
+                "shyvanadoubleattack",
+                "shyvanadoubleattackdragon",
+                "sivirwattackbounce",
+                "monkeykingdoubleattack",
+                "yorickspectralghoulbasicattack",
+                "yorickdecayedghoulbasicattack",
+                "yorickravenousghoulbasicattack",
+                "zyragraspingplantattack",
+                "zyragraspingplantattack2",
+                "zyragraspingplantattackfire",
+                "zyragraspingplantattack2fire"
+            };
 
         #endregion
 
@@ -109,46 +150,11 @@
         public virtual bool AttackingEnabled { get; set; } = true;
 
         /// <inheritdoc cref="IOrbwalker" />
-        public string[] AttackResets { get; set; } =
+        public string[] AttackResets
         {
-            "dariusnoxiantacticsonh",
-            "garenq",
-            "gravesmove",
-            "jaxempowertwo",
-            "jaycehypercharge",
-            "leonashieldofdaybreak",
-            "luciane",
-            "monkeykingdoubleattack",
-            "mordekaisermaceofspades",
-            "nasusq",
-            "nautiluspiercinggaze",
-            "netherblade",
-            "gangplankqwrapper",
-            "powerfist",
-            "renektonpreexecute",
-            "rengarq",
-            "shyvanadoubleattack",
-            "sivirw",
-            "takedown",
-            "talonnoxiandiplomacy",
-            "trundletrollsmash",
-            "vaynetumble",
-            "vie",
-            "volibearq",
-            "xenzhaocombotarget",
-            "yorickspectral",
-            "reksaiq",
-            "itemtitanichydracleave",
-            "masochism",
-            "illaoiw",
-            "elisespiderw",
-            "fiorae",
-            "meditate",
-            "sejuaninorthernwinds",
-            "camilleq",
-            "camilleq2",
-            "vorpalspikes"
-        };
+            get => this.attackResets;
+            set => this.attackResets = value;
+        }
 
         /// <inheritdoc cref="IOrbwalker" />
         public OrbwalkerMode Combo { get; set; }
@@ -170,7 +176,7 @@
         {
             get
             {
-                var activeMode = GetActiveMode();
+                var activeMode = this.GetActiveMode();
 
                 if (activeMode == null)
                 {
@@ -206,7 +212,7 @@
         {
             get
             {
-                var active = GetActiveMode();
+                var active = this.GetActiveMode();
                 if (active == null)
                 {
                     return "None";
@@ -261,7 +267,7 @@
 
             if (!mode.UsingGlobalKey)
             {
-                Config.Add(mode.MenuItem);
+                this.Config.Add(mode.MenuItem);
             }
         }
 
@@ -284,7 +290,7 @@
         public OrbwalkerMode DuplicateMode(OrbwalkerMode mode, string newName, KeyCode key)
         {
             var newMode = new OrbwalkerMode(newName, key, mode.GetTargetImplementation, mode.ModeBehaviour);
-            AddMode(newMode);
+            this.AddMode(newMode);
             return newMode;
         }
 
@@ -292,7 +298,7 @@
         public OrbwalkerMode DuplicateMode(OrbwalkerMode mode, string newName, GlobalKey key)
         {
             var newMode = new OrbwalkerMode(newName, key, mode.GetTargetImplementation, mode.ModeBehaviour);
-            AddMode(newMode);
+            this.AddMode(newMode);
             return newMode;
         }
 
@@ -313,7 +319,7 @@
         /// <inheritdoc cref="IOrbwalker" />
         public virtual AttackableUnit FindTarget()
         {
-            return FindTarget(GetActiveMode());
+            return this.FindTarget(this.GetActiveMode());
         }
 
         /// <inheritdoc cref="IOrbwalker" />
@@ -340,12 +346,9 @@
         /// </summary>
         protected NonKillableMinionEventArgs FireNonKillableMinion(AttackableUnit target)
         {
-            var args = new NonKillableMinionEventArgs
-            {
-                Target = target
-            };
+            var args = new NonKillableMinionEventArgs { Target = target };
 
-            OnNonKillableMinion?.Invoke(Player, args);
+            this.OnNonKillableMinion?.Invoke(Player, args);
 
             return args;
         }
@@ -355,12 +358,9 @@
         /// </summary>
         protected PostAttackEventArgs FirePostAttack(AttackableUnit target)
         {
-            var args = new PostAttackEventArgs
-            {
-                Target = target
-            };
+            var args = new PostAttackEventArgs { Target = target };
 
-            PostAttack?.Invoke(Player, args);
+            this.PostAttack?.Invoke(Player, args);
 
             return args;
         }
@@ -370,12 +370,9 @@
         /// </summary>
         protected PreAttackEventArgs FirePreAttack(AttackableUnit target)
         {
-            var args = new PreAttackEventArgs
-            {
-                Target = target
-            };
+            var args = new PreAttackEventArgs { Target = target };
 
-            PreAttack?.Invoke(Player, args);
+            this.PreAttack?.Invoke(Player, args);
 
             return args;
         }
@@ -385,12 +382,9 @@
         /// </summary>
         protected PreMoveEventArgs FirePreMove(Vector3 position)
         {
-            var args = new PreMoveEventArgs
-            {
-                MovePosition = position
-            };
+            var args = new PreMoveEventArgs { MovePosition = position };
 
-            PreMove?.Invoke(Player, args);
+            this.PreMove?.Invoke(Player, args);
 
             return args;
         }

@@ -23,6 +23,7 @@
     using SDK.Delegates;
     using SDK.Unit_Extensions;
     using Ward_Manager;
+    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
 
     class LeeSin
     {

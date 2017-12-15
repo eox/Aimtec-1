@@ -7,6 +7,9 @@
     using Core;
     using OrbwalkingEvents;
     using SDK.Unit_Extensions;
+    using OrbwalkingMode = SDK.Orbwalking.OrbwalkingMode;
+    using PreAttackEventArgs = SDK.Orbwalking.PreAttackEventArgs;
+    using PreMoveEventArgs = SDK.Orbwalking.PreMoveEventArgs;
 
     class Manager
     {

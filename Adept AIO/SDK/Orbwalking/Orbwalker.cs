@@ -1,4 +1,4 @@
-﻿namespace Adept_AIO.Champions.Riven.Orbwalker
+﻿namespace Adept_AIO.SDK.Orbwalking
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +7,9 @@
     using Aimtec.SDK.Menu.Config;
     using Aimtec.SDK.Util;
 
+    /// <summary>
+    ///     Orbwalker class
+    /// </summary>
     public class Orbwalker : IOrbwalker
     {
         #region Static Fields
@@ -84,7 +87,15 @@
         /// </value>
         public static IOrbwalker Implementation
         {
-            get => impl ?? (impl = new OrbwalkingImpl());
+            get
+            {
+                if (impl == null)
+                {
+                    impl = new OrbwalkingImpl();
+                }
+
+                return impl;
+            }
 
             set
             {
@@ -139,7 +150,10 @@
         }
 
         /// <inheritdoc cref="IOrbwalker" />
-        public OrbwalkingMode Mode => Implementation.Mode;
+        public OrbwalkingMode Mode
+        {
+            get => Implementation.Mode;
+        }
 
         /// <inheritdoc cref="IOrbwalker" />
         public string ModeName => Implementation.ModeName;

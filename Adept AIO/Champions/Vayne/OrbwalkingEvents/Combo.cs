@@ -8,6 +8,7 @@
     using Core;
     using SDK.Unit_Extensions;
     using SDK.Usables;
+    using PostAttackEventArgs = SDK.Orbwalking.PostAttackEventArgs;
 
     class Combo
     {
