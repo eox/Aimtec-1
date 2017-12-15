@@ -8,6 +8,7 @@
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Prediction.Collision;
     using Aimtec.SDK.Prediction.Skillshots;
+    using Aimtec.SDK.Prediction.Skillshots.AoE;
 
     interface IPrediction
     {
@@ -57,10 +58,22 @@
         {
             if (!input.Unit.IsValidTarget() || !input.Unit.IsValid)
             {
-                return new PredictionOutput { Input = input };
+                return new PredictionOutput();
             }
 
-            if (input.Unit.IsDashing())
+            if (ft)
+            {
+                input.Delay += Game.Ping / 2000f + 0.06f;
+                input.From = input.From - (input.Unit.ServerPosition - input.From).Normalized()
+                             * ObjectManager.GetLocalPlayer().BoundingRadius;
+
+                if (input.AoE)
+                {
+                    return AoePrediction.GetAoEPrediction(input);
+                }
+            }
+
+            if (input.Unit.IsDashing() && !input.Unit.GetDashInfo().IsBlink)
             {
                 return this.GetDashPrediction(input, collision);
             }
@@ -137,11 +150,7 @@
         {
             if (Environment.TickCount - lastTickChecked <= 50)
             {
-                return new PredictionOutput()
-                {
-                    HitChance = HitChance.Impossible,
-                    Input = input
-                };
+                return new PredictionOutput();
             }
 
             lastTickChecked = Environment.TickCount;
@@ -169,7 +178,7 @@
 
             if (lenght > 1)
             {
-                var time = unitSpeed * (Game.ClockTime - Timers[input.Unit.NetworkId] + Game.Ping * 0.001f);
+                var time = unitSpeed * (Game.ClockTime - Timers[input.Unit.NetworkId] + Game.Ping / 1000f);
                 var d = 0f;
 
                 for (var i = 0; i < lenght - 1; i++)
