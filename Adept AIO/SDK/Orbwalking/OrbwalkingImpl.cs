@@ -489,28 +489,22 @@ namespace Adept_AIO.SDK.Orbwalking
 
         private AttackableUnit GetLaneClearTarget()
         {
-            if (UnderTurretMode())
-            {
-                return this.GetUnderTurret();
-            }
-
             var attackable = ObjectManager.Get<AttackableUnit>().Where(this.IsValidAttackableObject);
             var attackableUnits = attackable as AttackableUnit[] ?? attackable.ToArray();
             IEnumerable<Obj_AI_Base> minions = attackableUnits.Where(x => x is Obj_AI_Base).Cast<Obj_AI_Base>().OrderByDescending(x => x.MaxHealth);
 
-            var actualKillable = GetLastHitTarget(minions.ToArray());
-            if (actualKillable != null)
-            {
-                return actualKillable;
-            }
-
             //Killable
             var enumerable = minions.ToArray();
-            //AttackableUnit killableMinion = enumerable.FirstOrDefault(x => this.CanKillMinion(x));
-            //if (killableMinion != null)
-            //{
-            //    return killableMinion;
-            //}
+            AttackableUnit killableMinion = enumerable.FirstOrDefault(x => this.CanKillMinion(x));
+            if (killableMinion != null)
+            {
+                return killableMinion;
+            }
+
+            if (UnderTurretMode())
+            { 
+                return this.GetUnderTurret();
+            }
 
             var waitableMinion = enumerable.Any(this.ShouldWaitMinion);
             if (waitableMinion)
@@ -577,130 +571,125 @@ namespace Adept_AIO.SDK.Orbwalking
 
         public AttackableUnit GetUnderTurret()
         {
-            var attackable = ObjectManager.Get<AttackableUnit>().Where(this.IsValidAttackableObject);
+            var attackable = ObjectManager.Get<AttackableUnit>().OrderBy(x => x.Distance(Player)).Where(this.IsValidAttackableObject);
 
             var nearestTurret = TurretAttackManager.GetNearestTurretData(Player, TurretAttackManager.TurretTeam.Ally);
 
-            if (nearestTurret == null)
+            if (nearestTurret == null || nearestTurret.Turret.Distance(Player) > 925)
             {
                 return null;
             }
 
             var attackableUnits = attackable as AttackableUnit[] ?? attackable.ToArray();
-            var underTurret = attackableUnits.Where(x => x.ServerPosition.Distance(nearestTurret.Turret.ServerPosition) < 900 && x.IsValidAutoRange());
-
-            if (underTurret.Any())
+            var tData = TurretAttackManager.GetTurretData(nearestTurret.Turret.NetworkId);
+            if (tData == null || !tData.TurretActive)
             {
-                var tData = TurretAttackManager.GetTurretData(nearestTurret.Turret.NetworkId);
-                if (tData == null || !tData.TurretActive)
+                return null;
+            }
+
+            var tTarget = tData.LastTarget;
+            if (!tTarget.IsValidAutoRange())
+            {
+                return null;
+            }
+
+            var attacks = tData.Attacks.Where(x => !x.Inactive);
+
+            foreach (var attack in attacks)
+            {
+             
+                //turret related
+                var eta = attack.PredictedLandTime - Game.TickCount;
+                var tDmg = tData.Turret.GetAutoAttackDamage(tTarget);
+
+                //myattack related
+                var castDelay = Player.AttackCastDelay * 1000 * 1.2f;
+                
+                var dist = Player.Distance(tTarget);
+                var travTime = dist / Player.BasicAttack.MissileSpeed * 1000;
+                var totalTime = (int) (castDelay + travTime + Game.Ping / 2f);
+
+                //minion hpred
+                var tMinionDmgPredHealth = HealthPrediction.Instance.GetPrediction(tTarget, totalTime);
+
+                //myattack
+                const int extraBuffer = 50;
+                //if total time > turret attack arrival time by buffer (can be early/late)
+                var canReachSooner = totalTime - eta > extraBuffer;
+
+                var myAutoDmg = this.GetRealAutoAttackDamage(tTarget);
+
+                //if my attk reach sooner than turret & my auto can kill it
+                if (canReachSooner && myAutoDmg >= tMinionDmgPredHealth)
                 {
-                    return null;
+                    return tTarget;
                 }
 
-                var tTarget = tData.LastTarget;
-                if (!tTarget.IsValidAutoRange())
+                var remHealth = tMinionDmgPredHealth - tDmg;
+
+                //Minion wont die
+                if (remHealth > 0)
                 {
-                    return null;
-                }
+                    if (remHealth <= myAutoDmg)
+                    {
+                        return null;
+                    }
 
-                var attacks = tData.Attacks.Where(x => !x.Inactive);
-
-                foreach (var attack in attacks)
-                {
-                    //turret related
-                    var arrival = attack.PredictedLandTime;
-                    var eta = arrival - Game.TickCount;
-                    var tDmg = tData.Turret.GetAutoAttackDamage(tTarget);
-
-                    //var tWillKill = tDmg > tTarget.Health;
-                    var numTurretAutosToKill = (int)Math.Ceiling(tTarget.Health / tDmg);
-                    var turretDistance = tData.Turret.Distance(tTarget) - Player.BoundingRadius - tTarget.BoundingRadius;
+                    var turretDistance = tData.Turret.Distance(tTarget);
                     var tCastDelay = tData.Turret.AttackCastDelay * 1000;
                     var tTravTime = turretDistance / tData.Turret.BasicAttack.MissileSpeed * 1000;
                     var tTotalTime = tCastDelay + tTravTime + Game.Ping / 2f;
 
-                    //myattack related
-                    var castDelay = Player.AttackCastDelay * 1000;
-                    //var minDelay = castDelay;
-                    var dist = Player.Distance(tTarget) - Player.BoundingRadius - tTarget.BoundingRadius;
-                    var travTime = dist / Player.BasicAttack.MissileSpeed * 1000;
-                    var totalTime = (int)(castDelay + travTime + Game.Ping / 2f);
-
-                    //minion hpred
-                    var tMinionDmgPredHealth = HealthPrediction.Instance.GetPrediction(tTarget, totalTime);
-
-                    //myattack
-                    const int ExtraBuffer = 50;
-                    //if total time > turret attack arrival time by buffer (can be early/late)
-                    var canReachSooner = totalTime - eta > ExtraBuffer;
-
-                    var myAutoDmg = this.GetRealAutoAttackDamage(tTarget);
-
-                    //if my attk reach sooner than turret & my auto can kill it
-                    if (canReachSooner && myAutoDmg >= tMinionDmgPredHealth)
+                    if (totalTime - tTotalTime < extraBuffer)
                     {
-                        return tTarget;
+                        return null;
                     }
 
-                    var remHealth = tMinionDmgPredHealth - tDmg;
+                    var numTurretAutosToKill = (int)Math.Ceiling(tTarget.Health / tDmg);
 
-                    //Minion wont die
-                    if (remHealth > 0)
+                    for (var i = 1; i <= numTurretAutosToKill; i++)
                     {
-                        if (remHealth <= myAutoDmg)
+                        var dmg = i * tDmg;
+                        var health = tTarget.Health - dmg;
+                        if (health > 0 && health < myAutoDmg)
                         {
-                            return null;
+                            break;
                         }
 
-                        if (totalTime - tTotalTime < 50)
+                        if (i == numTurretAutosToKill)
                         {
-                            return null;
-                        }
-
-                        for (var i = 1; i <= numTurretAutosToKill; i++)
-                        {
-                            var dmg = i * tDmg;
-                            var health = tTarget.Health - dmg;
-                            if (health > 0 && health < myAutoDmg)
-                            {
-                                break;
-                            }
-
-                            if (i == numTurretAutosToKill)
-                            {
-                                return tTarget;
-                            }
+                            return tTarget;
                         }
                     }
+                }
 
-                    //Turret will kill min and nothing i can do about it
-                    else
+                //Turret will kill min and nothing i can do about it
+                else
+                {
+                    foreach (var min in attackableUnits)
                     {
-                        foreach (var min in attackableUnits)
+                        if (min.NetworkId == tTarget.NetworkId)
                         {
-                            if (min.NetworkId == tTarget.NetworkId)
-                            {
-                                continue;
-                            }
+                            continue;
+                        }
 
-                            var minBase = min as Obj_AI_Base;
-                            if (minBase == null)
-                            {
-                                continue;
-                            }
+                        var minBase = min as Obj_AI_Base;
+                        if (minBase == null)
+                        {
+                            continue;
+                        }
 
-                            //myattack related
-                            var castDelay1 = Player.AttackCastDelay * 1000;
-                            var dist1 = Player.Distance(min) - Player.BoundingRadius - min.BoundingRadius;
-                            var travTime1 = dist1 / Player.BasicAttack.MissileSpeed * 1000;
-                            var totalTime1 = (int)(castDelay1 + travTime1 + Game.Ping / 2f);
+                        //myattack related
+                        var castDelay1 = Player.AttackCastDelay * 1000;
+                        var dist1 = Player.Distance(min) - Player.BoundingRadius - min.BoundingRadius;
+                        var travTime1 = dist1 / Player.BasicAttack.MissileSpeed * 1000;
+                        var totalTime1 = (int) (castDelay1 + travTime1 + Game.Ping / 2f);
 
-                            var dmg1 = this.GetRealAutoAttackDamage(minBase);
-                            var pred1 = HealthPrediction.Instance.GetPrediction(minBase, totalTime1);
-                            if (dmg1 > pred1)
-                            {
-                                return min;
-                            }
+                        var dmg1 = this.GetRealAutoAttackDamage(minBase);
+                        var pred1 = HealthPrediction.Instance.GetPrediction(minBase, totalTime1);
+                        if (dmg1 > pred1)
+                        {
+                            return min;
                         }
                     }
                 }
