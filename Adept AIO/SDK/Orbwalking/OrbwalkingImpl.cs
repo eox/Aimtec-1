@@ -545,11 +545,11 @@ namespace Adept_AIO.SDK.Orbwalking
                 var predHealth = this.GetPredictedHealth(minion);
 
                 //taking damage
-                if (minion.Health - predHealth > 0)
+                if (minion.Health * 1.15f - predHealth > 0)
                 {
                     continue;
                 }
-
+                
                 return minion;
             }
 
@@ -898,17 +898,22 @@ namespace Adept_AIO.SDK.Orbwalking
             {
                 m.SetGlow(Color.LimeGreen, 4);
             }
+
+            foreach (var m in ObjectManager.Get<Obj_AI_Minion>().OrderBy(x => x.Distance(Player)).Where(x => x.HasGlow() && x.Health <= 0))
+            {
+                m.RemoveGlow();
+            }
         }
 
         private double GetRealAutoAttackDamage(Obj_AI_Base minion)
         {
-            return minion.IsWard() ? 1 : Player.GetAutoAttackDamage(minion);
+            return minion.IsWard() ? 1 : Player.GetAutoAttackDamage(minion) * 0.97f; 
         }
 
         private bool ShouldWaitMinion(Obj_AI_Base minion)
         {
-            var time = this.TimeForAutoToReachTarget(minion) + (int)Player.AttackDelay * 1000 * 1.2f + Game.Ping / 2f + 1000 * 500 / Player.BasicAttack.MissileSpeed;
-            var pred = HealthPrediction.Instance.GetLaneClearHealthPrediction(minion, (int)(time));
+            var time = this.TimeForAutoToReachTarget(minion) + (int)Player.AttackDelay * 1000 * 1.2f;
+            var pred = HealthPrediction.Instance.GetLaneClearHealthPrediction(minion, (int)time);
 
             return pred < this.GetRealAutoAttackDamage(minion);
         }
@@ -958,7 +963,7 @@ namespace Adept_AIO.SDK.Orbwalking
         private int TimeForAutoToReachTarget(AttackableUnit minion)
         {
             var dist = Player.ServerPosition.Distance(minion.ServerPosition);
-            var attackTravelTime = dist / (int)GetBasicAttackMissileSpeed(ObjectManager.GetLocalPlayer()) * 1000f;
+            var attackTravelTime = dist / (int)GetBasicAttackMissileSpeed(ObjectManager.GetLocalPlayer()) * 1000f * 1.2f;
             var totalTime = (int)(this.AnimationTime + attackTravelTime + Game.Ping / 2f);
             return totalTime;
         }
