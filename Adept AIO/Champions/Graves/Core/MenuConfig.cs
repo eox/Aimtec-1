@@ -22,6 +22,7 @@
             {
                 new MenuBool("Q", "Use Q"),
                 new MenuBool("W", "Use W"),
+                new MenuBool("WCC", "Only W On Hard CC"),
                 new MenuBool("E", "Use E"),
                 new MenuSliderBool("RHealth", "Use R | If Target Health % <=", true, 30),
                 new MenuSliderBool("RCount", "Use R | If Enemies Count >=", true, 2, 1, 5)

@@ -53,7 +53,6 @@
                 new MenuBool("Path", "Auto Path To Q Extend"),
                 new MenuBool("Q", "Use Q (Killable"),
                 new MenuBool("QAuto", "Use Q (When Enemy Can Be Hit)"),
-                new MenuBool("R", "Use R (Killable)"),
                 new MenuBool("RCC", "Use R (Hard CC")
             };
 

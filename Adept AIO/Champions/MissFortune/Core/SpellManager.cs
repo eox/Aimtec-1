@@ -20,7 +20,7 @@
         public SpellManager()
         {
             Q = new Spell(SpellSlot.Q, 600f);
-            Q.SetSkillshot(0.25f, (float)(50f * Math.PI / 160f), 1000f, false, SkillshotType.Cone);
+            Q.SetSkillshot(0.25f, (float)(50f * Math.PI / 160f), 1000f, false, SkillshotType.Cone, false, HitChance.VeryHigh);
 
             W = new Spell(SpellSlot.W);
 

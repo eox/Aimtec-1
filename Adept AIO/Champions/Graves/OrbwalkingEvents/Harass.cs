@@ -12,7 +12,7 @@
         public static void PostAttack(object sender, PostAttackEventArgs args)
         {
             var target = args.Target as Obj_AI_Base;
-            if (target == null)
+            if (target == null || !target.IsHero)
             {
                 return;
             }

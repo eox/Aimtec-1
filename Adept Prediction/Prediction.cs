@@ -155,7 +155,11 @@
 
             lastTickChecked = Environment.TickCount;
 
-            var result = new PredictionOutput { Input = input, HitChance = HitChance.VeryHigh };
+            var result = new PredictionOutput
+            {
+                Input = input, HitChance = HitChance.VeryHigh,
+                UnitPosition = input.Unit.ServerPosition
+            };
 
             var unit = input.Unit;
 
@@ -164,8 +168,7 @@
 
             var path = unit.Path;
             var lenght = path.Length;
-            var predpos = Vector3.Zero;
-
+          
             if (input.AoE || input.Type == SkillshotType.Circle)
             {
                 input.Radius /= 2f;
@@ -189,13 +192,13 @@
 
                         if (dd >= ss)
                         {
-                            predpos = (unitPosition + (vi1 - unitPosition).Normalized() * ss).To3D();
+                            result.CastPosition = (unitPosition + (vi1 - unitPosition).Normalized() * ss).To3D();
                             break;
                         }
 
                         if (i + 1 == lenght - 1)
                         {
-                            predpos = (unitPosition + (vi1 - unitPosition).Normalized() * unitPosition.Distance(vi1)).To3D();
+                            result.CastPosition = (unitPosition + (vi1 - unitPosition).Normalized() * unitPosition.Distance(vi1)).To3D();
                             break;
                         }
 
@@ -209,7 +212,7 @@
 
                             if (dd >= ss)
                             {
-                                predpos = (vj + (vj1 - vj).Normalized() * ss).To3D();
+                                result.CastPosition = (vj + (vj1 - vj).Normalized() * ss).To3D();
                                 break;
                             }
 
@@ -218,7 +221,7 @@
                                 continue;
                             }
 
-                            predpos = (vj + (vj1 - vj).Normalized() * dd).To3D();
+                            result.CastPosition = (vj + (vj1 - vj).Normalized() * dd).To3D();
                             break;
                         }
                         break;
@@ -229,35 +232,31 @@
                         continue;
                     }
 
-                    predpos = (vi + (vi1 - vi).Normalized() * vi.Distance(vi1)).To3D();
+                    result.CastPosition = (vi + (vi1 - vi).Normalized() * vi.Distance(vi1)).To3D();
                     break;
                 }
             }
             else
             {
-                predpos = unit.Position;
+                result.CastPosition = unit.Position;
             }
 
-            if (predpos.IsZero || (int)path.LastOrDefault().X != (int)unit.Path.LastOrDefault().X)
+            if (result.CastPosition.IsZero || (int)path.LastOrDefault().X != (int)unit.Path.LastOrDefault().X)
             {
                 result.HitChance = HitChance.Impossible;
             }
 
-            if (input.RangeCheckFrom.Distance(predpos) > input.Range)
+            if (input.RangeCheckFrom.Distance(result.CastPosition) > input.Range)
             {
                 result.HitChance = HitChance.OutOfRange;
             }
-
-            result.UnitPosition = input.Unit.ServerPosition;
-
-            result.CastPosition = predpos;
 
             if (!checkCollision || !input.Collision)
             {
                 return result;
             }
 
-            var collisionObjects = Collision.GetCollision(new List<Vector3> { input.Unit.ServerPosition, result.UnitPosition, result.CastPosition }, input);
+            var collisionObjects = Collision.GetCollision(new List<Vector3> { unit.ServerPosition, result.UnitPosition, result.CastPosition }, input);
 
             if (collisionObjects.Count > 0)
             {
