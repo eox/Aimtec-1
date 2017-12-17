@@ -25,7 +25,7 @@ namespace Adept_AIO.Champions.MissFortune.OrbwalkingEvents
                 return;
             }
 
-            SpellManager.CastQ(minion);
+            SpellManager.Q.CastOnUnit(minion);
         }
     }
 }

@@ -795,7 +795,7 @@ namespace Adept_AIO.SDK.Orbwalking
                                };
 
             var attacking = new Menu("Attacking", "Attacking")
-                                { new MenuSlider("ExtraWindup", "Additional Windup", Game.Ping / 2, 0, 200, true) };
+                                { new MenuSlider("ExtraWindup", "Additional Windup", Game.Ping, 0, 200, true) };
 
             var farming = new Menu("Farming", "Farming")
                               {
@@ -822,7 +822,6 @@ namespace Adept_AIO.SDK.Orbwalking
             this.Config.Add(farming);
             this.Config.Add(misc);
             this.Config.Add(drawings);
-
 
             this.AddMode(this.Combo = new OrbwalkerMode("Combo", GlobalKeys.ComboKey, this.GetHeroTarget, null));
             this.AddMode(this.LaneClear = new OrbwalkerMode("Laneclear", GlobalKeys.WaveClearKey, this.GetLaneClearTarget, null));
@@ -902,12 +901,15 @@ namespace Adept_AIO.SDK.Orbwalking
             return minion.IsWard() ? 1 : Player.GetAutoAttackDamage(minion); 
         }
 
+        // This is messy but works. Healthprediction isn't fully working/implemented.
         private bool ShouldWaitMinion(Obj_AI_Base minion)
         {
             var time = this.TimeForAutoToReachTarget(minion) + (int)Player.AttackDelay * 1000 * 1.1f;
             var pred = HealthPrediction.Instance.GetLaneClearHealthPrediction(minion, (int)time);
-
-            return pred < this.GetRealAutoAttackDamage(minion) * 1.35f && GameObjects.AllyMinions.Count(x => x.Distance(Player) <= Player.AttackRange) > 0;
+            var multiplier = GameObjects.AllyMinions.Count(x => x.Distance(minion) < (x.IsRanged ? 425 : 200));
+            var final = multiplier * .15 + 1;
+         //   Console.WriteLine($"Multiplier: {final} | Minions: {multiplier}");
+            return pred < this.GetRealAutoAttackDamage(minion) * final && multiplier > 0;
         }
 
         private void SpellBook_OnStopCast(Obj_AI_Base sender, SpellBookStopCastEventArgs e)

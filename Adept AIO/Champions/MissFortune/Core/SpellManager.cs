@@ -92,6 +92,7 @@
                     x.IsValidTarget(Q.Range) &&
                     (x.IsMinion || x.IsHero) &&
                     Cone(x).IsInside(Q.GetPrediction(target).CastPosition.To2D()) &&
+                    Q.GetPrediction(target, x.ServerPosition, x.ServerPosition).HitChance >= HitChance.VeryHigh &&
                     x.NetworkId != target.NetworkId)
                     
                 .OrderBy(x => x.Distance(Global.Player))
