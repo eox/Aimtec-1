@@ -27,7 +27,7 @@
 
             var manager = new Manager(combo, harass, laneclear, jungleclear, spellConfig);
 
-            var drawManager = new DrawManager(menuConfig, new Dmg(spellConfig), spellConfig);
+            var drawManager = new DrawManager(menuConfig, new Dmg(), spellConfig);
 
             Game.OnUpdate += manager.OnUpdate;
             Game.OnUpdate += misc.OnUpdate;

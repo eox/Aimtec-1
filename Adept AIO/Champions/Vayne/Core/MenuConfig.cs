@@ -9,8 +9,7 @@
     using SDK.Delegates;
     using SDK.Menu_Extension;
     using SDK.Unit_Extensions;
-    using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
-
+  
     class MenuConfig
     {
         public static OrbwalkerMode FleeOrbwalkerMode, CondemnFlashOrbwalkerMode;
@@ -21,12 +20,12 @@
         {
             var mainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
             mainMenu.Attach();
-            Global.Orbwalker.Attach(mainMenu);
+            Orbwalker.Implementation.Attach(mainMenu);
             FleeOrbwalkerMode = new OrbwalkerMode("Flee", KeyCode.A, null, Flee.OnKeyPressed);
-            Global.Orbwalker.AddMode(FleeOrbwalkerMode);
+            Orbwalker.Implementation.AddMode(FleeOrbwalkerMode);
 
             CondemnFlashOrbwalkerMode = new OrbwalkerMode("Condemn Flash", KeyCode.T, null, CondemnFlash.OnKeyPressed);
-            Global.Orbwalker.AddMode(CondemnFlashOrbwalkerMode);
+            Orbwalker.Implementation.AddMode(CondemnFlashOrbwalkerMode);
 
             Gapcloser.Attach(mainMenu, "Anti Gapcloser");
 

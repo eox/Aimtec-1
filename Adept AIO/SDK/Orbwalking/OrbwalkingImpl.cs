@@ -498,17 +498,20 @@ namespace Adept_AIO.SDK.Orbwalking
             AttackableUnit killableMinion = enumerable.FirstOrDefault(x => this.CanKillMinion(x));
             if (killableMinion != null)
             {
+                Console.WriteLine("Lasthit");
                 return killableMinion;
             }
 
             if (UnderTurretMode())
             { 
+                Console.WriteLine("Under Turret");
                 return this.GetUnderTurret();
             }
 
             var waitableMinion = enumerable.Any(this.ShouldWaitMinion);
             if (waitableMinion)
             {
+                Console.WriteLine("Waiting for minion to get low health");
                 Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
                 return null;
             }
@@ -516,6 +519,7 @@ namespace Adept_AIO.SDK.Orbwalking
             var structure = GetStructureTarget(attackableUnits);
             if (structure != null)
             {
+                Console.WriteLine("Is Building");
                 return structure;
             }
             
@@ -529,27 +533,24 @@ namespace Adept_AIO.SDK.Orbwalking
                     //taking damage
                     if (Math.Abs(this.LastTarget.Health - predHealth) < 0)
                     {
+                        Console.WriteLine("!!!");
                         return this.LastTarget;
                     }
                 }
             }
-            
-            foreach (var minion in enumerable)
-            {
-                var predHealth = this.GetPredictedHealth(minion);
 
-                //taking damage
-                if (minion.Health * 1.15f - predHealth > 0)
-                {
-                    continue;
-                }
-                
+            var minion = enumerable.FirstOrDefault(x => x.Health * 1.15f - this.GetPredictedHealth(x) > 0);
+
+            if (minion != null)
+            {
+                Console.WriteLine("Focusing one minion at a time");
                 return minion;
             }
 
             var first = enumerable.MaxBy(x => x.Health);
             if (first != null)
             {
+                Console.WriteLine("Focusing minion with max health");
                 return first;
             }
 
@@ -557,6 +558,7 @@ namespace Adept_AIO.SDK.Orbwalking
             var hero = this.GetHeroTarget();
             if (hero != null)
             {
+                Console.WriteLine("Is Enemy Hero.");
                 return hero;
             }
 
@@ -597,13 +599,8 @@ namespace Adept_AIO.SDK.Orbwalking
 
             foreach (var attack in attacks)
             {
-             
-                //turret related
-                var eta = attack.PredictedLandTime - Game.TickCount;
-                var tDmg = tData.Turret.GetAutoAttackDamage(tTarget);
-
                 //myattack related
-                var castDelay = Player.AttackCastDelay * 1000 * 1.2f;
+                var castDelay = Player.AttackCastDelay * 1000;
                 
                 var dist = Player.Distance(tTarget);
                 var travTime = dist / Player.BasicAttack.MissileSpeed * 1000;
@@ -614,6 +611,10 @@ namespace Adept_AIO.SDK.Orbwalking
 
                 //myattack
                 const int extraBuffer = 50;
+
+                //turret related
+                var eta = attack.PredictedLandTime - Game.TickCount;
+
                 //if total time > turret attack arrival time by buffer (can be early/late)
                 var canReachSooner = totalTime - eta > extraBuffer;
 
@@ -624,6 +625,8 @@ namespace Adept_AIO.SDK.Orbwalking
                 {
                     return tTarget;
                 }
+
+                var tDmg = tData.Turret.GetAutoAttackDamage(tTarget);
 
                 var remHealth = tMinionDmgPredHealth - tDmg;
 
@@ -645,7 +648,7 @@ namespace Adept_AIO.SDK.Orbwalking
                         return null;
                     }
 
-                    var numTurretAutosToKill = (int)Math.Ceiling(tTarget.Health / tDmg);
+                    var numTurretAutosToKill = (int)Math.Ceiling(tTarget.Health - myAutoDmg / tDmg);
 
                     for (var i = 1; i <= numTurretAutosToKill; i++)
                     {
@@ -896,15 +899,15 @@ namespace Adept_AIO.SDK.Orbwalking
 
         private double GetRealAutoAttackDamage(Obj_AI_Base minion)
         {
-            return minion.IsWard() ? 1 : Player.GetAutoAttackDamage(minion) * 0.97f; 
+            return minion.IsWard() ? 1 : Player.GetAutoAttackDamage(minion); 
         }
 
         private bool ShouldWaitMinion(Obj_AI_Base minion)
         {
-            var time = this.TimeForAutoToReachTarget(minion) + (int)Player.AttackDelay * 1000 * 1.2f;
+            var time = this.TimeForAutoToReachTarget(minion) + (int)Player.AttackDelay * 1000 * 1.1f;
             var pred = HealthPrediction.Instance.GetLaneClearHealthPrediction(minion, (int)time);
 
-            return pred < this.GetRealAutoAttackDamage(minion);
+            return pred < this.GetRealAutoAttackDamage(minion) * 1.35f && GameObjects.AllyMinions.Count(x => x.Distance(Player) <= Player.AttackRange) > 0;
         }
 
         private void SpellBook_OnStopCast(Obj_AI_Base sender, SpellBookStopCastEventArgs e)
@@ -952,7 +955,7 @@ namespace Adept_AIO.SDK.Orbwalking
         private int TimeForAutoToReachTarget(AttackableUnit minion)
         {
             var dist = Player.ServerPosition.Distance(minion.ServerPosition);
-            var attackTravelTime = dist / (int)GetBasicAttackMissileSpeed(ObjectManager.GetLocalPlayer()) * 1000f * 1.2f;
+            var attackTravelTime = dist / (int)GetBasicAttackMissileSpeed(ObjectManager.GetLocalPlayer()) * 1000f * 1.1f;
             var totalTime = (int)(this.AnimationTime + attackTravelTime + Game.Ping / 2f);
             return totalTime;
         }

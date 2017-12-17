@@ -4,6 +4,7 @@
     using Aimtec.SDK.Menu;
     using Aimtec.SDK.Menu.Components;
     using SDK.Menu_Extension;
+    using SDK.Orbwalking;
     using SDK.Unit_Extensions;
 
     class MenuConfig
@@ -15,7 +16,7 @@
             MainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
             MainMenu.Attach();
             MainMenu.Add(new MenuBool("Stealth", "Stealth Recall"));
-            Global.Orbwalker.Attach(MainMenu);
+            Orbwalker.Implementation.Attach(MainMenu);
 
             Combo = new Menu("TwitchCombo", "Combo")
             {
