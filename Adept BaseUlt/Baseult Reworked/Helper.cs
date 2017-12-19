@@ -45,7 +45,7 @@
 
             //DebugConsole.WriteLine($"Target Health: {(int)final} | Damage: {PlayerDamage(_target)}", MessageState.Debug);
 
-            return target.Health * 1.05f;
+            return target.Health * 1.15f;
         }
 
         public static Vector3 GetFountainPos()
