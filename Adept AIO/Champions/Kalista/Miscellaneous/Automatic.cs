@@ -5,7 +5,6 @@
     using Aimtec;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using SDK.Generic;
     using SDK.Unit_Extensions;

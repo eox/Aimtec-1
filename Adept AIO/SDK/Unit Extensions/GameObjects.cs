@@ -437,7 +437,8 @@
 
             Game.OnUpdate += delegate
             {
-                foreach (var enemy in ObjectManager.Get<Obj_AI_Base>().Where(x => x.Distance(Global.Player) <= 3000 && x.IsEnemy))
+              
+                foreach (var enemy in ObjectManager.Get<Obj_AI_Base>().Where(x => x.Distance(Global.Player) <= 1000 && x.IsEnemy))
                 {
                     foreach (var s in NotViable)
                     {
@@ -450,6 +451,7 @@
                         {
                             continue;
                         }
+
                         if (EnemyMinionsList.Contains(enemy))
                         {
                             EnemyMinionsList.Remove(enemyMinion);
@@ -480,7 +482,8 @@
             "plant",
             "ward",
             "barrel",
-            "trap"
+            "trap",
+            "shroom"
         };
 
         private static void OnCreate(GameObject sender)

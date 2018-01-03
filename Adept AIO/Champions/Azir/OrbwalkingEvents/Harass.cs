@@ -23,7 +23,7 @@
                 SpellConfig.CastQ(target);
             }
 
-            if (SpellConfig.W.Ready && MenuConfig.Harass["W"].Enabled && Global.Player.ManaPercent() > MenuConfig.Harass["W"].Value)
+            if (SpellConfig.W.Ready && MenuConfig.Harass["W"].Enabled && Global.Player.ManaPercent() > MenuConfig.Harass["W"].Value && target.IsValidTarget(SpellConfig.W.Range))
             {
                 SpellConfig.W.Cast(Global.Player.ServerPosition.Extend(target.ServerPosition, SpellConfig.W.Range));
             }

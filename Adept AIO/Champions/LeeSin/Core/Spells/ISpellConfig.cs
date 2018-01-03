@@ -1,7 +1,6 @@
 ﻿namespace Adept_AIO.Champions.LeeSin.Core.Spells
 {
     using Aimtec;
-    using Aimtec.SDK.Orbwalking;
     using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
     using Spell = Aimtec.SDK.Spell;
 

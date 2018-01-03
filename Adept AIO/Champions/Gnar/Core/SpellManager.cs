@@ -71,7 +71,7 @@
 
         public static void CastQ(Obj_AI_Base target, int hitCount = 1)
         {
-            Q.Cast(target, true, hitCount);
+            Q.Cast(target);
         }
 
         public static void CastW(Obj_AI_Base target, int hitCount = 1)

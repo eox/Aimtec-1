@@ -59,7 +59,7 @@
                 {
                     SpellConfig.W.Cast(Global.Player.ServerPosition.Extend(target.ServerPosition, SpellConfig.W.Range));
                 }
-                else if (target.IsValidTarget(SpellConfig.W.Range + 65))
+                else if (target.IsValidTarget(SpellConfig.W.Range))
                 {
                     SpellConfig.W.Cast(target);
                 }

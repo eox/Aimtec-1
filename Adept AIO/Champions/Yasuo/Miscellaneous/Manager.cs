@@ -3,7 +3,6 @@
     using System.Threading;
     using Aimtec;
     using Aimtec.SDK.Events;
-    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Util;
     using Core;
     using OrbwalkingEvents;

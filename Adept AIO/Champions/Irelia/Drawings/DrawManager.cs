@@ -3,7 +3,6 @@
     using System.Drawing;
     using System.Linq;
     using Aimtec;
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using SDK.Unit_Extensions;
     using OrbwalkingMode = SDK.Orbwalking.OrbwalkingMode;

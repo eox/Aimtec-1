@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using Aimtec;
     using Aimtec.SDK.Menu;
@@ -30,47 +31,6 @@
         ///     The Orbwalker Menu
         /// </summary>
         protected Menu Config;
-
-        private string[] attackResets =
-            {
-                "dariusnoxiantacticsonh",
-                "garenq",
-                "gravesmove",
-                "jaxempowertwo",
-                "jaycehypercharge",
-                "leonashieldofdaybreak",
-                "luciane",
-                "monkeykingdoubleattack",
-                "mordekaisermaceofspades",
-                "nasusq",
-                "nautiluspiercinggaze",
-                "netherblade",
-                "gangplankqwrapper",
-                "powerfist",
-                "renektonpreexecute",
-                "rengarq",
-                "shyvanadoubleattack",
-                "sivirw",
-                "takedown",
-                "talonnoxiandiplomacy",
-                "trundletrollsmash",
-                "vaynetumble",
-                "vie",
-                "volibearq",
-                "xenzhaocombotarget",
-                "yorickspectral",
-                "reksaiq",
-                "itemtitanichydracleave",
-                "masochism",
-                "illaoiw",
-                "elisespiderw",
-                "fiorae",
-                "meditate",
-                "sejuaninorthernwinds",
-                "camilleq",
-                "camilleq2",
-                "vorpalspikes"
-            };
 
         /// <summary>
         ///     Spells that are attacks even if they don't have the "attack" word in their name.
@@ -150,11 +110,46 @@
         public virtual bool AttackingEnabled { get; set; } = true;
 
         /// <inheritdoc cref="IOrbwalker" />
-        public string[] AttackResets
+        public string[] AttackResets { get; set; } =
         {
-            get => this.attackResets;
-            set => this.attackResets = value;
-        }
+            "dariusnoxiantacticsonh",
+            "garenq",
+            "gravesmove",
+            "jaxempowertwo",
+            "jaycehypercharge",
+            "leonashieldofdaybreak",
+            "luciane",
+            "monkeykingdoubleattack",
+            "mordekaisermaceofspades",
+            "nasusq",
+            "nautiluspiercinggaze",
+            "netherblade",
+            "gangplankqwrapper",
+            "powerfist",
+            "renektonpreexecute",
+            "rengarq",
+            "shyvanadoubleattack",
+            "sivirw",
+            "takedown",
+            "talonnoxiandiplomacy",
+            "trundletrollsmash",
+            "vaynetumble",
+            "vie",
+            "volibearq",
+            "xenzhaocombotarget",
+            "yorickspectral",
+            "reksaiq",
+            "itemtitanichydracleave",
+            "masochism",
+            "illaoiw",
+            "elisespiderw",
+            "fiorae",
+            "meditate",
+            "sejuaninorthernwinds",
+            "camilleq",
+            "camilleq2",
+            "vorpalspikes"
+        };
 
         /// <inheritdoc cref="IOrbwalker" />
         public OrbwalkerMode Combo { get; set; }
@@ -183,24 +178,12 @@
                     return OrbwalkingMode.None;
                 }
 
-                if (activeMode.Name == "Combo")
+                switch (activeMode.Name)
                 {
-                    return OrbwalkingMode.Combo;
-                }
-
-                if (activeMode.Name == "Laneclear")
-                {
-                    return OrbwalkingMode.Laneclear;
-                }
-
-                if (activeMode.Name == "Mixed")
-                {
-                    return OrbwalkingMode.Mixed;
-                }
-
-                if (activeMode.Name == "Lasthit")
-                {
-                    return OrbwalkingMode.Lasthit;
+                    case "Combo": return OrbwalkingMode.Combo;
+                    case "Laneclear": return OrbwalkingMode.Laneclear;
+                    case "Mixed": return OrbwalkingMode.Mixed;
+                    case "Lasthit": return OrbwalkingMode.Lasthit;
                 }
 
                 return OrbwalkingMode.Custom;

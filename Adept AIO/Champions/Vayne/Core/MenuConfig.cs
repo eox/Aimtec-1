@@ -3,11 +3,11 @@
     using System.Collections.Generic;
     using Aimtec.SDK.Menu;
     using Aimtec.SDK.Menu.Components;
-    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Util;
     using OrbwalkingEvents;
     using SDK.Delegates;
     using SDK.Menu_Extension;
+    using SDK.Orbwalking;
     using SDK.Unit_Extensions;
   
     class MenuConfig
@@ -20,12 +20,12 @@
         {
             var mainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
             mainMenu.Attach();
-            Orbwalker.Implementation.Attach(mainMenu);
+            Global.Orbwalker.Attach(mainMenu);
             FleeOrbwalkerMode = new OrbwalkerMode("Flee", KeyCode.A, null, Flee.OnKeyPressed);
-            Orbwalker.Implementation.AddMode(FleeOrbwalkerMode);
+            Global.Orbwalker.AddMode(FleeOrbwalkerMode);
 
             CondemnFlashOrbwalkerMode = new OrbwalkerMode("Condemn Flash", KeyCode.T, null, CondemnFlash.OnKeyPressed);
-            Orbwalker.Implementation.AddMode(CondemnFlashOrbwalkerMode);
+            Global.Orbwalker.AddMode(CondemnFlashOrbwalkerMode);
 
             Gapcloser.Attach(mainMenu, "Anti Gapcloser");
 

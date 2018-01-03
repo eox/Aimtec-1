@@ -2,7 +2,6 @@
 {
     using Aimtec;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using SDK.Unit_Extensions;
     using PostAttackEventArgs = SDK.Orbwalking.PostAttackEventArgs;

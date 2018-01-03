@@ -3,7 +3,6 @@
     using System.Linq;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using OrbwalkingEvents;
     using SDK.Unit_Extensions;
     using OrbwalkingMode = SDK.Orbwalking.OrbwalkingMode;

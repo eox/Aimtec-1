@@ -3,7 +3,6 @@
     using System.Linq;
     using System.Threading;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Util;
     using Core;
     using SDK.Unit_Extensions;

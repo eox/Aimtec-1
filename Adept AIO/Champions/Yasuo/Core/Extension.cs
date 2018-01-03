@@ -4,7 +4,6 @@
     using Aimtec;
     using Aimtec.SDK.Events;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using SDK.Unit_Extensions;
     using OrbwalkerMode = SDK.Orbwalking.OrbwalkerMode;
 

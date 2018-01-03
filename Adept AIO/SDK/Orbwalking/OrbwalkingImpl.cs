@@ -489,6 +489,7 @@ namespace Adept_AIO.SDK.Orbwalking
 
         private AttackableUnit GetLaneClearTarget()
         {
+           
             var attackable = ObjectManager.Get<AttackableUnit>().Where(this.IsValidAttackableObject);
             var attackableUnits = attackable as AttackableUnit[] ?? attackable.ToArray();
             IEnumerable<Obj_AI_Base> minions = attackableUnits.Where(x => x is Obj_AI_Base).Cast<Obj_AI_Base>().OrderByDescending(x => x.MaxHealth);
@@ -498,20 +499,17 @@ namespace Adept_AIO.SDK.Orbwalking
             AttackableUnit killableMinion = enumerable.FirstOrDefault(x => this.CanKillMinion(x));
             if (killableMinion != null)
             {
-                Console.WriteLine("Lasthit");
                 return killableMinion;
             }
 
             if (UnderTurretMode())
             { 
-                Console.WriteLine("Under Turret");
                 return this.GetUnderTurret();
             }
 
             var waitableMinion = enumerable.Any(this.ShouldWaitMinion);
             if (waitableMinion)
             {
-                Console.WriteLine("Waiting for minion to get low health");
                 Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
                 return null;
             }
@@ -519,7 +517,6 @@ namespace Adept_AIO.SDK.Orbwalking
             var structure = GetStructureTarget(attackableUnits);
             if (structure != null)
             {
-                Console.WriteLine("Is Building");
                 return structure;
             }
             
@@ -528,12 +525,13 @@ namespace Adept_AIO.SDK.Orbwalking
             {
                 if (this.LastTarget is Obj_AI_Base b)
                 {
+                    
                     var predHealth = this.GetPredictedHealth(b);
 
                     //taking damage
                     if (Math.Abs(this.LastTarget.Health - predHealth) < 0)
                     {
-                        Console.WriteLine("!!!");
+                       
                         return this.LastTarget;
                     }
                 }
@@ -543,25 +541,22 @@ namespace Adept_AIO.SDK.Orbwalking
 
             if (minion != null)
             {
-                Console.WriteLine("Focusing one minion at a time");
                 return minion;
             }
 
             var first = enumerable.MaxBy(x => x.Health);
             if (first != null)
             {
-                Console.WriteLine("Focusing minion with max health");
                 return first;
             }
 
             //Heros
             var hero = this.GetHeroTarget();
             if (hero != null)
-            {
-                Console.WriteLine("Is Enemy Hero.");
+            {  
                 return hero;
             }
-
+           
             return null;
         }
 
@@ -573,6 +568,7 @@ namespace Adept_AIO.SDK.Orbwalking
 
         public AttackableUnit GetUnderTurret()
         {
+         
             var attackable = ObjectManager.Get<AttackableUnit>().OrderBy(x => x.Distance(Player)).Where(this.IsValidAttackableObject);
 
             var nearestTurret = TurretAttackManager.GetNearestTurretData(Player, TurretAttackManager.TurretTeam.Ally);

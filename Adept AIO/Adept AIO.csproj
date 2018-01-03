@@ -62,6 +62,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrap.cs" />
+    <Compile Include="BOT\HowlingAbyss\AramBot.cs" />
+    <Compile Include="BOT\HowlingAbyss\Events\ModeManager.cs" />
+    <Compile Include="BOT\HowlingAbyss\Events\MovementManager.cs" />
+    <Compile Include="BOT\HowlingAbyss\Events\RelicShield.cs" />
+    <Compile Include="BOT\HowlingAbyss\Events\RenderManager.cs" />
+    <Compile Include="BOT\HowlingAbyss\Events\UpdateManager.cs" />
+    <Compile Include="BOT\SR\Data\JungleData.cs" />
+    <Compile Include="BOT\SR\Events\ModeManager.cs" />
+    <Compile Include="BOT\SR\Events\MovementManager.cs" />
+    <Compile Include="BOT\SR\SummonersRiftBot.cs" />
+    <Compile Include="BOT\SR\Events\RenderManager.cs" />
+    <Compile Include="BOT\SR\Events\UpdateManager.cs" />
+    <Compile Include="BOT\Utilities\BotData.cs" />
+    <Compile Include="BOT\Utilities\KeyManager.cs" />
+    <Compile Include="BOT\Utilities\LevelUpManager.cs" />
+    <Compile Include="BOT\Menu\MenuConfig.cs" />
+    <Compile Include="BOT\Utilities\PlayerData.cs" />
     <Compile Include="Champions\Azir\Azir.cs" />
     <Compile Include="Champions\Azir\Core\AzirHelper.cs" />
     <Compile Include="Champions\Azir\Core\Dmg.cs" />

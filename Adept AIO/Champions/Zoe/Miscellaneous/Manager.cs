@@ -2,7 +2,6 @@
 {
     using System;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Prediction.Skillshots;
     using Core;
     using OrbwalkingEvents;

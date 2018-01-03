@@ -14,6 +14,11 @@
             return NavMesh.WorldToCell(pos).Flags.HasFlag(NavCellFlags.Wall) || NavMesh.WorldToCell(pos).Flags.HasFlag(NavCellFlags.Building);
         }
 
+        public static bool IsGrassAt(Vector3 pos)
+        {
+            return NavMesh.WorldToCell(pos).Flags.HasFlag(NavCellFlags.Grass);
+        }
+
         public static Vector3 GeneratePoint(Vector3 start, Vector3 end)
         {
             for (var i = 0; i < start.Distance(end); i++)
@@ -41,6 +46,25 @@
                 }
             }
             return false;
+        }
+
+        public static Vector3 NearestGrass(Obj_AI_Base target, float range)
+        {
+            for (var i = 0; i < 360; i += 40)
+            {
+                var dir = target.Orientation.To2D();
+                var angleRad = Maths.DegreeToRadian(i);
+                var rot = (target.ServerPosition.To2D() + range * dir.Rotated((float)angleRad)).To3D();
+
+                if (!IsGrassAt(rot))
+                {
+                    continue;
+                }
+
+                return rot;
+            }
+
+            return Vector3.Zero;
         }
 
         public static Vector3 NearestWall(Obj_AI_Base target, float range)

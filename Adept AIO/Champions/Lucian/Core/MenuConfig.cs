@@ -5,7 +5,6 @@
     using Aimtec.SDK.Menu.Components;
     using SDK.Delegates;
     using SDK.Menu_Extension;
-    using SDK.Orbwalking;
     using SDK.Unit_Extensions;
 
     class MenuConfig
@@ -16,7 +15,7 @@
         {
             var mainMenu = new Menu(string.Empty, $"Adept AIO - {Global.Player.ChampionName}", true);
             mainMenu.Attach();
-            Orbwalker.Implementation.Attach(mainMenu);
+            Global.Orbwalker.Attach(mainMenu);
 
             Gapcloser.Attach(mainMenu, "Anti Gapcloser");
 
@@ -30,6 +29,7 @@
                         "Engage"
                     },
                     0),
+
                 new MenuList("Mode1",
                     "E To:",
                     new[]

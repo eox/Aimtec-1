@@ -1,7 +1,6 @@
 ﻿namespace Adept_AIO.Champions.Lucian.Miscellaneous
 {
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using OrbwalkingEvents;
     using SDK.Unit_Extensions;
     using OrbwalkingMode = SDK.Orbwalking.OrbwalkingMode;

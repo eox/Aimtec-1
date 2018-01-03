@@ -87,7 +87,7 @@
                 {
                     case Mode.Normal:
                     {
-                        var m = GameObjects.EnemyMinions.LastOrDefault(x => x.IsValidSpellTarget(SpellConfig.Q.Range));
+                        var m = GameObjects.EnemyMinions.LastOrDefault(x => x.IsValidTarget(SpellConfig.Q.Range));
                         if (m == null || Global.Player.IsDashing())
                         {
                             return;
@@ -98,7 +98,7 @@
                         break;
                     case Mode.Tornado:
                     {
-                        var m = GameObjects.EnemyMinions.LastOrDefault(x => x.IsValidSpellTarget(SpellConfig.Q.Range));
+                        var m = GameObjects.EnemyMinions.LastOrDefault(x => x.IsValidTarget(SpellConfig.Q.Range));
                         if (m == null || Global.Player.IsDashing())
                         {
                             return;

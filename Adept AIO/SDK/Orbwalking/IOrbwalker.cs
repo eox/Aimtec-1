@@ -88,6 +88,7 @@
         /// </value>
         OrbwalkingMode Mode { get; }
 
+    
         /// <summary>
         ///     Returns the current Orbwalker Mode Name as a string
         /// </summary>

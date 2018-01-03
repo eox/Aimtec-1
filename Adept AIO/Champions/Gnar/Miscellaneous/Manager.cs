@@ -1,7 +1,6 @@
 ﻿namespace Adept_AIO.Champions.Gnar.Miscellaneous
 {
     using Aimtec;
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using OrbwalkingEvents;
     using SDK.Unit_Extensions;

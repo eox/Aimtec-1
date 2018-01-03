@@ -38,8 +38,7 @@
                 return 0;
             }
 
-
-            return Global.Player.GetSpellDamage(target, SpellSlot.E) + Global.Player.GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
+            return Global.Player.GetSpellDamage(target, SpellSlot.E) * 1.125f + Global.Player.GetSpellDamage(target, SpellSlot.E, DamageStage.Buff) * 1.38f;
         }
     }
 }

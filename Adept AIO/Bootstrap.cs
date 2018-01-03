@@ -1,8 +1,11 @@
 ﻿namespace Adept_AIO
 {
     using System.Linq;
+    using Aimtec;
     using Aimtec.SDK.Events;
-    using Aimtec.SDK.Prediction.Skillshots;
+    using BOT.HowlingAbyss;
+    using BOT.Menu;
+    using BOT.SR;
     using Champions.Azir;
     using Champions.Draven;
     using Champions.Ezreal;
@@ -29,7 +32,6 @@
     using Champions.Zed;
     using Champions.Zoe;
     using SDK.Generic;
-    using SDK.Geometry_Related;
     using SDK.Unit_Extensions;
     using SDK.Usables;
 
@@ -80,6 +82,19 @@
             new SummonerSpells();
             new Global();
             new GetRandom();
+
+            switch (Game.MapId)
+            {
+                case GameMapId.HowlingAbyss:
+                    DebugConsole.WriteLine($"ARAM BOT INITIALIZED", MessageState.Warn);
+                    new AramBot();
+                    break;
+                case GameMapId.SummonersRift:
+                    DebugConsole.WriteLine($"SUMMONERS RIFT BOT INITIALIZED", MessageState.Warn);
+                    new SummonersRiftBot();
+                    break;
+            }
+         
 
             switch (Global.Player.ChampionName)
             {

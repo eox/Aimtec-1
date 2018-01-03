@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using Aimtec.SDK.Menu;
     using Aimtec.SDK.Menu.Components;
-    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Util;
     using OrbwalkingEvents;
     using SDK.Delegates;

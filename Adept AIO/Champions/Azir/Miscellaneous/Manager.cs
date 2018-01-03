@@ -5,7 +5,6 @@
     using System.Threading;
     using Aimtec;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Util;
     using Core;
     using OrbwalkingEvents;
@@ -25,19 +24,22 @@
                     return;
                 }
 
-                foreach (var soldier in SoldierManager.Soldiers)
+                if (Global.Orbwalker.Mode == OrbwalkingMode.Laneclear || Global.Orbwalker.Mode == OrbwalkingMode.Lasthit)
                 {
-                    var enemy = GameObjects.Enemy.FirstOrDefault(x => x.Distance(soldier) <= 300 + x.BoundingRadius && !x.IsDead && x.MaxHealth > 10 &&
-                                                                      soldier.Distance(Global.Player) <= SpellConfig.Q.Range + 65 &&
-                                                                      soldier.Distance(Global.Player) > Global.Player.AttackRange);
-                    if (enemy == null || Game.TickCount - lastAa <= 1000)
+                    foreach (var soldier in SoldierManager.Soldiers)
                     {
-                        continue;
-                    }
+                        var enemy = GameObjects.Enemy.FirstOrDefault(x => x.Distance(soldier) <= 300 + x.BoundingRadius && !x.IsDead && x.MaxHealth > 10 &&
+                                                                          soldier.Distance(Global.Player) <= SpellConfig.Q.Range + 65 &&
+                                                                          soldier.Distance(Global.Player) > Global.Player.AttackRange);
+                        if (enemy == null || Game.TickCount - lastAa <= 1000)
+                        {
+                            continue;
+                        }
 
-                    lastAa = Game.TickCount;
-                    Global.Player.IssueOrder(OrderType.AttackUnit, enemy);
-                    DelayAction.Queue(300, () => Global.Player.IssueOrder(OrderType.MoveTo, Game.CursorPos), new CancellationToken(false));
+                        lastAa = Game.TickCount;
+                        Global.Player.IssueOrder(OrderType.AttackUnit, enemy);
+                        DelayAction.Queue(300, () => Global.Player.IssueOrder(OrderType.MoveTo, Game.CursorPos), new CancellationToken(false));
+                    }
                 }
 
                 SpellConfig.R.Width = 133 * (3 + Global.Player.GetSpell(SpellSlot.R).Level);

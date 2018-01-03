@@ -1,5 +1,6 @@
 ﻿namespace Adept_AIO.Champions.Tristana.Miscellaneous
 {
+    using System.Linq;
     using Aimtec;
     using Aimtec.SDK.Extensions;
     using Core;
@@ -31,7 +32,7 @@
 
             if (spellConfig.W.Ready)
             {
-                spellConfig.W.Cast(Global.Player.GetFountainPos());
+                spellConfig.W.Cast(GameObjects.AllySpawnPoints.FirstOrDefault().ServerPosition);
             }
             else if (spellConfig.R.Ready)
             {

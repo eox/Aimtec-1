@@ -36,8 +36,8 @@
                 spellConfig.Q.Cast();
             }
 
-            if (spellConfig.W.Ready && menuConfig.Combo["W"].Enabled && target.Health < dmg.Damage(target) && target.Distance(Global.Player) > Global.Player.AttackRange + 100 &&
-                Global.Player.CountEnemyHeroesInRange(2000) <= 2 && target.ServerPosition.CountAllyHeroesInRange(900) == 0)
+            if (spellConfig.W.Ready && menuConfig.Combo["W"].Enabled && target.Health < dmg.Damage(target) * 2 && target.Distance(Global.Player) > Global.Player.AttackRange + 100 &&
+                Global.Player.CountEnemyHeroesInRange(2000) <= 2 && target.ServerPosition.CountAllyHeroesInRange(500) == 0)
             {
                 spellConfig.W.Cast(target);
             }

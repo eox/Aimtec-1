@@ -28,10 +28,6 @@
         /// </summary>
         public AOrbwalker ParentInstance;
 
-        private bool attackEnabled = true;
-
-        private bool moveEnabled = true;
-
         #endregion
 
         #region Constructors and Destructors
@@ -99,14 +95,7 @@
         /// <summary>
         ///     Whether attacking is currently allowed
         /// </summary>
-        public bool AttackingEnabled
-        {
-            get
-            {
-                return this.attackEnabled;
-            }
-            set => this.attackEnabled = value;
-        }
+        public bool AttackingEnabled { get; set; } = true;
 
         /// <summary>
         ///     Whether this mode should execute the base Orbwalking Logic
@@ -121,14 +110,7 @@
         /// <summary>
         ///     Whether moving is currently enabled
         /// </summary>
-        public bool MovingEnabled
-        {
-            get
-            {
-                return this.moveEnabled;
-            }
-            set => this.moveEnabled = value;
-        }
+        public bool MovingEnabled { get; set; } = true;
 
         /// <summary>
         ///     The name of this mode

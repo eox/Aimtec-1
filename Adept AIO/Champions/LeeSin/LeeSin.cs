@@ -4,7 +4,6 @@
     using Aimtec;
     using Aimtec.SDK.Menu;
     using Aimtec.SDK.Menu.Components;
-    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Util;
     using Core;
     using Core.Damage;

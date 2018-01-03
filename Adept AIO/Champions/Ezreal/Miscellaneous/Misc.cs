@@ -4,7 +4,6 @@
     using System.Threading;
     using Aimtec;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Util;
     using Core;
     using SDK.Generic;

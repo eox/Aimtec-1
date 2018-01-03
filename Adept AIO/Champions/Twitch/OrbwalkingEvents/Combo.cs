@@ -1,8 +1,8 @@
 ﻿namespace Adept_AIO.Champions.Twitch.OrbwalkingEvents
 {
+    using System.Linq;
     using Aimtec;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using SDK.Unit_Extensions;
     using PostAttackEventArgs = SDK.Orbwalking.PostAttackEventArgs;
@@ -25,6 +25,15 @@
 
         public static void OnUpdate()
         {
+            if (MenuConfig.Combo["E"].Enabled)
+            {
+                var targ = GameObjects.EnemyHeroes.FirstOrDefault(x => x.HasBuff("twitchdeadlyvenom") && x.GetBuffCount("twitchdeadlyvenom") >= 6);
+                if (targ != null)
+                {
+                    SpellManager.E.Cast();
+                }
+            }
+
             var target = Global.TargetSelector.GetTarget(SpellManager.R.Range);
             if (target == null)
             {

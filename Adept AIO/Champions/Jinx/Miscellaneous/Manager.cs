@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Jinx.Miscellaneous
 {
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using OrbwalkingEvents;
     using SDK.Unit_Extensions;

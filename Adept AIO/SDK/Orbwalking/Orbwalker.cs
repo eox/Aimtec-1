@@ -87,15 +87,7 @@
         /// </value>
         public static IOrbwalker Implementation
         {
-            get
-            {
-                if (impl == null)
-                {
-                    impl = new OrbwalkingImpl();
-                }
-
-                return impl;
-            }
+            get => impl ?? (impl = new OrbwalkingImpl());
 
             set
             {
@@ -150,10 +142,9 @@
         }
 
         /// <inheritdoc cref="IOrbwalker" />
-        public OrbwalkingMode Mode
-        {
-            get => Implementation.Mode;
-        }
+        public OrbwalkingMode Mode => Implementation.Mode;
+
+        public OrbwalkingMode RealMode { get; set; }
 
         /// <inheritdoc cref="IOrbwalker" />
         public string ModeName => Implementation.ModeName;

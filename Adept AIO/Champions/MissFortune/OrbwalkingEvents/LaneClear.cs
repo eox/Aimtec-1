@@ -5,7 +5,6 @@
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Damage.JSON;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using SDK.Unit_Extensions;
     using PostAttackEventArgs = SDK.Orbwalking.PostAttackEventArgs;

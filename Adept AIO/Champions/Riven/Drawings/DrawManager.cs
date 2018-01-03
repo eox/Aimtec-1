@@ -4,7 +4,6 @@
     using System.Linq;
     using Aimtec;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using SDK.Draw_Extension;
     using SDK.Geometry_Related;

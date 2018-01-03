@@ -2,7 +2,6 @@
 {
     using System.Linq;
     using Aimtec.SDK.Extensions;
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using OrbwalkingEvents;
     using SDK.Unit_Extensions;

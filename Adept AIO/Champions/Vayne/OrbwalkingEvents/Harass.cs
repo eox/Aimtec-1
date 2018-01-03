@@ -1,6 +1,5 @@
 ﻿namespace Adept_AIO.Champions.Vayne.OrbwalkingEvents
 {
-    using Aimtec.SDK.Orbwalking;
     using Core;
     using SDK.Unit_Extensions;
     using PostAttackEventArgs = SDK.Orbwalking.PostAttackEventArgs;
